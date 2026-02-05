@@ -10,14 +10,12 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
             color: #333;
             background: #ffffff;
         }
-
         /* Header */
         header {
             background: #fff;
@@ -27,7 +25,6 @@
             top: 0;
             z-index: 100;
         }
-
         .header-content {
             max-width: 1200px;
             margin: 0 auto;
@@ -36,31 +33,26 @@
             justify-content: space-between;
             align-items: center;
         }
-
         .logo {
             font-size: 1.5rem;
             font-weight: 700;
             color: #222;
             text-decoration: none;
         }
-
         nav ul {
             display: flex;
             gap: 2rem;
             list-style: none;
         }
-
         nav a {
             color: #555;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
         }
-
         nav a:hover {
             color: #2196F3;
         }
-
         /* Hero Section */
         .hero {
             max-width: 1200px;
@@ -68,27 +60,23 @@
             padding: 0 2rem;
             text-align: center;
         }
-
         .hero h1 {
             font-size: 2.5rem;
             font-weight: 700;
             color: #222;
             margin-bottom: 0.5rem;
         }
-
         .hero p {
             font-size: 1.2rem;
             color: #666;
             margin-bottom: 1.5rem;
         }
-
         .social-links {
             display: flex;
             gap: 1rem;
             justify-content: center;
             margin-top: 1rem;
         }
-
         .social-links a {
             color: #555;
             text-decoration: none;
@@ -98,33 +86,28 @@
             border-radius: 4px;
             transition: all 0.3s;
         }
-
         .social-links a:hover {
             border-color: #2196F3;
             color: #2196F3;
         }
-
         /* Projects Grid */
         .projects {
             max-width: 1200px;
             margin: 3rem auto;
             padding: 0 2rem;
         }
-
         .section-title {
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 2rem;
             color: #222;
         }
-
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
             margin-bottom: 4rem;
         }
-
         .project-card {
             background: #fff;
             border: 1px solid #e0e0e0;
@@ -133,12 +116,10 @@
             transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
         }
-
         .project-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 24px rgba(0,0,0,0.1);
         }
-
         .project-image {
             width: 100%;
             height: 250px;
@@ -148,37 +129,31 @@
             align-items: center;
             justify-content: center;
         }
-
         .project-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
         .project-content {
             padding: 1.5rem;
         }
-
         .project-title {
             font-size: 1.3rem;
             font-weight: 700;
             color: #222;
             margin-bottom: 0.5rem;
         }
-
         .project-description {
             color: #666;
             font-size: 0.95rem;
             line-height: 1.5;
             margin-bottom: 1rem;
         }
-
         .tech-tags {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
         }
-
         .tag {
             background: #e3f2fd;
             color: #1976d2;
@@ -187,20 +162,17 @@
             font-size: 0.85rem;
             font-weight: 500;
         }
-
         /* About Section */
         .about {
             max-width: 800px;
             margin: 4rem auto;
             padding: 0 2rem;
         }
-
         .about p {
             color: #555;
             line-height: 1.8;
             margin-bottom: 1rem;
         }
-
         /* Footer */
         footer {
             background: #f5f5f5;
@@ -208,7 +180,6 @@
             margin-top: 4rem;
             border-top: 1px solid #e0e0e0;
         }
-
         .footer-content {
             max-width: 1200px;
             margin: 0 auto;
@@ -216,31 +187,25 @@
             text-align: center;
             color: #666;
         }
-
         .contact-info {
             margin-top: 1rem;
         }
-
         .contact-info a {
             color: #2196F3;
             text-decoration: none;
         }
-
         /* Responsive */
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
                 gap: 1rem;
             }
-
             nav ul {
                 gap: 1rem;
             }
-
             .hero h1 {
                 font-size: 2rem;
             }
-
             .projects-grid {
                 grid-template-columns: 1fr;
             }
@@ -268,7 +233,7 @@
         <h1>Thiago Pari</h1>
         <p>Robotics Engineer | Sensor Fusion & Autonomous Systems</p>
         <div class="social-links">
-            <a href="https://github.com/thiago-pari" target="_blank">GitHub</a>
+            <a href="https://github.com/ThiagoPari" target="_blank">GitHub</a>
             <a href="https://linkedin.com/in/thiago-pari" target="_blank">LinkedIn</a>
             <a href="mailto:parimaquera.t@northeastern.edu">Email</a>
         </div>
@@ -279,7 +244,7 @@
         <h2 class="section-title">Projects</h2>
         <div class="projects-grid">
             
-            <!-- Project 6: Balloon Boy -->
+            <!-- Project: Balloon Boy -->
             <a href="projects/balloon-boy/index.html" style="text-decoration: none; color: inherit;">
                 <div class="project-card">
                     <div class="project-image">
@@ -300,61 +265,40 @@
                         </p>
                         <div class="tech-tags">
                             <span class="tag">Python</span>
-                            <span class="tag">Gemma 2 9B</span>
+                            <span class="tag">Qwen 2.5 7B</span>
                             <span class="tag">OpenAI API</span>
                             <span class="tag">OpenCV</span>
                             <span class="tag">ESP32</span>
-                            <span class="tag">LangGraph</span>
                         </div>
                     </div>
                 </div>
             </a> 
-            <!-- Project 1: RoboFox Quadruped (NEW!) -->
+
+            <!-- Project: 12-DOF Quadruped -->
             <a href="projects/robofox-quadruped/index.html" style="text-decoration: none; color: inherit;">
                 <div class="project-card">
                     <div class="project-image">
-                        <img src="images/robofox-quadruped.jpg" alt="RoboFox Quadruped Robot">
+                        <img src="images/robofox-quadruped.jpg" alt="12-DOF Quadruped Robot">
                     </div>
                     <div class="project-content">
-                        <h3 class="project-title">RoboFox: Terrain-Adaptive Quadruped</h3>
+                        <h3 class="project-title">12-DOF Quadruped Robot</h3>
                         <p class="project-description">
-                            Dynamically stable quadruped with ML terrain classification, Extended Kalman Filter 
-                            sensor fusion (71% error reduction), and adaptive gait control. Complete ROS2 stack 
-                            with custom kinematics, leg odometry, and real-time IMU integration.
+                            Custom quadruped robot built from scratch with 3D printed body, 12 servo actuators,
+                            and integrated electronics. Currently standing stably with calibrated servos while
+                            developing inverse kinematics and gait generation in MuJoCo simulation.
                         </p>
                         <div class="tech-tags">
-                            <span class="tag">ROS2</span>
                             <span class="tag">Python</span>
-                            <span class="tag">EKF</span>
-                            <span class="tag">Machine Learning</span>
-                            <span class="tag">Inverse Kinematics</span>
-                            <span class="tag">IMU Fusion</span>
+                            <span class="tag">MuJoCo</span>
+                            <span class="tag">Fusion 360</span>
+                            <span class="tag">Raspberry Pi</span>
+                            <span class="tag">I2C</span>
                         </div>
                     </div>
                 </div>
             </a>
 
-            <!-- Project 2: WALL-E -->
-            <div class="project-card">
-                <div class="project-image">
-                    <img src="images/wall-e-robot.jpg" alt="WALL-E Animatronic Robot">
-                </div>
-                <div class="project-content">
-                    <h3 class="project-title">WALL-E Animatronic Robot</h3>
-                    <p class="project-description">
-                        Six-degree-of-freedom animatronic robot with IMU-based motion control, servo encoders, and real-time XM code integration for expressive movements.
-                    </p>
-                    <div class="tech-tags">
-                        <span class="tag">ROS2</span>
-                        <span class="tag">C++</span>
-                        <span class="tag">IMU</span>
-                        <span class="tag">Encoders</span>
-                        <span class="tag">6-DOF Kinematics</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Project 3: Bundle Adjustment -->
+            <!-- Project: Bundle Adjustment -->
             <a href="When Does Convex Bundle Adjustment Fail.pdf" target="_blank" style="text-decoration: none; color: inherit;">
                 <div class="project-card">
                     <div class="project-image">
@@ -377,7 +321,7 @@
                 </div>
             </a>
 
-            <!-- Project 5: Sensor Fusion -->
+            <!-- Project: Sensor Fusion -->
             <a href="projects/ekf-localization/index.html" style="text-decoration: none; color: inherit;">
                 <div class="project-card">
                     <div class="project-image">
@@ -429,6 +373,5 @@
             </div>
         </div>
     </footer>
-
 </body>
 </html>

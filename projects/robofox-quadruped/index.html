@@ -3,21 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RoboFox: Terrain-Adaptive Quadruped Robot - Thiago Pari</title>
+    <title>12-DOF Quadruped Robot - Thiago Pari</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
             color: #333;
             background: #ffffff;
         }
-
         header {
             background: #fff;
             border-bottom: 1px solid #e0e0e0;
@@ -26,7 +24,6 @@
             top: 0;
             z-index: 100;
         }
-
         .header-content {
             max-width: 1200px;
             margin: 0 auto;
@@ -35,51 +32,43 @@
             justify-content: space-between;
             align-items: center;
         }
-
         .logo {
             font-size: 1.5rem;
             font-weight: 700;
             color: #222;
             text-decoration: none;
         }
-
         nav ul {
             display: flex;
             gap: 2rem;
             list-style: none;
         }
-
         nav a {
             color: #555;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
         }
-
         nav a:hover {
             color: #2196F3;
         }
-
         .project-header {
             max-width: 900px;
             margin: 3rem auto 2rem;
             padding: 0 2rem;
         }
-
         .project-header h1 {
             font-size: 2.5rem;
             font-weight: 700;
             color: #222;
             margin-bottom: 1rem;
         }
-
         .project-meta {
             display: flex;
             gap: 1rem;
             flex-wrap: wrap;
             margin-bottom: 2rem;
         }
-
         .meta-tag {
             background: #e3f2fd;
             color: #1976d2;
@@ -88,77 +77,65 @@
             font-size: 0.9rem;
             font-weight: 500;
         }
-
         .project-content {
             max-width: 900px;
             margin: 0 auto;
             padding: 0 2rem 4rem;
         }
-
         .project-content h2 {
             font-size: 1.8rem;
             font-weight: 700;
             color: #222;
             margin: 3rem 0 1rem;
         }
-
         .project-content h3 {
             font-size: 1.4rem;
             font-weight: 600;
             color: #333;
             margin: 2rem 0 1rem;
         }
-
         .project-content p {
             color: #555;
             margin-bottom: 1rem;
             line-height: 1.8;
         }
-
         .project-content ul {
             margin-left: 2rem;
             margin-bottom: 1rem;
         }
-
         .project-content li {
             color: #555;
             margin-bottom: 0.5rem;
             line-height: 1.8;
         }
-
         .project-image {
             width: 100%;
             margin: 2rem 0;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
             margin: 2rem 0;
         }
-
         .stat-card {
             background: #f5f5f5;
             padding: 1.5rem;
             border-radius: 8px;
             text-align: center;
         }
-
         .stat-value {
             font-size: 2rem;
             font-weight: 700;
             color: #2196F3;
             margin-bottom: 0.5rem;
         }
-
         .stat-label {
             color: #666;
             font-size: 0.9rem;
         }
-
         .github-link {
             display: inline-block;
             background: #2196F3;
@@ -170,11 +147,9 @@
             margin: 2rem 0;
             transition: background 0.3s;
         }
-
         .github-link:hover {
             background: #1976d2;
         }
-
         code {
             background: #f5f5f5;
             padding: 0.2rem 0.4rem;
@@ -182,7 +157,6 @@
             font-family: 'Courier New', monospace;
             font-size: 0.9em;
         }
-
         .highlight-box {
             background: #e8f5e9;
             border-left: 4px solid #4caf50;
@@ -190,7 +164,6 @@
             margin: 1.5rem 0;
             border-radius: 4px;
         }
-
         .status-badge {
             display: inline-block;
             padding: 0.5rem 1rem;
@@ -199,17 +172,14 @@
             font-size: 0.9rem;
             margin-bottom: 1rem;
         }
-
         .status-complete {
             background: #e8f5e9;
             color: #2e7d32;
         }
-
         .status-inprogress {
             background: #fff3e0;
             color: #ef6c00;
         }
-
         footer {
             background: #f5f5f5;
             padding: 2rem 0;
@@ -218,17 +188,14 @@
             text-align: center;
             color: #666;
         }
-
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
                 gap: 1rem;
             }
-
             nav ul {
                 gap: 1rem;
             }
-
             .project-header h1 {
                 font-size: 2rem;
             }
@@ -251,165 +218,142 @@
     </header>
 
     <div class="project-header">
-        <h1>🦊 RoboFox: Terrain-Adaptive Quadruped Robot</h1>
+        <h1>12-DOF Quadruped Robot</h1>
         <div class="project-meta">
-            <span class="meta-tag">ROS2 Jazzy</span>
             <span class="meta-tag">Python</span>
-            <span class="meta-tag">EKF</span>
-            <span class="meta-tag">Machine Learning</span>
+            <span class="meta-tag">MuJoCo</span>
             <span class="meta-tag">Fusion 360</span>
-            <span class="meta-tag">KiCad</span>
+            <span class="meta-tag">Raspberry Pi</span>
+            <span class="meta-tag">I2C</span>
             <span class="meta-tag">October 2025 – Present</span>
         </div>
         <div>
-            <span class="status-badge status-complete">✓ Software Complete</span>
+            <span class="status-badge status-complete">✓ Hardware Assembled</span>
             <span class="status-badge status-complete">✓ CAD Complete</span>
-            <span class="status-badge status-inprogress">⚡ Hardware Assembly Jan 8</span>
+            <span class="status-badge status-inprogress">⚡ IK/Gait Development</span>
         </div>
     </div>
 
     <div class="project-content">
         
-        <img src="media/robofox-hero.jpg" alt="RoboFox quadruped robot CAD render" class="project-image">
+        <img src="media/robofox-hero.jpg" alt="Quadruped robot assembled" class="project-image">
 
         <h2>Overview</h2>
         <p>
-            Terrain-adaptive quadruped robot implementing machine learning classification, Extended Kalman Filter sensor fusion, and inverse kinematics control. The system achieved <strong>71% error reduction</strong> in position estimation by fusing leg odometry with IMU data, while adaptive gait parameters automatically adjust to detected surfaces (concrete, grass, gravel, sand). Complete development from CAD design through ROS2 simulation to hardware integration.
+            A 12-DOF quadruped robot built from scratch, spanning CAD design, 3D printing, electronics integration, and software development. The robot currently stands stably using calibrated servo positions and PID-style balance adjustments. Currently developing inverse kinematics and gait generation in MuJoCo simulation for walking locomotion.
         </p>
 
         <div class="highlight-box">
-            <strong>Key Achievement:</strong> Proprioceptive state estimation combining inverse kinematics-based leg odometry with IMU fusion achieved 71% error reduction versus odometry-only baseline (0.243m vs 0.857m mean error).
+            <strong>Current Status:</strong> Hardware fully assembled and standing. Developing forward/inverse kinematics model in MuJoCo to enable walking gaits before deploying to physical robot.
         </div>
 
-        <h2>Performance Metrics</h2>
+        <h2>Specifications</h2>
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-value">71%</div>
-                <div class="stat-label">Error Reduction</div>
+                <div class="stat-value">12</div>
+                <div class="stat-label">Degrees of Freedom</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">12 DOF</div>
-                <div class="stat-label">Total Actuators</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">50 Hz</div>
-                <div class="stat-label">EKF Update Rate</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">85-90%</div>
-                <div class="stat-label">Terrain Classification</div>
+                <div class="stat-value">3</div>
+                <div class="stat-label">DOF per Leg</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value">185mm</div>
                 <div class="stat-label">Standing Height</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">~25 min</div>
-                <div class="stat-label">Battery Runtime</div>
+                <div class="stat-value">250mm</div>
+                <div class="stat-label">Body Length</div>
             </div>
         </div>
 
-        <h2>Technical Approach</h2>
-        
-        <h3>Inverse Kinematics & Gait Control</h3>
-        <ul>
-            <li>3-DOF leg kinematics with geometric IK solver achieving <0.1mm endpoint accuracy</li>
-            <li>Multiple gait patterns (trot, walk, bound, pace) with Bezier curve foot trajectories</li>
-            <li>50Hz real-time control loop validated in RViz simulation</li>
-            <li>Terrain-adaptive parameters adjusting step height and timing based on surface detection</li>
-        </ul>
-
-        <img src="media/robofox-rviz-trot.gif" alt="RViz simulation showing trot gait" class="project-image">
-        <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: -1rem; margin-bottom: 2rem;">
-            Trot gait simulation in RViz showing coordinated diagonal leg movements at 50Hz
-        </p>
-
-        <h3>Extended Kalman Filter State Estimation</h3>
-        <ul>
-            <li>15-state EKF fusing leg odometry (via Jacobian) with BNO055 IMU data</li>
-            <li>71% error reduction versus odometry-only baseline in 50-step simulation</li>
-            <li>Zero-velocity updates during stance phase using FSR foot sensors</li>
-            <li>Architecture mirrors Boston Dynamics Spot and MIT Cheetah approaches</li>
-        </ul>
-
-        <h3>Machine Learning Terrain Classification</h3>
-        <ul>
-            <li>1D CNN trained on IMU vibration signatures from time and frequency domain features</li>
-            <li>Target 85-90% accuracy across 4-6 terrain classes (concrete, grass, gravel, sand)</li>
-            <li>Real-time 10Hz inference using 128-sample windows from 100Hz IMU stream</li>
-            <li>Training data collected from robot walking trials on labeled terrain surfaces</li>
-        </ul>
-
-        <h2>System Integration</h2>
-        
-        <img src="media/robofox-exploded-view.jpg" alt="Three-tier electronics architecture" class="project-image">
-        <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: -1rem; margin-bottom: 2rem;">
-            Three-tier architecture: servos/legs → Raspberry Pi + controllers → power electronics
-        </p>
-
-        <h3>Mechanical Design</h3>
-        <ul>
-            <li>Custom sensor mounts integrated into RoboFox body via boolean operations in Fusion 360</li>
-            <li>Vibration-isolated IMU mount using PLA with 3M VHB foam tape achieving 60-70% damping</li>
-            <li>Bottom-mounted battery bay (73mm × 34mm) with snap-lid retention for low center of gravity</li>
-            <li>Integrated mounting bosses for Pi, Arduino, and buck converters eliminating separate plates</li>
-        </ul>
-
-        <img src="media/robofox-electronics-detail.jpg" alt="Electronics integration detail" class="project-image">
-        <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: -1rem; margin-bottom: 2rem;">
-            Electronics integration: 5mm thermal spacing between Pi and buck converters
-        </p>
-
-        <h3>Embedded Systems</h3>
-        <ul>
-            <li>Raspberry Pi 4 running ROS2 Jazzy for high-level control and state estimation</li>
-            <li>Arduino Nano reading FSR foot sensors, communicating via USB serial</li>
-            <li>PCA9685 I2C PWM driver controlling 12 servos through shared I2C bus with BNO055</li>
-            <li>Dual-rail power: XL4015 buck converters providing 5V @ 3A (Pi) and 6V @ 5A (servos)</li>
-            <li>Star-topology common ground with proper wire gauge selection (16-26 AWG)</li>
-        </ul>
-
-        <h3>Software Stack</h3>
-        <ul>
-            <li>Four ROS2 packages: description, control, state estimation, terrain classification</li>
-            <li>Kinematic solver with forward/inverse kinematics and Jacobian computation</li>
-            <li>Multi-gait generator with configurable patterns and Bezier swing trajectories</li>
-            <li>EKF implementation fusing proprioceptive sensors at 50Hz</li>
-        </ul>
-
-        <h2>Key Learnings</h2>
-        <ul>
-            <li><strong>Sensor selection tradeoffs:</strong> BNO055 ($28) adequate for portfolio with foam damping, upgrade path to industrial MEMS documented showing awareness of application requirements</li>
-            <li><strong>Mechanical-software co-design:</strong> Integrated mounting features directly into body structure versus separate plates, requiring CAD proficiency and design-for-assembly thinking</li>
-            <li><strong>Power system constraints:</strong> Battery sizing (2200mAh for 25min runtime), thermal management (5mm component spacing), and bulk capacitor requirements for servo current spikes</li>
-            <li><strong>Professional documentation:</strong> KiCad schematics and comprehensive GitHub README demonstrate systems thinking beyond code implementation</li>
-        </ul>
-
-        <h2>Hardware Platform</h2>
+        <h2>Mechanical Design</h2>
         <p>
-            12-DOF quadruped (250mm body, 185mm standing height) with 12× Corona DS-843MG servos, Raspberry Pi 4, BNO055 IMU, 4× FSR foot sensors, 2S 2200mAh LiPo, Arduino Nano, PCA9685 PWM driver. Components arriving January 8, 2026.
+            Complete mechanical design done in Fusion 360, with all structural components 3D printed. Each leg has 3 degrees of freedom using a 4-bar linkage mechanism with 1:1 gear ratios.
+        </p>
+        <ul>
+            <li>Parametric CAD model in Fusion 360 with fabrication-ready STL exports</li>
+            <li>4-bar linkage leg mechanism with 75mm link segments</li>
+            <li>Integrated mounting bosses for electronics (Pi, buck converters)</li>
+            <li>Vibration-isolated IMU mount using foam interface for sensor protection</li>
+        </ul>
+
+        <img src="media/robofox-exploded-view.jpg" alt="CAD exploded view" class="project-image">
+        <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: -1rem; margin-bottom: 2rem;">
+            Three-tier assembly: legs/servos → main body with electronics → power system
+        </p>
+
+        <h2>Electronics Integration</h2>
+        <p>
+            Embedded system with Raspberry Pi 4 for high-level control, communicating with servo drivers and sensors over I2C.
+        </p>
+
+        <h3>Power Distribution</h3>
+        <ul>
+            <li>Dual XL4015 buck converters providing 5V (logic) and 6V (servos) rails</li>
+            <li>Power budget calculated from total servo current draw with safety margin</li>
+            <li>2S LiPo battery selected based on space and weight constraints</li>
+            <li>Decoupling capacitors for servo current spike protection</li>
+        </ul>
+
+        <h3>Communication Architecture</h3>
+        <ul>
+            <li>I2C bus shared between PCA9685 PWM driver and BNO055 IMU</li>
+            <li>PCA9685 controlling all 12 Corona DS-843MG servos via PWM</li>
+            <li>FSR402 force sensors on feet for ground contact detection</li>
+        </ul>
+
+        <img src="media/robofox-electronics-detail.jpg" alt="Electronics wiring" class="project-image">
+        <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: -1rem; margin-bottom: 2rem;">
+            Electronics integration showing power distribution and I2C connections
+        </p>
+
+        <h2>Calibration & Testing</h2>
+        <p>
+            Systematic hardware validation before integration, including individual component testing and servo limit discovery.
+        </p>
+        <ul>
+            <li>Tested voltage rails to verify buck converter output; identified and replaced one defective unit (outputting 14V instead of 5.9V)</li>
+            <li>Mapped safe angular limits for each servo to prevent mechanical interference</li>
+            <li>Validated BNO055 IMU readings and calibration status</li>
+            <li>Tested FSR402 force sensors for reliable ground contact detection</li>
+            <li>Tuned balance parameters for stable standing posture</li>
+        </ul>
+
+        <h2>Current Development: Kinematics in MuJoCo</h2>
+        <p>
+            Currently developing the forward and inverse kinematics model in MuJoCo physics simulation. This approach validates the kinematic model and gait patterns in simulation before deploying to the physical robot.
+        </p>
+        <ul>
+            <li>Building URDF/MJCF model matching physical robot dimensions</li>
+            <li>Implementing geometric IK solver for 3-DOF legs</li>
+            <li>Developing gait patterns (trot, walk) with Bezier curve foot trajectories</li>
+            <li>Sim-to-real transfer planned once simulation validates successfully</li>
+        </ul>
+
+        <h2>Hardware Components</h2>
+        <p>
+            <strong>Compute:</strong> Raspberry Pi 4<br>
+            <strong>Actuators:</strong> 12× Corona DS-843MG servos<br>
+            <strong>Sensors:</strong> BNO055 9-DOF IMU, 4× FSR402 force sensors<br>
+            <strong>Drivers:</strong> PCA9685 16-channel PWM driver (I2C)<br>
+            <strong>Power:</strong> 2S LiPo, 2× XL4015 buck converters<br>
         </p>
 
         <h2>Technology Stack</h2>
         <p>
-            <strong>Robotics:</strong> ROS2 Jazzy, RViz, Inverse Kinematics, EKF, Leg Odometry
-            <br>
-            <strong>ML:</strong> PyTorch/TensorFlow (1D CNN), LightGBM, ONNX
-            <br>
-            <strong>Embedded:</strong> Raspberry Pi 4, Arduino Nano, PCA9685 (I2C), BNO055 (9-DOF IMU)
-            <br>
-            <strong>CAD:</strong> Fusion 360, OpenSCAD, Blender, KiCad
-            <br>
+            <strong>Simulation:</strong> MuJoCo, Python<br>
+            <strong>Embedded:</strong> Raspberry Pi 4, I2C (PCA9685, BNO055)<br>
+            <strong>CAD:</strong> Fusion 360, OpenSCAD<br>
             <strong>Languages:</strong> Python, C++
         </p>
 
-        <a href="https://github.com/thiago-pari/robofox-quadruped" target="_blank" class="github-link">View on GitHub →</a>
+        <a href="https://github.com/ThiagoPari/ThiagoPari/tree/main/projects/robofox-quadruped" target="_blank" class="github-link">View on GitHub →</a>
 
     </div>
 
     <footer>
-        <p>© 2024 Thiago Pari | Built with focus and simplicity</p>
+        <p>© 2025 Thiago Pari | Built with focus and simplicity</p>
     </footer>
-
 </body>
 </html>

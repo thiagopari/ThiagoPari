@@ -255,7 +255,10 @@
 
         <h2>Overview</h2>
         <p>
-            Real-time sensor fusion system combining wheel odometry, IMU, simulated GPS, and LiDAR scan matching through Extended Kalman Filtering for robust mobile robot localization. This project demonstrates advanced state estimation techniques achieving <strong>28.8% error reduction</strong> compared to dead reckoning baseline.
+            Real-time sensor fusion system combining wheel odometry, IMU and simulated GPS through Extended and Unscented Kalman Filtering for robust mobile robot localization, with a LiDAR scan-matching update. Fusing odometry, IMU and simulated GPS cut RMS position error by <strong>28.8%</strong> compared to a dead-reckoning baseline.
+        </p>
+        <p>
+            <em>Note: LiDAR did not run in the Gazebo simulation (GPU limits under Parallels on Apple Silicon), so the localization results below use odometry, IMU and simulated GPS. The scan-matching figures come from validating the ICP algorithm on its own.</em>
         </p>
 
         <div class="highlight-box">
@@ -278,7 +281,7 @@
             </div>
             <div class="stat-card">
                 <div class="stat-value">96%</div>
-                <div class="stat-label">Scan Match Success Rate</div>
+                <div class="stat-label">Scan Match Success Rate (standalone ICP)</div>
             </div>
         </div>
 
@@ -297,7 +300,7 @@
 
         <h3>Robust LiDAR Scan Matching</h3>
         <p>
-            Implemented multi-resolution trimmed ICP (Iterative Closest Point) algorithm achieving exceptional accuracy. The pipeline includes:
+            Implemented a multi-resolution trimmed ICP (Iterative Closest Point) algorithm, validated on its own but not yet run inside the Gazebo simulation. The pipeline includes:
         </p>
         <ul>
             <li><strong>Multi-resolution alignment:</strong> Coarse-to-fine approach with voxel downsampling at [0.1m, 0.05m, 0.02m] scales for computational efficiency</li>
@@ -319,7 +322,7 @@
             <li><strong>Motion Prediction:</strong> 50Hz updates using wheel odometry velocities with full covariance propagation</li>
             <li><strong>IMU Updates:</strong> 50Hz heading corrections with 1° accuracy improving orientation estimates</li>
             <li><strong>GPS Updates:</strong> 1Hz position corrections with ~30cm accuracy as absolute position reference</li>
-            <li><strong>Scan Matching:</strong> 6Hz LiDAR-based position updates with 2.3cm average RMSE when successful</li>
+            <li><strong>Scan Matching:</strong> 6Hz LiDAR-based position updates with 2.3cm average RMSE when successful (standalone validation; not yet run in the simulation)</li>
             <li><strong>Dead Reckoning Baseline:</strong> Pure odometry integration without corrections for performance comparison</li>
         </ul>
 
@@ -357,7 +360,7 @@
         <h2>Future Enhancements</h2>
         <ul>
             <li><strong>EKF-SLAM:</strong> Extend to simultaneous localization and mapping with landmark features</li>
-            <li><strong>Hardware Validation:</strong> Deploy to real TurtleBot3 hardware (scheduled January 2025)</li>
+            <li><strong>Hardware Validation:</strong> Deploy to real TurtleBot3 hardware</li>
             <li><strong>Visual Odometry:</strong> Integrate camera-based motion estimation for additional redundancy</li>
             <li><strong>Adaptive Filtering:</strong> Context-aware noise models that adjust based on motion dynamics</li>
         </ul>

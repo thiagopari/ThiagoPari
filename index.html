@@ -377,7 +377,7 @@
                     </p>
                     <ul class="exp-list">
                         <li>Traced sonar SLAM failure on real pool data (scan matching recovered only 0&ndash;6% of along-track motion) to vertical-mount bias, not noise; recommended a horizontal mount, which reached 0.2&ndash;0.3 m ATE in a pool simulation at slow survey speed</li>
-                        <li>Wrote ROS 2 drivers for the Ping360 sonar and VN-100 IMU, which a teammate integrated into the vehicle firmware; traced slow sonar sweeps to a serial-transfer bottleneck; per-beam time fell ~4&times; (133 &rarr; 32 ms)</li>
+                        <li>Wrote ROS 2 drivers for the Ping360 sonar and VN-100 IMU, which a teammate integrated into the vehicle firmware; traced slow sonar sweeps to a serial-transfer bottleneck, after which per-beam time fell ~4&times; (133 &rarr; 32 ms)</li>
                         <li>Audited 8 pool recordings and found 4 data defects, including a frame bug (FRD vs. FLU) in my own IMU driver that reversed lap headings</li>
                         <li>Trained a real-time U-Net hull-inspection segmenter (0.50 test mIoU over 7 classes; 247 FPS model-only at 512 px on a laptop GPU) after rejecting public datasets that labeled red paint as rust</li>
                         <li>Built an Isaac Sim Replicator synthetic-data pipeline and a sonar survey simulator calibrated from recorded rosbags</li>
@@ -462,7 +462,7 @@
                         <p class="project-description">
                             Stress-tested XM, a convex SDP bundle-adjustment pipeline, under severe image blur and ill-conditioned problems.
                             COLMAP feature matching was the bottleneck (match retention fell to 5.7% under severe blur), while the
-                            SDP relaxation stayed tight (rank &le; 3) in every tested case, though tight is not the same as correct, as the report notes. Report (PDF).
+                            SDP relaxation stayed tight (rank &le; 3) in every tested case (tight is not the same as correct, as the report notes). Report (PDF).
                         </p>
                         <div class="tech-tags">
                             <span class="tag">Python</span>
@@ -510,7 +510,7 @@
                         <h3 class="project-title">12-DOF Quadruped Robot</h3>
                         <p class="card-context">Personal project &middot; Oct 2025 &ndash; present &middot; Based on Will Cogley's RoboFox design</p>
                         <p class="project-description">
-                            Printed, wired and calibrated a 12-servo quadruped (Raspberry Pi, PCA9685, BNO055 IMU) that stood stably on calibrated servos (Feb 2026);
+                            Printed, wired and calibrated a 12-servo quadruped (Raspberry Pi, PCA9685, BNO055 IMU) that stood stably in Feb 2026;
                             IK and gait code developed on a MuJoCo model. Status, Sep 2026: legs being
                             reprinted before IK tuning on the hardware.
                         </p>

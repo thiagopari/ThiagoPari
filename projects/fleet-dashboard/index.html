@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Real-Time Robot Fleet Dashboard - Thiago Pari</title>
+    <meta name="description" content="ROS 2-to-web dashboard: an rclpy + FastAPI node streams odometry and battery state from 3 simulated robots over WebSocket to a React / Three.js map.">
     <style>
         * {
             margin: 0;
@@ -50,7 +51,7 @@
             transition: color 0.3s;
         }
         nav a:hover {
-            color: #2196F3;
+            color: #1565c0;
         }
         .project-header {
             max-width: 900px;
@@ -62,6 +63,7 @@
             font-weight: 700;
             color: #222;
             margin-bottom: 1rem;
+            line-height: 1.2;
         }
         .project-meta {
             display: flex;
@@ -71,7 +73,7 @@
         }
         .meta-tag {
             background: #e3f2fd;
-            color: #1976d2;
+            color: #1565c0;
             padding: 0.4rem 1rem;
             border-radius: 4px;
             font-size: 0.9rem;
@@ -129,7 +131,7 @@
         .stat-value {
             font-size: 2rem;
             font-weight: 700;
-            color: #2196F3;
+            color: #1976d2;
             margin-bottom: 0.5rem;
         }
         .stat-label {
@@ -138,7 +140,7 @@
         }
         .github-link {
             display: inline-block;
-            background: #2196F3;
+            background: #1976d2;
             color: white;
             padding: 0.75rem 1.5rem;
             border-radius: 4px;
@@ -148,7 +150,7 @@
             transition: background 0.3s;
         }
         .github-link:hover {
-            background: #1976d2;
+            background: #1565c0;
         }
         code {
             background: #f5f5f5;
@@ -178,7 +180,7 @@
         }
         .status-inprogress {
             background: #fff3e0;
-            color: #ef6c00;
+            color: #bf360c;
         }
         footer {
             background: #f5f5f5;
@@ -200,6 +202,11 @@
                 font-size: 2rem;
             }
         }
+        @media print {
+            header { position: static; }
+            nav { display: none; }
+            .github-link { color: #1565c0; }
+        }
     </style>
 </head>
 <body>
@@ -208,8 +215,8 @@
             <a href="../../index.html" class="logo">Thiago Pari</a>
             <nav>
                 <ul>
+                    <li><a href="../../index.html#experience">Experience</a></li>
                     <li><a href="../../index.html#projects">Projects</a></li>
-                    <li><a href="../../index.html#about">About</a></li>
                     <li><a href="../../index.html#contact">Contact</a></li>
                     <li><a href="../../Pari Resume.pdf" target="_blank">Resume</a></li>
                 </ul>
@@ -218,158 +225,99 @@
     </header>
 
     <div class="project-header">
-        <h1><a href="http://34.152.114.228:5173/">Real-Time Robot Fleet Dashboard</a></h1>
+        <h1>Real-Time Robot Fleet Dashboard</h1>
         <div class="project-meta">
-            <span class="meta-tag">React</span>
-            <span class="meta-tag">TypeScript</span>
+            <span class="meta-tag">ROS 2 (rclpy)</span>
             <span class="meta-tag">FastAPI</span>
-            <span class="meta-tag">Three.js</span>
             <span class="meta-tag">WebSocket</span>
-            <span class="meta-tag">Docker</span>
+            <span class="meta-tag">React</span>
+            <span class="meta-tag">Three.js</span>
             <span class="meta-tag">January 2026 – February 2026</span>
         </div>
         <div>
-            <span class="status-badge status-complete">✓ Deployed on GCP</span>
-            <span class="status-badge status-complete">✓ 3D Visualization Complete</span>
+            <span class="status-badge status-complete">✓ Runs locally with 3 simulated robots</span>
         </div>
     </div>
 
     <div class="project-content">
-        
-        <img src="media/fleet-dashboard-hero.jpg" alt="Fleet Dashboard Screenshot" class="project-image">
+
+        <img src="media/fleet-dashboard-hero.jpg" alt="Fleet dashboard with robot status cards, alerts and fleet statistics" class="project-image">
 
         <h2>Overview</h2>
         <p>
-            Online Dashboard <a href="http://34.152.114.228:5173/">LINK</a>. Full-stack web application for real-time monitoring of robot fleets. The dashboard displays live telemetry from multiple simulated robots, featuring an interactive 3D visualization built with Three.js, battery monitoring with automatic alerts, and mission status tracking. Built with React/TypeScript frontend and Python FastAPI backend, deployed to Google Cloud Platform using Docker.
+            A ROS 2-to-web bridge for monitoring a robot fleet. A FastAPI backend runs an rclpy node that subscribes to each
+            robot's odometry and battery topics and pushes updates over WebSocket to a React dashboard with a Three.js 3D map,
+            robot status cards and low-battery alerts. Tested with 3 simulated robots publishing odometry at 10 Hz.
         </p>
-
-        <div class="highlight-box">
-            <strong>Key Achievement:</strong> Sub-100ms end-to-end latency from robot telemetry to dashboard display, with 10Hz update rate supporting real-time monitoring of multiple robots simultaneously.
-        </div>
 
         <h2>Specifications</h2>
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-value">&lt;100ms</div>
-                <div class="stat-label">End-to-End Latency</div>
-            </div>
-            <div class="stat-card">
                 <div class="stat-value">10 Hz</div>
-                <div class="stat-label">Update Rate</div>
+                <div class="stat-label">Simulated Odometry Rate</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">5+</div>
-                <div class="stat-label">Simultaneous Robots</div>
+                <div class="stat-value">3</div>
+                <div class="stat-label">Simulated Robots</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value">3D</div>
-                <div class="stat-label">Live Visualization</div>
+                <div class="stat-label">Live Map (Three.js)</div>
             </div>
         </div>
 
-        <h2>Frontend Architecture</h2>
-        <p>
-            React application with TypeScript providing type safety and improved developer experience. State management handled through Zustand for efficient real-time updates without unnecessary re-renders.
-        </p>
+        <h2>Architecture</h2>
+        <h3>ROS 2 Side</h3>
         <ul>
-            <li><strong>Component framework:</strong> React 18 with TypeScript for type-safe component development</li>
-            <li><strong>3D rendering:</strong> Three.js with React Three Fiber for interactive robot visualization</li>
-            <li><strong>State management:</strong> Zustand for lightweight, efficient real-time state updates</li>
-            <li><strong>Styling:</strong> Tailwind CSS for responsive, utility-first design</li>
-            <li><strong>Real-time data:</strong> Custom WebSocket hook managing connection state and automatic reconnection</li>
+            <li>A simulator script runs 3 robot nodes, each publishing <code>nav_msgs/Odometry</code> and <code>sensor_msgs/BatteryState</code></li>
+            <li>The backend's rclpy node subscribes to both topics per robot and raises a low-battery alert below 20%</li>
         </ul>
 
-        <h3>3D Visualization</h3>
-        <p>
-            Interactive 3D map showing robot positions, orientations, and movement trajectories in real-time. Features orbit controls for camera manipulation, color-coded robot markers based on connection status, and smooth position interpolation.
-        </p>
+        <h3>Backend</h3>
+        <ul>
+            <li><strong>Framework:</strong> FastAPI with the rclpy node in the same process</li>
+            <li><strong>REST:</strong> <code>/api/robots</code> and <code>/api/status</code></li>
+            <li><strong>Real-time:</strong> a WebSocket endpoint (<code>/ws</code>) broadcasting robot state and alerts to every connected client</li>
+        </ul>
 
-        <img src="media/fleet-dashboard-3d.jpg" alt="3D Visualization" class="project-image">
+        <h3>Frontend</h3>
+        <ul>
+            <li><strong>Framework:</strong> React 18 with Vite</li>
+            <li><strong>3D map:</strong> Three.js through React Three Fiber, with orbit controls</li>
+            <li><strong>State:</strong> Zustand store fed by a WebSocket hook that reconnects automatically</li>
+            <li><strong>Styling:</strong> Tailwind CSS</li>
+        </ul>
+
+        <img src="media/fleet-dashboard-3d.jpg" alt="Three.js map showing robot positions" class="project-image">
         <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: -1rem; margin-bottom: 2rem;">
-            Three.js 3D visualization showing robot positions with real-time updates
-        </p>
-
-        <h2>Backend Architecture</h2>
-        <p>
-            Python FastAPI server handling REST endpoints and WebSocket connections for real-time telemetry streaming.
-        </p>
-        <ul>
-            <li><strong>Framework:</strong> FastAPI with async support for high-performance request handling</li>
-            <li><strong>Real-time:</strong> WebSocket endpoint broadcasting robot state updates to all connected clients</li>
-            <li><strong>REST API:</strong> Endpoints for robot registration, mission queuing, and historical data retrieval</li>
-            <li><strong>Database:</strong> PostgreSQL for persistent storage of robot state and telemetry history</li>
-        </ul>
-
-        <h3>WebSocket Communication</h3>
-        <p>
-            Pub/sub architecture enabling instant updates from robot simulators to all connected dashboard clients. The backend maintains connection state and handles graceful reconnection with exponential backoff.
+            Three.js 3D map showing robot positions with live updates
         </p>
 
         <h2>Features</h2>
-
-        <h3>Robot Status Cards</h3>
         <ul>
-            <li>Live position and orientation display updated at 10Hz</li>
-            <li>Battery level with color-coded indicators (green/yellow/red thresholds)</li>
-            <li>Connection status with automatic offline detection</li>
-            <li>Individual robot detail expansion panel</li>
+            <li>Robot status cards: position, battery level (green above 50%, yellow above 20%, red below) and online status</li>
+            <li>Alert panel with severity levels, including automatic low-battery alerts</li>
+            <li>Fleet statistics: total robots, active robots and alert count</li>
         </ul>
 
-        <h3>Alert System</h3>
+        <h2>Limitations</h2>
         <ul>
-            <li>Automatic low battery warnings with configurable thresholds</li>
-            <li>Connection lost notifications with timestamp</li>
-            <li>Alert history panel with severity indicators</li>
-            <li>Visual badge showing active alert count</li>
-        </ul>
-
-        <h3>Fleet Statistics</h3>
-        <ul>
-            <li>Total robots in fleet with active/offline breakdown</li>
-            <li>Current alert count by severity</li>
-            <li>Average battery level across fleet</li>
-            <li>System status overview</li>
-        </ul>
-
-        <h2>Deployment</h2>
-        <p>
-            Containerized application deployed to Google Cloud Platform for public accessibility and portfolio demonstration.
-        </p>
-        <ul>
-            <li><strong>Containerization:</strong> Docker containers for both frontend and backend services</li>
-            <li><strong>Cloud hosting:</strong> Google Cloud Compute Engine VM with external IP</li>
-            <li><strong>Networking:</strong> Configured firewall rules for HTTP/WebSocket access</li>
-            <li><strong>Configuration:</strong> Environment-based settings for local development vs production deployment</li>
+            <li>Simulated robots only; no persistence (state lives in memory)</li>
+            <li>Runs locally; an earlier cloud demo is offline</li>
         </ul>
 
         <h2>Technology Stack</h2>
-        
-        <h3>Frontend</h3>
         <p>
-            <code>React 18</code>, <code>TypeScript</code>, <code>Vite</code>, <code>Three.js</code>, <code>React Three Fiber</code>, <code>Zustand</code>, <code>Tailwind CSS</code>
-        </p>
-
-        <h3>Backend</h3>
-        <p>
-            <code>Python</code>, <code>FastAPI</code>, <code>WebSocket</code>, <code>PostgreSQL</code>, <code>SQLAlchemy</code>, <code>Uvicorn</code>
-        </p>
-
-        <h3>DevOps</h3>
-        <p>
-            <code>Docker</code>, <code>Google Cloud Platform</code>, <code>Git</code>
+            <code>Python</code>, <code>ROS 2 (rclpy)</code>, <code>FastAPI</code>, <code>WebSocket</code>, <code>React 18</code>, <code>Vite</code>,
+            <code>Three.js</code>, <code>React Three Fiber</code>, <code>Zustand</code>, <code>Tailwind CSS</code>
         </p>
 
         <h2>Future Development</h2>
         <ul>
-            <li><strong>Real robot integration:</strong> Connect Quadruped and Balloon Boy for live monitoring</li>
-            <li><strong>Path planning:</strong> Visualize planned trajectories and navigation goals</li>
-            <li><strong>Command interface:</strong> Send movement commands to robots from dashboard</li>
-            <li><strong>Historical charts:</strong> Plot battery drain and movement patterns over time</li>
-            <li><strong>Multi-robot coordination:</strong> Task assignment and fleet optimization algorithms</li>
+            <li><strong>Real robot integration:</strong> connect physical robots (e.g. the quadruped) for live monitoring</li>
+            <li><strong>Command interface:</strong> send goals to robots from the dashboard</li>
+            <li><strong>History:</strong> store telemetry and plot battery drain and movement over time</li>
         </ul>
-<!--
-        <a href="https://github.com/ThiagoPari/robot-fleet-dashboard" target="_blank" class="github-link">View on GitHub →</a>
--->
     </div>
 
 </body>

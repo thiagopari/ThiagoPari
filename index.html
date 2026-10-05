@@ -3,12 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thiago Pari - Robotics Engineer</title>
+    <title>Thiago Pari | Perception &amp; 3D Mapping</title>
+    <meta property="og:title" content="Thiago Pari | Perception &amp; 3D Mapping">
+    <meta property="og:description" content="M.S. Robotics, Northeastern (May 2027). Underwater perception and 3D mapping, structure-from-motion, sensor fusion.">
+    <meta property="og:url" content="https://thiagopari.github.io/ThiagoPari/">
+    <meta property="og:image" content="https://thiagopari.github.io/ThiagoPari/images/underwater-sfm.jpg">
+    <meta property="og:type" content="website">
+    <meta name="description" content="Thiago Pari, M.S. Robotics at Northeastern (May 2027). Perception, 3D mapping and state estimation: underwater sonar and IMU mapping, structure-from-motion, sensor fusion. Projects and resume.">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+        html {
+            scroll-padding-top: 6rem;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -41,6 +50,8 @@
         }
         nav ul {
             display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 2rem;
             list-style: none;
         }
@@ -51,7 +62,7 @@
             transition: color 0.3s;
         }
         nav a:hover {
-            color: #2196F3;
+            color: #1565c0;
         }
         /* Hero Section */
         .hero {
@@ -73,6 +84,7 @@
         }
         .social-links {
             display: flex;
+            flex-wrap: wrap;
             gap: 1rem;
             justify-content: center;
             margin-top: 1rem;
@@ -87,8 +99,8 @@
             transition: all 0.3s;
         }
         .social-links a:hover {
-            border-color: #2196F3;
-            color: #2196F3;
+            border-color: #1565c0;
+            color: #1565c0;
         }
         /* Projects Grid */
         .projects {
@@ -156,22 +168,11 @@
         }
         .tag {
             background: #e3f2fd;
-            color: #1976d2;
+            color: #1565c0;
             padding: 0.25rem 0.75rem;
             border-radius: 4px;
             font-size: 0.85rem;
             font-weight: 500;
-        }
-        /* About Section */
-        .about {
-            max-width: 800px;
-            margin: 4rem auto;
-            padding: 0 2rem;
-        }
-        .about p {
-            color: #555;
-            line-height: 1.8;
-            margin-bottom: 1rem;
         }
         /* Footer */
         footer {
@@ -191,27 +192,137 @@
             margin-top: 1rem;
         }
         .contact-info a {
-            color: #2196F3;
+            color: #1565c0;
             text-decoration: none;
         }
         .contact-line span {
-            margin-right: 30px;   /* adjust spacing */
+            display: inline-block;
+            margin: 0 15px;
+        }
+
+        /* Hero focus, status and summary */
+        .hero .focus {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 0.25rem;
+        }
+        .hero .status {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 1.25rem;
+        }
+        .hero .summary {
+            max-width: 720px;
+            margin: 0 auto 1.5rem;
+            font-size: 1.05rem;
+            color: #555;
+        }
+        .social-links a.primary {
+            background: #1976d2;
+            border-color: #1976d2;
+            color: #fff;
+        }
+        .social-links a.primary:hover {
+            background: #1565c0;
+            color: #fff;
+        }
+        /* Card details */
+        .card-context {
+            color: #6b6b6b;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+        .pill {
+            display: inline-block;
+            background: #fff3e0;
+            color: #bf360c;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.1rem 0.5rem;
+            border-radius: 999px;
+            margin-left: 0.25rem;
+        }
+        .exp-list {
+            margin: 0.75rem 0 1rem 1.25rem;
+            color: #555;
+            font-size: 0.95rem;
+        }
+        .exp-list li {
+            margin-bottom: 0.4rem;
+        }
+        .nda-note {
+            color: #6b6b6b;
+            font-size: 0.85rem;
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+        /* Other projects, skills, education */
+        .compact-list {
+            list-style: none;
+            border-top: 1px solid #e0e0e0;
+        }
+        .compact-list li {
+            padding: 0.9rem 0;
+            border-bottom: 1px solid #e0e0e0;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        .compact-list a {
+            color: #1976d2;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .compact-list a:hover {
+            text-decoration: underline;
+        }
+        .compact-list .when {
+            color: #6b6b6b;
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.25rem 2rem;
+        }
+        .skills-grid h3 {
+            font-size: 1rem;
+            color: #222;
+            margin-bottom: 0.25rem;
+        }
+        .skills-grid p {
+            color: #555;
+            font-size: 0.95rem;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
+            header {
+                position: static;
+            }
             .header-content {
                 flex-direction: column;
                 gap: 1rem;
+                padding: 0 1rem;
             }
             nav ul {
-                gap: 1rem;
+                gap: 0.75rem;
             }
             .hero h1 {
                 font-size: 2rem;
             }
             .projects-grid {
                 grid-template-columns: 1fr;
+            }
+        }
+        @media print {
+            header, .social-links, .project-image {
+                display: none;
+            }
+            .project-card, .compact-list li {
+                break-inside: avoid;
+            }
+            h2, h3 {
+                break-after: avoid;
             }
         }
     </style>
@@ -224,24 +335,29 @@
             <nav>
                 <ul>
                     <li><a href="#experience">Experience</a></li>
-                    <li><a href="#education">Education</a></li>
                     <li><a href="#projects">Projects</a></li>
-<!--
-                    <li><a href="#about">About</a></li>
--->
+                    <li><a href="#skills">Skills</a></li>
                     <li><a href="#contact">Contact</a></li>
                     <li><a href="Pari Resume.pdf" target="_blank">Resume</a></li>
                 </ul>
             </nav>
         </div>
     </header>
-    
+
     <!-- Hero Section -->
     <section class="hero">
         <h1>Thiago Pari</h1>
-        <p>Robotics Engineer</p>
+        <p class="focus">Perception &middot; 3D Mapping &middot; State Estimation</p>
+        <p class="status">M.S. Robotics, Northeastern University &middot; Graduating May 2027 &middot; Open to full-time roles</p>
+        <p class="summary">
+            I work on perception and mapping for places where cameras and GPS stop being reliable.
+            At Archenaux Robotics I owned the 3D mapping architecture for an underwater hull-inspection robot
+            (sensor selection, ROS 2 sonar and IMU drivers, SLAM evaluation on pool data) and trained a real-time segmentation model.
+            I'm looking for full-time perception, 3D mapping, ROS 2 and research engineering roles after I graduate in May 2027.
+        </p>
         <div class="social-links">
-            <a href="https://github.com/ThiagoPari" target="_blank">GitHub</a>
+            <a href="Pari Resume.pdf" target="_blank" class="primary">Resume (PDF)</a>
+            <a href="https://github.com/thiagopari" target="_blank">GitHub</a>
             <a href="https://linkedin.com/in/thiago-pari" target="_blank">LinkedIn</a>
             <a href="mailto:parimaquera.t@northeastern.edu">Email</a>
         </div>
@@ -251,52 +367,30 @@
     <section class="projects" id="experience">
         <h2 class="section-title">Experience</h2>
         <div class="projects-grid" style="grid-template-columns: 1fr;">
-            <div class="project-card" style="cursor: default;">
+            <div class="project-card" style="cursor: default; transform: none; box-shadow: none;">
                 <div class="project-content">
-                    <h3 class="project-title">Robotics Engineer Co-op &mdash; Archenaux Robotics</h3>
-                    <p class="project-description" style="color:#888; font-size:0.9rem; margin-bottom:0.5rem;">
-                        May 2026 &ndash; Present
-                    </p>
+                    <h3 class="project-title">Robotics Engineer Co-op, Underwater Perception &amp; 3D Mapping &mdash; Archenaux Robotics</h3>
+                    <p class="card-context">Somerville, MA &middot; May &ndash; Sep 2026</p>
                     <p class="project-description">
-                        Underwater perception and 3D reconstruction research for an autonomous
-                        marine robotics platform. Sensor-architecture trade studies and
-                        prototype validation of structure-from-motion and SLAM pipelines.
-                        Cross-functional scoping with founders, product, and engineering.
+                        Owned the 3D mapping architecture on a 5&ndash;7 person team building an underwater robot that cleans and inspects ship hulls.
+                        Ruled out visual SLAM early (median 51 ORB keypoints per frame on recorded camera data) and moved the design to sonar + IMU.
                     </p>
+                    <ul class="exp-list">
+                        <li>Traced sonar SLAM failure on real pool data (scan matching recovered only 0&ndash;6% of along-track motion) to vertical-mount bias, not noise; recommended a horizontal mount, which reached 0.2&ndash;0.3 m ATE in a pool simulation at slow survey speed</li>
+                        <li>Wrote ROS 2 drivers for the Ping360 sonar and VN-100 IMU, which a teammate integrated into the vehicle firmware; traced slow sonar sweeps to a serial-transfer bottleneck; per-beam time fell ~4&times; (133 &rarr; 32 ms)</li>
+                        <li>Audited 8 pool recordings and found 4 data defects, including a frame bug (FRD vs. FLU) in my own IMU driver that reversed lap headings</li>
+                        <li>Trained a real-time U-Net hull-inspection segmenter (0.50 test mIoU over 7 classes; 247 FPS model-only at 512 px on a laptop GPU) after rejecting public datasets that labeled red paint as rust</li>
+                        <li>Built an Isaac Sim Replicator synthetic-data pipeline and a sonar survey simulator calibrated from recorded rosbags</li>
+                    </ul>
+                    <p class="nda-note">Under NDA, so no images or code from this work are shown.</p>
                     <div class="tech-tags">
-                        <span class="tag">Computer Vision</span>
-                        <span class="tag">SfM / SLAM</span>
-                        <span class="tag">COLMAP</span>
-                        <span class="tag">Sensor Fusion</span>
+                        <span class="tag">ROS 2</span>
+                        <span class="tag">Sonar + IMU SLAM</span>
                         <span class="tag">Python</span>
+                        <span class="tag">PyTorch</span>
+                        <span class="tag">Isaac Sim</span>
+                        <span class="tag">rosbag2</span>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Education Section -->
-    <section class="projects" id="education">
-        <h2 class="section-title">Education</h2>
-        <div class="projects-grid" style="grid-template-columns: 1fr;">
-            <div class="project-card" style="cursor: default;">
-                <div class="project-content">
-                    <h3 class="project-title">Northeastern University &mdash; Boston, MA</h3>
-                    <p class="project-description" style="color:#888; font-size:0.9rem; margin-bottom:0.5rem;">
-                        M.S. Robotics Engineering &middot; Expected 2027
-                    </p>
-                    <p class="project-description">
-                        Coursework in control systems, perception, SLAM, numerical methods,
-                        and state estimation.
-                    </p>
-                </div>
-            </div>
-            <div class="project-card" style="cursor: default;">
-                <div class="project-content">
-                    <h3 class="project-title">New York University &mdash; New York, NY</h3>
-                    <p class="project-description" style="color:#888; font-size:0.9rem; margin-bottom:0.5rem;">
-                        B.A. Economics &amp; Mathematics
-                    </p>
                 </div>
             </div>
         </div>
@@ -306,19 +400,20 @@
     <section class="projects" id="projects">
         <h2 class="section-title">Projects</h2>
         <div class="projects-grid">
-            
+
             <!-- Project: Underwater SfM Degradation Study -->
-            <a href="https://github.com/thiagopari/underwater-sfm-degradation" target="_blank" style="text-decoration: none; color: inherit;">
+            <a href="projects/underwater-sfm/index.html" style="text-decoration: none; color: inherit;">
                 <div class="project-card">
                     <div class="project-image">
                         <img src="images/underwater-sfm.jpg" alt="Same scene under clear air and increasingly turbid Jerlov water types">
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">Underwater SfM Degradation Study</h3>
+                        <p class="card-context">Personal research project &middot; Jul &ndash; Sep 2026 &middot; Solo</p>
                         <p class="project-description">
-                            Simulation study of when COLMAP stops recovering camera poses underwater: spectral rendering from
-                            measured Jerlov water optics with camera noise, scored by pose error against a clear-air reference
-                            over 56 seeded runs. Water type and range collapse onto one optical-depth axis.
+                            Physics-based underwater renderer (measured Jerlov optics, camera noise) feeding COLMAP, scored against a
+                            clear-air reference over 64 seeded runs. SfM keeps one map up to optical depth 2.4 (attenuation &times; range), splits at 2.7 and loses
+                            cameras from 3.2; color correction doesn't move the transition.
                         </p>
                         <div class="tech-tags">
                             <span class="tag">Python</span>
@@ -326,101 +421,6 @@
                             <span class="tag">PyTorch</span>
                             <span class="tag">Computer Vision</span>
                             <span class="tag">SfM</span>
-                        </div>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Project: Balloon Boy -->
-            <a href="projects/balloon-boy/index.html" style="text-decoration: none; color: inherit;">
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="images/balloon_boy.jpg" alt="Balloon Boy">
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">Balloon Boy: AI-Powered Desktop Assistant</h3>
-                        <p class="project-description">
-                            14-inch animatronic with custom dual-axis eye mechanism using four-bar linkages,
-                            hybrid local/cloud AI system (Qwen 2.5 7B + GPT-4o-mini), and agentic tool framework
-                            including web search and browser automation. Currently testing eye mechanism.
-                        </p>
-                        <div class="tech-tags">
-                            <span class="tag">Python</span>
-                            <span class="tag">Qwen 2.5 7B</span>
-                            <span class="tag">ESP32-S3</span>
-                            <span class="tag">Fusion 360</span>
-                            <span class="tag">Selenium</span>
-                        </div>
-                    </div>
-                </div>
-            </a> 
-
-            <!-- Project: Robot Fleet Dashboard -->
-            <a href="projects/fleet-dashboard/index.html" style="text-decoration: none; color: inherit;">
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="images/fleet-dashboard-3d.jpg" alt="Fleet Dashboard">
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">Real-Time Robot Fleet Dashboard</h3>
-                        <p class="project-description">
-                            Full-stack web application for monitoring robot fleets with Three.js 3D visualization,
-                            WebSocket real-time updates at 10Hz, battery alerts, and fleet statistics.
-                            Deployed to Google Cloud Platform with sub-100ms latency.
-                        </p>
-                        <div class="tech-tags">
-                            <span class="tag">React</span>
-                            <span class="tag">TypeScript</span>
-                            <span class="tag">FastAPI</span>
-                            <span class="tag">Three.js</span>
-                            <span class="tag">Docker</span>
-                        </div>
-                    </div>
-                </div>
-            </a> 
-
-            <!-- Project: 12-DOF Quadruped -->
-            <a href="projects/quadruped/index.html" style="text-decoration: none; color: inherit;">
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="images/robofox-quadruped.jpg" alt="12-DOF Quadruped Robot">
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">12-DOF Quadruped Robot</h3>
-                        <p class="project-description">
-                            Custom quadruped robot built from scratch with 3D printed body, 12 servo actuators,
-                            and integrated electronics. Currently standing stably with calibrated servos while
-                            developing inverse kinematics and gait generation in MuJoCo simulation.
-                        </p>
-                        <div class="tech-tags">
-                            <span class="tag">Python</span>
-                            <span class="tag">MuJoCo</span>
-                            <span class="tag">Fusion 360</span>
-                            <span class="tag">Raspberry Pi</span>
-                            <span class="tag">I2C</span>
-                        </div>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Project: Bundle Adjustment -->
-            <a href="When Does Convex Bundle Adjustment Fail.pdf" target="_blank" style="text-decoration: none; color: inherit;">
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="images/bundle-adjustment-unidepth.png" alt="Convex Bundle Adjustment Analysis">
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">Robustness Analysis of Convex Bundle Adjustment</h3>
-                        <p class="project-description">
-                            Systematic stress testing of the XM algorithm pipeline identifying COLMAP feature matching as the critical bottleneck (5.7% retention) while the convex SDP solver maintained 100% success rate under extreme conditions.
-                        </p>
-                        <div class="tech-tags">
-                            <span class="tag">C++</span>
-                            <span class="tag">Python</span>
-                            <span class="tag">SLAM</span>
-                            <span class="tag">SDP Optimization</span>
-                            <span class="tag">Computer Vision</span>
-                            <span class="tag">UniDepth</span>
                         </div>
                     </div>
                 </div>
@@ -434,38 +434,151 @@
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">Multi-Sensor Fusion Localization</h3>
+                        <p class="card-context">Nov 2025 &ndash; Jan 2026 &middot; Solo</p>
                         <p class="project-description">
-                            Real-time EKF/UKF sensor fusion of wheel odometry, IMU and simulated GPS at 50 Hz, cutting RMS error 28.8% vs. dead reckoning, plus a trimmed ICP LiDAR scan-matching update.
+                            50 Hz ROS 2 EKF and UKF fusing wheel odometry, IMU and simulated GPS in Gazebo, cutting RMS position error
+                            28.8% vs. dead reckoning, and riding through simulated 15 s GPS outages. A trimmed ICP LiDAR update is written but not yet run in simulation.
                         </p>
                         <div class="tech-tags">
-                            <span class="tag">ROS2</span>
+                            <span class="tag">ROS 2</span>
                             <span class="tag">Python</span>
                             <span class="tag">EKF</span>
                             <span class="tag">UKF</span>
-                            <span class="tag">IMU</span>
-                            <span class="tag">GPS</span>
-                            <span class="tag">LiDAR ICP</span>
+                            <span class="tag">Gazebo</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Project: Bundle Adjustment -->
+            <a href="When Does Convex Bundle Adjustment Fail.pdf" target="_blank" style="text-decoration: none; color: inherit;">
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="images/bundle-adjustment-unidepth.jpg" alt="Convex Bundle Adjustment Analysis">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Robustness Analysis of Convex Bundle Adjustment</h3>
+                        <p class="card-context">Course project, EECE 5550 Mobile Robotics &middot; Nov &ndash; Dec 2025 &middot; Team of 2</p>
+                        <p class="project-description">
+                            Stress-tested XM, a convex SDP bundle-adjustment pipeline, under severe image blur and ill-conditioned problems.
+                            COLMAP feature matching was the bottleneck (match retention fell to 5.7% under severe blur), while the
+                            SDP relaxation stayed tight (rank &le; 3) in every tested case, though tight is not the same as correct, as the report notes. Report (PDF).
+                        </p>
+                        <div class="tech-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">SDP Optimization</span>
+                            <span class="tag">Bundle Adjustment</span>
+                            <span class="tag">COLMAP</span>
+                            <span class="tag">UniDepth</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Project: Bayesian Skill Gate (hackathons) -->
+            <a href="projects/skill-gate/index.html" style="text-decoration: none; color: inherit;">
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="images/skill-gate.jpg" alt="Simulated robot arm opening a cabinet drawer in the LIBERO benchmark">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Bayesian Skill Gate for VLA Robot Policies <span class="pill">In progress</span></h3>
+                        <p class="card-context">Dell &times; NVIDIA GB10 Hackathon &middot; Oct 2026 &middot; Team of 4 &middot; My part: the gate, the GR00T cell service and the control plane</p>
+                        <p class="project-description">
+                            An AI agent may trigger a robot skill only after trials show P(success &ge; 0.8) &ge; 0.95 under a Beta posterior.
+                            On a Dell GB10, the gate ran 20 GR00T N1.7 episodes in LIBERO simulation and opened only for the checkpoint
+                            that went 15/15. At the event only the agent's prompt enforced it; now moving it into a Cedar-enforced control plane.
+                        </p>
+                        <div class="tech-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">GR00T N1.7</span>
+                            <span class="tag">Bayesian inference</span>
+                            <span class="tag">Cedar</span>
+                            <span class="tag">LIBERO</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Project: 12-DOF Quadruped -->
+            <a href="projects/quadruped/index.html" style="text-decoration: none; color: inherit;">
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="images/robofox-quadruped.jpg" alt="12-DOF Quadruped Robot">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">12-DOF Quadruped Robot</h3>
+                        <p class="card-context">Personal project &middot; Oct 2025 &ndash; present &middot; Based on Will Cogley's RoboFox design</p>
+                        <p class="project-description">
+                            Printed, wired and calibrated a 12-servo quadruped (Raspberry Pi, PCA9685, BNO055 IMU) that stood stably on calibrated servos (Feb 2026);
+                            IK and gait code developed on a MuJoCo model. Status, Sep 2026: legs being
+                            reprinted before IK tuning on the hardware.
+                        </p>
+                        <div class="tech-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">MuJoCo</span>
+                            <span class="tag">Raspberry Pi</span>
+                            <span class="tag">I2C</span>
+                            <span class="tag">Inverse Kinematics</span>
                         </div>
                     </div>
                 </div>
             </a>
 
         </div>
+
+        <h3 class="project-title">Other Projects</h3>
+        <ul class="compact-list">
+            <li>
+                <a href="projects/fleet-dashboard/index.html">Robot Fleet Dashboard</a> <span class="when">&middot; Jan &ndash; Feb 2026</span><br>
+                ROS 2-to-web bridge: an rclpy + FastAPI node streams odometry (10 Hz) and battery state (1 Hz) from 3 simulated robots
+                over WebSocket to a React / Three.js dashboard.
+            </li>
+            <li>
+                <a href="projects/balloon-boy/index.html">Balloon Boy</a> <span class="when">&middot; Oct 2025 &ndash; Feb 2026, paused</span><br>
+                Animatronic desktop assistant: a local + cloud LLM agent (Qwen 2.5 7B, GPT-4o-mini) with tool use and memory,
+                and ESP32-S3 servo firmware (C++) for the eyes. Eye mechanism based on Will Cogley's open design.
+            </li>
+        </ul>
     </section>
-<!--
-        <section class="about" id="about">
-        <h2 class="section-title">About</h2>
-        <p>
-            I'm a Master's student in Robotics Engineering at Northeastern University with a background in Economics and Mathematics from NYU. My transition into robotics has been driven by a passion for building intelligent systems that bridge hardware and software.
-        </p>
-        <p>
-            My work focuses on sensor fusion, computer vision, and control systems for autonomous robots. I've developed projects ranging from animatronic robots to SLAM systems, with particular expertise in integrating IMU, GPS, and LiDAR sensors for robust state estimation.
-        </p>
-        <p>
-            Currently seeking co-op and internship opportunities in robotics and autonomous vehicles where I can apply my skills in perception, localization, and system integration.
-        </p>
+
+    <!-- Skills Section -->
+    <section class="projects" id="skills">
+        <h2 class="section-title">Skills</h2>
+        <div class="skills-grid">
+            <div>
+                <h3>Perception &amp; SLAM</h3>
+                <p>OpenCV, COLMAP / SfM, GTSAM, KISS-ICP / GICP, Open3D point clouds, EKF / UKF sensor fusion</p>
+            </div>
+            <div>
+                <h3>Deep Learning</h3>
+                <p>PyTorch, semantic segmentation, object detection (YOLO), DINOv2 / AnyLoc, synthetic data</p>
+            </div>
+            <div>
+                <h3>Robotics &amp; Simulation</h3>
+                <p>ROS 2 (rosbag2, DDS, TF, MAVROS), Isaac Sim / Replicator, Gazebo, MuJoCo; sonar, IMU, GPS, cameras</p>
+            </div>
+            <div>
+                <h3>Programming &amp; Tools</h3>
+                <p>Python, C++, MATLAB, SQL, Git, Linux, Docker, pytest, GitHub Actions CI, Claude Code (AI-assisted development)</p>
+            </div>
+        </div>
     </section>
--->
+
+    <!-- Education Section -->
+    <section class="projects" id="education">
+        <h2 class="section-title">Education</h2>
+        <ul class="compact-list">
+            <li>
+                <strong>Northeastern University</strong> &mdash; M.S. Robotics, GPA 3.7 <span class="when">&middot; Boston, MA &middot; Expected May 2027</span><br>
+                Computer Vision, Robotic Science and Systems, Mobile Robotics, Robotics Sensing and Navigation, Machine Learning
+            </li>
+            <li>
+                <strong>New York University</strong> &mdash; B.A. Economics and Mathematics <span class="when">&middot; New York, NY &middot; May 2025</span>
+            </li>
+        </ul>
+    </section>
+
     <!-- Footer -->
     <footer id="contact">
         <div class="footer-content">
@@ -476,9 +589,11 @@
                 <span>Email: <a href="mailto:parimaquera.t@northeastern.edu">parimaquera.t@northeastern.edu</a></span>
                 <span>Phone: (347)-409-0333</span>
                 <span>LinkedIn: <a href="https://linkedin.com/in/thiago-pari">thiago-pari</a></span>
+                <span>GitHub: <a href="https://github.com/thiagopari">thiagopari</a></span>
             </p>
 
             </div>
         </div>
     </footer>
-
+</body>
+</html>

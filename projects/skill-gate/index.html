@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bayesian Skill Gate for VLA Robot Policies - Thiago Pari</title>
+    <meta name="description" content="A Bayesian gate that lets an AI agent trigger a GR00T N1.7 robot skill only after measured trials support it. Built at the Dell x NVIDIA GB10 hackathon, continued for the Nebius x NVIDIA hackathon.">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #ffffff;
+        }
+        header {
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo { font-size: 1.5rem; font-weight: 700; color: #222; text-decoration: none; }
+        nav ul { display: flex; gap: 2rem; list-style: none; }
+        nav a { color: #555; text-decoration: none; font-weight: 500; transition: color 0.3s; }
+        nav a:hover { color: #1565c0; }
+        .project-header { max-width: 900px; margin: 3rem auto 2rem; padding: 0 2rem; }
+        .project-header h1 { font-size: 2.5rem; font-weight: 700; color: #222; margin-bottom: 1rem; line-height: 1.2; }
+        .context { color: #666; margin-bottom: 1rem; }
+        .project-meta { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .meta-tag {
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 0.4rem 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin: 0 0.5rem 0.5rem 0;
+        }
+        .status-complete { background: #e8f5e9; color: #2e7d32; }
+        .status-inprogress { background: #fff3e0; color: #bf360c; }
+        .project-content { max-width: 900px; margin: 0 auto; padding: 0 2rem 4rem; }
+        .project-content h2 { font-size: 1.8rem; font-weight: 700; color: #222; margin: 3rem 0 1rem; }
+        .project-content p { color: #555; margin-bottom: 1rem; line-height: 1.8; }
+        .project-content ul { margin-left: 2rem; margin-bottom: 1rem; }
+        .project-content li { color: #555; margin-bottom: 0.5rem; line-height: 1.8; }
+        .clips { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        figure { margin: 0; }
+        video { width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: #000; }
+        figcaption { color: #666; font-size: 0.9rem; text-align: center; margin-top: 0.75rem; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .stat-card { background: #f5f5f5; padding: 1.5rem; border-radius: 8px; text-align: center; }
+        .stat-value { font-size: 2rem; font-weight: 700; color: #1976d2; margin-bottom: 0.5rem; }
+        .stat-label { color: #666; font-size: 0.9rem; }
+        .table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+        table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+        th, td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0; color: #555; }
+        th { color: #222; background: #f5f5f5; }
+        .highlight-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; gap: 1rem; }
+            nav ul { gap: 1rem; }
+            .project-header h1 { font-size: 2rem; }
+            header { position: static; }
+        }
+        @media print {
+            header { position: static; }
+            nav, .clips { display: none; }
+            .stat-card, tr { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="../../index.html" class="logo">Thiago Pari</a>
+            <nav>
+                <ul>
+                    <li><a href="../../index.html#experience">Experience</a></li>
+                    <li><a href="../../index.html#projects">Projects</a></li>
+                    <li><a href="../../index.html#contact">Contact</a></li>
+                    <li><a href="../../Pari Resume.pdf" target="_blank">Resume</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="project-header">
+        <h1>Bayesian Skill Gate for VLA Robot Policies</h1>
+        <p class="context">Dell &times; NVIDIA GB10 Hackathon, Oct 3, 2026 (team of 4) &middot; continued for the Nebius &times; NVIDIA Hackathon</p>
+        <div class="project-meta">
+            <span class="meta-tag">Python</span>
+            <span class="meta-tag">GR00T N1.7</span>
+            <span class="meta-tag">LIBERO</span>
+            <span class="meta-tag">Bayesian inference</span>
+            <span class="meta-tag">Thompson sampling</span>
+            <span class="meta-tag">Cedar</span>
+            <span class="meta-tag">Docker (arm64)</span>
+        </div>
+        <div>
+            <span class="status-badge status-complete">&#10003; Ran on the GB10, Oct 3</span>
+            <span class="status-badge status-inprogress">In progress: repo link after the Oct 30 submission</span>
+        </div>
+    </div>
+
+    <div class="project-content">
+
+        <div class="highlight-box">
+            <strong>My part:</strong> the Bayesian gate, the arm64 GR00T + LIBERO cell service the supervisor agent calls,
+            and the Learner's Permit control plane. Teammates built the fleet simulation and Isaac Sim warehouse, the integration and Docker stack, the supervisor LLM setup, the Discord bot and the dashboard.
+        </div>
+
+        <h2>Problem</h2>
+        <p>
+            An AI agent that can trigger robot skills needs a rule for when a skill can be trusted. Vision-language-action (VLA)
+            policies vary widely from task to task, so that rule should come from measured trials of each skill, not from a prompt.
+        </p>
+
+        <h2>The Gate</h2>
+        <ul>
+            <li>Each trial succeeds or fails. With a uniform prior, a policy's success rate has a <code>Beta(1 + s, 1 + f)</code> posterior.</li>
+            <li>The gate opens only when the best candidate has <strong>P(rate &ge; 0.8) &ge; 0.95</strong>. 13 straight successes (0.956) are the shortest run that opens it; 12 give 0.945. In C-3 the candidate opened it at 15/15 (0.972).</li>
+            <li>Thompson sampling chooses which candidate checkpoint gets the next batch of trials, so trials flow to the policy most likely to be best.</li>
+            <li>An "unattended" tier asks for P(rate &ge; 0.99) &ge; 0.95, which takes 298 straight successes: high reliability has to be paid for in trials.</li>
+        </ul>
+        <p>The trial cap matters as much as the threshold. Exact probabilities for the single-policy case, batches of 4:</p>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>Trial cap</th><th>A true-90% policy gets licensed</th><th>A policy right at 80% gets licensed</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>40</td><td>55%</td><td>8%</td></tr>
+                    <tr><td>100</td><td>92%</td><td>14%</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p>The project moved from a cap of 40 to 100 because of this table.</p>
+
+        <h2>Result on the GB10 (Oct 3)</h2>
+        <p>
+            The models and simulators ran locally on one Dell Pro Max GB10: a Qwen3.6 supervisor model on vLLM, an agent sandbox, and two GR00T N1.7
+            policy servers on NVIDIA's LIBERO checkpoints, in containers built for arm64 and staged offline before the event.
+            In run C-3 the gate compared two checkpoints on <em>"open the middle drawer of the cabinet"</em> in LIBERO, a simulated robot-manipulation benchmark:
+        </p>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">15/15</div>
+                <div class="stat-label">Candidate checkpoint, P = 0.97: commissioned</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">0/5</div>
+                <div class="stat-label">Current checkpoint: not commissioned</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">2:56</div>
+                <div class="stat-label">20 GR00T episodes, start to decision</div>
+            </div>
+        </div>
+        <div class="clips">
+            <figure>
+                <video src="media/candidate-policy-pass.mp4" autoplay muted loop playsinline controls preload="metadata" aria-label="Simulated robot arm opening the middle drawer of a cabinet"></video>
+                <figcaption>Candidate checkpoint opens the drawer (simulation).</figcaption>
+            </figure>
+            <figure>
+                <video src="media/current-policy-fail.mp4" autoplay muted loop playsinline controls preload="metadata" aria-label="Simulated robot arm failing to open the cabinet drawer"></video>
+                <figcaption>Current checkpoint fails the same task (simulation).</figcaption>
+            </figure>
+        </div>
+        <p>
+            <em>Caveat:</em> the passing checkpoint was trained on that task suite and the failing one wasn't, so C-3 shows the gate
+            making the right call, not a surprising policy result.
+        </p>
+
+        <h2>What the Hackathon Exposed, and the Fix</h2>
+        <p>
+            At the GB10 event only the agent's prompt respected the gate; no code checked it. Learner's Permit, the continuation,
+            puts the gate in code: a planner (Nemotron) can reach a GR00T skill only through one endpoint, <code>POST /run</code>.
+        </p>
+        <ul>
+            <li>A Cedar policy (an authorization-policy language) checks the role from the session, never from the LLM; anything else the planner emits is dropped.</li>
+            <li>The skill must hold a license earned in trials, scoped to the conditions that were tested and revoked when live results slip.</li>
+            <li>A web datasheet check can block a pick but never allow one. Missing context means deny.</li>
+        </ul>
+        <p>
+            <strong>Status (Oct 5):</strong> control plane, console and a refuse &rarr; earn &rarr; block &rarr; revoke demo, with 64 passing tests
+            and CI, all on a mock runner with offline stand-ins for Nemotron and the datasheet check. GR00T trials in Isaac Sim come next; no Isaac Sim numbers yet.
+        </p>
+    </div>
+</body>
+</html>

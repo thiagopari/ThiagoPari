@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Underwater SfM Degradation Study - Thiago Pari</title>
+    <meta name="description" content="Simulation study of when COLMAP structure-from-motion stops recovering camera poses underwater: measured Jerlov water optics, a camera noise model and 64 seeded runs.">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #ffffff;
+        }
+        header {
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo { font-size: 1.5rem; font-weight: 700; color: #222; text-decoration: none; }
+        nav ul { display: flex; gap: 2rem; list-style: none; }
+        nav a { color: #555; text-decoration: none; font-weight: 500; transition: color 0.3s; }
+        nav a:hover { color: #1565c0; }
+        .project-header { max-width: 900px; margin: 3rem auto 2rem; padding: 0 2rem; }
+        .project-header h1 { font-size: 2.5rem; font-weight: 700; color: #222; margin-bottom: 1rem; line-height: 1.2; }
+        .context { color: #666; margin-bottom: 1rem; }
+        .project-meta { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .meta-tag {
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 0.4rem 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .btn-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .btn {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            border: 1px solid #1976d2;
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .btn-primary { background: #1976d2; color: #fff; }
+        .btn:hover { background: #1565c0; border-color: #1565c0; color: #fff; }
+        .project-content { max-width: 900px; margin: 0 auto; padding: 0 2rem 4rem; }
+        .project-content h2 { font-size: 1.8rem; font-weight: 700; color: #222; margin: 3rem 0 1rem; }
+        .project-content p { color: #555; margin-bottom: 1rem; line-height: 1.8; }
+        .project-content ul, .project-content ol { margin-left: 2rem; margin-bottom: 1rem; }
+        .project-content li { color: #555; margin-bottom: 0.5rem; line-height: 1.8; }
+        figure { margin: 2rem 0; }
+        figure img { width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        figcaption { color: #666; font-size: 0.9rem; text-align: center; margin-top: 0.75rem; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .stat-card { background: #f5f5f5; padding: 1.5rem; border-radius: 8px; text-align: center; }
+        .stat-value { font-size: 2rem; font-weight: 700; color: #1976d2; margin-bottom: 0.5rem; }
+        .stat-label { color: #666; font-size: 0.9rem; }
+        .table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+        table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+        th, td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0; color: #555; }
+        th { color: #222; background: #f5f5f5; }
+        .highlight-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; gap: 1rem; }
+            nav ul { gap: 1rem; }
+            .project-header h1 { font-size: 2rem; }
+            header { position: static; }
+        }
+        @media print {
+            header { position: static; }
+            nav { display: none; }
+            figure, .stat-card, tr { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="../../index.html" class="logo">Thiago Pari</a>
+            <nav>
+                <ul>
+                    <li><a href="../../index.html#experience">Experience</a></li>
+                    <li><a href="../../index.html#projects">Projects</a></li>
+                    <li><a href="../../index.html#contact">Contact</a></li>
+                    <li><a href="../../Pari Resume.pdf" target="_blank">Resume</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="project-header">
+        <h1>Underwater SfM Degradation Study</h1>
+        <p class="context">Personal research project &middot; Jul &ndash; Sep 2026 &middot; Solo</p>
+        <div class="project-meta">
+            <span class="meta-tag">Python</span>
+            <span class="meta-tag">COLMAP 4</span>
+            <span class="meta-tag">PyTorch (DPT depth)</span>
+            <span class="meta-tag">Underwater optics</span>
+            <span class="meta-tag">pytest + GitHub Actions</span>
+        </div>
+        <div class="btn-row">
+            <a class="btn btn-primary" href="https://github.com/thiagopari/underwater-sfm-degradation" target="_blank">Code on GitHub &rarr;</a>
+            <a class="btn" href="https://thiagopari.github.io/underwater-sfm-degradation/" target="_blank">Interactive viewer &rarr;</a>
+            <a class="btn" href="https://github.com/thiagopari/underwater-sfm-degradation/blob/main/WRITEUP.md" target="_blank">v1 &rarr; v2 write-up &rarr;</a>
+        </div>
+    </div>
+
+    <div class="project-content">
+
+        <figure>
+            <picture><source media="(max-width: 600px)" srcset="media/hero_grid.jpg"><img src="media/hero.jpg" alt="The same building photo rendered for clear air and Jerlov water types IB, II, III, 1C, 3C and 5C, growing greener and hazier left to right"></picture>
+            <figcaption>One frame at a 3 m median standoff: clear air, then Jerlov IB, II, III, 1C, 3C and 5C.</figcaption>
+        </figure>
+
+        <h2>Question</h2>
+        <p>
+            When does off-the-shelf structure-from-motion stop recovering camera poses underwater, and what controls it?
+            For a camera-based underwater mapper, the answer decides whether cameras can carry the map at a given
+            water clarity and standoff, so it is worth measuring rather than guessing.
+        </p>
+
+        <h2>Approach</h2>
+        <ul>
+            <li><strong>Scene:</strong> COLMAP's public <code>south-building</code> photos (30 frames, 1600&times;1200). A clear-air COLMAP run is the reference.</li>
+            <li><strong>Range:</strong> DPT-SwinV2 monocular depth fitted to the reference reconstruction (82% inliers, 2.7% median depth error), with one global scale so every view agrees on range.</li>
+            <li><strong>Water:</strong> spectral rendering from measured absorption and scattering of six Jerlov water types (Williamson &amp; Hollins 2022): direct attenuation with beam attenuation <code>c = a + b</code>, small-angle forward scatter and single-scattering veiling light.</li>
+            <li><strong>Camera:</strong> auto-exposure gain, Poisson shot noise, read noise, 8-bit sRGB and JPEG.</li>
+            <li><strong>Scoring:</strong> COLMAP 4.0.4 with SIFT on every image set, plus ALIKED + LightGlue on the 3 m water-type sweep (one seed); camera poses aligned to the reference (Umeyama) and counted as accurate within 10 cm and 2&deg;. 64 seeded runs on a laptop CPU.</li>
+        </ul>
+
+        <h2>Key Results</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">&tau; &le; 2.4</div>
+                <div class="stat-label">One complete map: all 30 cameras within 25 mm (SIFT, baseline sensor, uncorrected)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">&tau; &asymp; 2.7</div>
+                <div class="stat-label">Map splits into two sub-models</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">&tau; &ge; 3.2</div>
+                <div class="stat-label">Cameras lost: 10&ndash;14 of 30 kept</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">62 / 63</div>
+                <div class="stat-label">Scored runs with every camera in the largest model within 10 cm and 2&deg;</div>
+            </div>
+        </div>
+        <p><em>&tau; is the median optical depth: the green-channel attenuation coefficient times the median scene depth.</em></p>
+
+        <ol>
+            <li><strong>Three regimes, ordered by optical depth.</strong> Water type and range combine into one axis. That part is expected, since range enters the model only through <em>c&middot;r</em>; what the study measures is where the transition sits and what moves it.</li>
+            <li><strong>The transition is not a constant.</strong> Four times the photon budget brings 1C at 5 m back to one complete map; a quarter drops 3C at 3 m to 14 cameras; 10&times; the veiling light splits 3C at 3 m. Treat &tau; &asymp; 2.4 as an optimistic bound for this sensor.</li>
+            <li><strong>SfM fails by fragmenting, not by getting poses wrong.</strong> In 62 of 63 scored runs, every camera in the largest model is within 10 cm and 2&deg; of the reference.</li>
+            <li><strong>Color correction does not move the transition.</strong> At 5C: uncorrected 10&ndash;12 cameras, white balance 11&ndash;12, Sea-thru with estimated parameters 12, an oracle that knows the true water 13. Once noise swamps the detail, re-coloring cannot bring it back.</li>
+            <li><strong>Learned features keep more structure, not more cameras.</strong> ALIKED + LightGlue keeps 7.9k points at 3C and 2.6k at 5C (SIFT: 5.5k and 0.5k) and 14 cameras at 5C (SIFT: 10&ndash;12), at about 6&times; the CPU time.</li>
+        </ol>
+
+        <figure>
+            <img src="media/optical_depth.png" alt="Scatter plot of accurate poses out of 30 against median optical depth for every uncorrected SIFT run at baseline sensor settings; all runs stay at 30 below about 2.4, then drop to between 10 and 17">
+            <figcaption>Accurate poses in the largest model against optical depth, every uncorrected SIFT run at baseline sensor settings. Hollow markers count cameras in any sub-model; the grey band is the observed transition.</figcaption>
+        </figure>
+
+        <h2>Water-Type Sweep</h2>
+        <p>SIFT, 3 m median standoff, 3 seeds (clear air: 2 replicates; mean, with min&ndash;max where runs differ).</p>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>Water</th><th>Cameras in largest model /30</th><th>Camera ATE RMSE (mm)</th><th>3D points</th><th>Exposure gain</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Clear air</td><td>30</td><td>0.3</td><td>13,044</td><td>1.0&times;</td></tr>
+                    <tr><td>IB open ocean</td><td>30</td><td>1.1</td><td>11,871</td><td>2.5&times;</td></tr>
+                    <tr><td>II</td><td>30</td><td>1.9 (1.1&ndash;2.4)</td><td>11,365</td><td>3.1&times;</td></tr>
+                    <tr><td>III turbid open ocean</td><td>30</td><td>3.0</td><td>10,321</td><td>4.7&times;</td></tr>
+                    <tr><td>1C clearest coastal</td><td>30</td><td>3.2 (2.3&ndash;3.7)</td><td>8,691</td><td>7.0&times;</td></tr>
+                    <tr><td>3C coastal</td><td>30</td><td>6.5 (4.5&ndash;7.9)</td><td>5,493</td><td>13.5&times;</td></tr>
+                    <tr><td>5C turbid coastal</td><td>11 (10&ndash;12)</td><td>9.6 (4.2&ndash;18.1)</td><td>515</td><td>43.8&times;</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <figure>
+            <picture><source media="(max-width: 600px)" srcset="media/sweep_stacked.png"><img src="media/sweep.png" alt="Three line charts against Jerlov water type: cameras kept stays at 30 until 3C then drops at 5C; pose error rises on a log scale; 3D points fall, with ALIKED plus LightGlue holding more points than SIFT in turbid water"></picture>
+            <figcaption>Cameras kept, pose error (log scale) and 3D points against water type, SIFT vs. ALIKED + LightGlue.</figcaption>
+        </figure>
+
+        <h2>Limitations</h2>
+        <ul>
+            <li><strong>One scene, and it isn't a hull.</strong> A textured building favors feature matching; low-texture painted hulls will break earlier.</li>
+            <li><strong>Ambient light only.</strong> Vehicle lights change both the signal and the backscatter geometry.</li>
+            <li><strong>Simplified scattering.</strong> Single-scattering veiling light with no multiple scattering is probably too weak, which is why the sensitivity runs matter.</li>
+            <li><strong>The sensor model sets the numbers.</strong> A bigger sensor or longer exposure moves the transition to larger &tau;.</li>
+            <li><strong>No real underwater validation yet</strong>, and 2&ndash;3 seeds per condition (1 for the ALIKED and sensitivity runs).</li>
+        </ul>
+
+        <h2>How It Was Built</h2>
+        <ul>
+            <li>Resumable study runner; every stage reproduces from the repo with <code>make</code> (data download with checksums, depth, study, plots, viewer).</li>
+            <li>Unit tests on the optics and scoring code, run in CI on GitHub Actions.</li>
+            <li><strong>v1 &rarr; v2:</strong> v1 attenuated light with the diffuse coefficient K<sub>d</sub> instead of beam attenuation and had no sensor noise, which understated degradation and made depth-aware color correction look like it recovered the map. v2 fixed both, and the repo's <a href="https://github.com/thiagopari/underwater-sfm-degradation/blob/main/WRITEUP.md" target="_blank">WRITEUP.md</a> lists everything that changed.</li>
+            <li>Public data only: COLMAP's <code>south-building</code> images and published water optics.</li>
+        </ul>
+
+        <h2>Next Steps</h2>
+        <ul>
+            <li>Validate against real underwater footage with ground-truth trajectories (FLSea, AQUALOC).</li>
+            <li>Multiple-scattering path radiance and vehicle-mounted lighting.</li>
+        </ul>
+    </div>
+</body>
+</html>

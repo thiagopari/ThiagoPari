@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Balloon Boy: AI-Powered Desktop Assistant - Thiago Pari</title>
+    <meta name="description" content="Animatronic desktop assistant: a local + cloud LLM agent (Qwen 2.5 7B, GPT-4o-mini) with tools and memory, and ESP32-S3 eye-servo firmware.">
     <style>
         * {
             margin: 0;
@@ -50,7 +51,7 @@
             transition: color 0.3s;
         }
         nav a:hover {
-            color: #2196F3;
+            color: #1565c0;
         }
         .project-header {
             max-width: 900px;
@@ -62,6 +63,7 @@
             font-weight: 700;
             color: #222;
             margin-bottom: 1rem;
+            line-height: 1.2;
         }
         .project-meta {
             display: flex;
@@ -71,7 +73,7 @@
         }
         .meta-tag {
             background: #e3f2fd;
-            color: #1976d2;
+            color: #1565c0;
             padding: 0.4rem 1rem;
             border-radius: 4px;
             font-size: 0.9rem;
@@ -129,7 +131,7 @@
         .stat-value {
             font-size: 2rem;
             font-weight: 700;
-            color: #2196F3;
+            color: #1976d2;
             margin-bottom: 0.5rem;
         }
         .stat-label {
@@ -138,7 +140,7 @@
         }
         .github-link {
             display: inline-block;
-            background: #2196F3;
+            background: #1976d2;
             color: white;
             padding: 0.75rem 1.5rem;
             border-radius: 4px;
@@ -148,7 +150,7 @@
             transition: background 0.3s;
         }
         .github-link:hover {
-            background: #1976d2;
+            background: #1565c0;
         }
         code {
             background: #f5f5f5;
@@ -178,7 +180,7 @@
         }
         .status-inprogress {
             background: #fff3e0;
-            color: #ef6c00;
+            color: #bf360c;
         }
         footer {
             background: #f5f5f5;
@@ -200,6 +202,11 @@
                 font-size: 2rem;
             }
         }
+        @media print {
+            header { position: static; }
+            nav { display: none; }
+            .github-link { color: #1565c0; }
+        }
     </style>
 </head>
 <body>
@@ -208,8 +215,8 @@
             <a href="../../index.html" class="logo">Thiago Pari</a>
             <nav>
                 <ul>
+                    <li><a href="../../index.html#experience">Experience</a></li>
                     <li><a href="../../index.html#projects">Projects</a></li>
-                    <li><a href="../../index.html#about">About</a></li>
                     <li><a href="../../index.html#contact">Contact</a></li>
                     <li><a href="../../Pari Resume.pdf" target="_blank">Resume</a></li>
                 </ul>
@@ -218,50 +225,45 @@
     </header>
 
     <div class="project-header">
-        <h1>🎈 Balloon Boy: AI-Powered Animatronic Desktop Assistant</h1>
+        <h1>Balloon Boy: AI-Powered Animatronic Desktop Assistant</h1>
         <div class="project-meta">
             <span class="meta-tag">Python</span>
             <span class="meta-tag">Qwen 2.5 7B</span>
             <span class="meta-tag">GPT-4o-mini</span>
             <span class="meta-tag">ESP32-S3</span>
-            <span class="meta-tag">Fusion 360</span>
-            <span class="meta-tag">October 2025 – Present</span>
+            <span class="meta-tag">C++ (firmware)</span>
+            <span class="meta-tag">October 2025 – February 2026</span>
         </div>
         <div>
-            <span class="status-badge status-complete">✓ AI System Operational</span>
-            <span class="status-badge status-complete">✓ CAD & Fabrication Complete</span>
-            <span class="status-badge status-inprogress">⚡ Testing Eye Mechanism</span>
+            <span class="status-badge status-complete">✓ LLM agent with tools and memory working</span>
+            <span class="status-badge status-inprogress">Paused since Feb 2026</span>
         </div>
     </div>
 
     <div class="project-content">
-        
-        <!-- Placeholder image - replace when you have photos -->
-        <div class="project-image">
-            <img src="media/balloon_boy.jpg" alt="Balloon Boy" class="project-image">
-        </div>
+
+        <img src="media/balloon_boy.jpg" alt="Balloon Boy animatronic head" class="project-image">
         <h2>Overview</h2>
         <p>
-            AI-powered desktop assistant combining mechanical engineering, embedded systems, and large language models. The 14-inch animatronic features a custom dual-axis eye mechanism with four-bar linkages, controlled by an ESP32-S3 with built-in camera and microphone. The AI system uses a <strong>hybrid local/cloud architecture</strong> running Qwen 2.5 7B locally for ~90% of queries with GPT-4o-mini fallback for complex reasoning, achieving significant cost savings while maintaining quality.
+            A 14-inch animatronic desktop assistant combining 3D-printed mechanics, embedded firmware and an LLM agent.
+            The eyes are driven by servos from a Seeed XIAO ESP32-S3 Sense (built-in camera and microphone). The agent runs
+            on a laptop and routes each query between a local model (Qwen 2.5 7B via Ollama) and a cloud model (GPT-4o-mini).
         </p>
 
         <div class="highlight-box">
-            <strong>Current Status:</strong> CAD design complete, all structural components 3D printed and assembled. Currently testing and calibrating servo ranges for smooth coordinated eye movement. AI system fully operational with tool-use framework including web search, browser automation, and code execution.
+            <strong>Status:</strong> paused since February 2026, after calibrating the eye servos. The agent, its tools and
+            its memory work on the laptop. On-device face-tracking firmware for the ESP32-S3 compiles but has not been tested on the hardware yet.
         </div>
 
         <h2>Specifications</h2>
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-value">4</div>
-                <div class="stat-label">Servo Actuators</div>
+                <div class="stat-value">2 of 4</div>
+                <div class="stat-label">Eye Servos Driven So Far (one eye fitted)</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">±30°</div>
-                <div class="stat-label">Eye Movement Range</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">~90%</div>
-                <div class="stat-label">Agentic AI Local Execution Rate</div>
+                <div class="stat-value">2</div>
+                <div class="stat-label">Axes per Eye (pan, tilt)</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value">14"</div>
@@ -271,99 +273,40 @@
 
         <h2>Mechanical Design</h2>
         <p>
-            Custom dual-axis eye mechanism designed in Fusion 360 using spatial four-bar linkages to convert servo rotations into realistic eye movements. Each eye has independent pan and tilt control.
+            The dual-axis eye mechanism is based on Will Cogley's open-source animatronic eye design (CC BY-NC-SA 4.0).
+            The design gives each eye independent pan and tilt through SG90-driven linkages; one eye is fitted and calibrated so far.
         </p>
         <ul>
-            <li><strong>Linkage geometry:</strong> Four-bar mechanism achieving symmetric ±30° range of motion for both axes</li>
-            <li><strong>Servo selection:</strong> 4× SG90 servos controlling dual-axis eye mechanism</li>
-            <li><strong>Integration:</strong> Component mounts for electronics integrated directly into body structure</li>
-            <li><strong>Fabrication:</strong> All structural components 3D printed, iterating on tolerances for servo mounts and linkage pins</li>
+            <li><strong>Fabrication:</strong> 3D-printed parts, iterating on tolerances for servo mounts and linkage pins</li>
+            <li><strong>Calibration:</strong> per-servo angle limits set in firmware to avoid mechanical interference</li>
         </ul>
 
-        <h2>Embedded Systems Architecture</h2>
-        <p>
-            Streamlined architecture using XIAO ESP32-S3 Sense as the central controller, eliminating the need for separate microcontrollers:
-        </p>
+        <h2>Embedded Systems</h2>
         <ul>
-            <li><strong>XIAO ESP32-S3 Sense:</strong> All-in-one module with built-in OV2640 camera and PDM microphone, handling video/audio capture and WiFi communication to laptop</li>
-            <li><strong>PCA9685:</strong> 16-channel I2C PWM driver controlling 4 SG90 servos with 12-bit resolution</li>
-            <li><strong>MAX98357A:</strong> I2S amplifier driving speaker for voice output</li>
-            <li><strong>Power system:</strong> Multi-rail distribution (3.3V, 5V, 6V) with appropriate voltage regulation and decoupling capacitors</li>
-            <li><strong>Communication:</strong> WiFi (ESP32-S3 ↔ Laptop for AI processing), I2C (ESP32-S3 ↔ PCA9685 for servo control)</li>
+            <li><strong>XIAO ESP32-S3 Sense:</strong> camera and microphone (the Wi-Fi link to the laptop agent is not built yet)</li>
+            <li><strong>PCA9685:</strong> 16-channel I2C PWM driver for the SG90 eye servos (2 driven so far)</li>
+            <li><strong>MAX98357A:</strong> I2S amplifier for planned voice output</li>
+            <li><strong>Firmware (C++, PlatformIO):</strong> servo test firmware, and on-device face detection that steers the eyes (compiles; hardware test pending)</li>
         </ul>
 
-        <h2>Hybrid AI Architecture</h2>
-        <p>
-            Intelligent routing between local and cloud models based on query complexity, optimizing for both cost and quality:
-        </p>
+        <h2>LLM Agent</h2>
         <ul>
-            <li><strong>Local LLM:</strong> Qwen 2.5 7B running via Ollama on RTX Pro 2000 GPU, handling ~90% of queries</li>
-            <li><strong>Cloud API:</strong> GPT-4o-mini for complex reasoning and multi-step tasks requiring stronger capabilities</li>
-            <li><strong>Intelligent routing:</strong> Complexity scoring algorithm analyzing query characteristics to determine optimal model</li>
-            <li><strong>Cost efficiency:</strong> ~90% cost reduction compared to all-cloud approach while maintaining response quality</li>
+            <li><strong>Routing:</strong> a complexity score picks the local model (Qwen 2.5 7B on the laptop GPU) or the cloud model (GPT-4o-mini) per query</li>
+            <li><strong>Tools (function calling):</strong> web and news search, webpage fetch, Selenium browser automation, Python code execution and vision-based computer control</li>
+            <li><strong>Memory:</strong> ChromaDB for episodic conversation memory, SQLite for structured user facts, with relevant past conversations retrieved into each prompt</li>
         </ul>
-
-        <h2>Agentic Tool Framework</h2>
-        <p>
-            The AI system includes autonomous tool-use capabilities through function calling:
-        </p>
-        <ul>
-            <li><strong>Web search:</strong> Real-time information retrieval for current events and fact-checking</li>
-            <li><strong>Browser automation:</strong> Selenium-based web interaction with DOM element analysis, achieving 95%+ reliability</li>
-            <li><strong>Code execution:</strong> Python file creation and execution in sandboxed environment</li>
-            <li><strong>Memory systems:</strong> ChromaDB for episodic conversation memory, SQLite for structured user facts</li>
-        </ul>
-
-        <h2>Memory & Context</h2>
-        <p>
-            Dual-memory architecture enables personalized, context-aware responses:
-        </p>
-        <ul>
-            <li><strong>Episodic memory:</strong> ChromaDB vector database storing conversation embeddings for semantic search</li>
-            <li><strong>Semantic memory:</strong> SQLite database for structured facts (user profile, preferences)</li>
-            <li><strong>Context injection:</strong> Automatic retrieval of relevant past conversations prepended to each query</li>
-        </ul>
-
-        <h2>Hardware Components</h2>
-        <p>
-            <strong>Controller:</strong> Seeed XIAO ESP32-S3 Sense (built-in camera + microphone)<br>
-            <strong>Servos:</strong> 4× SG90 (dual-axis eye mechanism)<br>
-            <strong>Audio:</strong> MAX98357A I2S amplifier + speaker<br>
-            <strong>Driver:</strong> PCA9685 16-channel PWM driver (I2C)<br>
-            <strong>Processing:</strong> ThinkPad P1 Gen 8 (Intel Core Ultra 7, RTX Pro 2000, 32GB RAM) running Ubuntu 24.04
-        </p>
 
         <h2>Technology Stack</h2>
-        
-        <h3>AI & Machine Learning</h3>
         <p>
-            <code>Qwen 2.5 7B</code> (local via Ollama), <code>GPT-4o-mini</code> (OpenAI API), <code>ChromaDB</code> (vector memory), <code>SQLite</code> (structured data)
-        </p>
-
-        <h3>Embedded Systems</h3>
-        <p>
-            <code>XIAO ESP32-S3 Sense</code>, <code>PCA9685</code> (I2C PWM driver), <code>MAX98357A</code> (I2S amp), I2C protocol
-        </p>
-
-        <h3>Mechanical & CAD</h3>
-        <p>
-            <code>Fusion 360</code> (primary CAD), <code>Blender</code> (mesh manipulation), <code>OpenSCAD</code> (parametric design), <code>Solidworks</code> (for isolated parts / practice)
-        </p>
-
-        <h3>Software Development</h3>
-        <p>
-            <code>Python</code>, <code>PlatformIO</code> (ESP32 firmware), <code>Selenium</code> (browser automation), <code>Git</code>, Ubuntu 24.04
+            <code>Python</code>, <code>Ollama</code>, <code>Qwen 2.5 7B</code>, <code>GPT-4o-mini</code>, <code>ChromaDB</code>, <code>SQLite</code>,
+            <code>Selenium</code>, <code>C++</code>, <code>PlatformIO</code>, <code>ESP32-S3</code>, <code>PCA9685</code>
         </p>
 
         <h2>Future Development</h2>
         <ul>
-            <li><strong>Voice interaction:</strong> Full speech-to-text and text-to-speech pipeline with servo synchronization</li>
-            <li><strong>Face tracking:</strong> OpenCV-based face detection for natural eye contact during conversations</li>
-            <li><strong>Conversational memory:</strong> Long-term context retention across sessions</li>
+            <li><strong>Face tracking on hardware:</strong> test the on-device face detection driving the eyes</li>
+            <li><strong>Voice:</strong> speech-to-text and text-to-speech synchronized with the eyes</li>
         </ul>
-<!--
-        <a href="https://github.com/ThiagoPari/ThiagoPari/tree/main/projects/balloon-boy" target="_blank" class="github-link">View on GitHub →</a>
--->
     </div>
 </body>
 </html>

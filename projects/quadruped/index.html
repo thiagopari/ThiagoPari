@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>12-DOF Quadruped Robot - Thiago Pari</title>
+    <meta name="description" content="12-DOF quadruped on Will Cogley's RoboFox design: Raspberry Pi, PCA9685 and BNO055 electronics, servo calibration, and IK and gait code in MuJoCo.">
     <style>
         * {
             margin: 0;
@@ -50,7 +51,7 @@
             transition: color 0.3s;
         }
         nav a:hover {
-            color: #2196F3;
+            color: #1565c0;
         }
         .project-header {
             max-width: 900px;
@@ -62,6 +63,7 @@
             font-weight: 700;
             color: #222;
             margin-bottom: 1rem;
+            line-height: 1.2;
         }
         .project-meta {
             display: flex;
@@ -71,7 +73,7 @@
         }
         .meta-tag {
             background: #e3f2fd;
-            color: #1976d2;
+            color: #1565c0;
             padding: 0.4rem 1rem;
             border-radius: 4px;
             font-size: 0.9rem;
@@ -129,7 +131,7 @@
         .stat-value {
             font-size: 2rem;
             font-weight: 700;
-            color: #2196F3;
+            color: #1976d2;
             margin-bottom: 0.5rem;
         }
         .stat-label {
@@ -138,7 +140,7 @@
         }
         .github-link {
             display: inline-block;
-            background: #2196F3;
+            background: #1976d2;
             color: white;
             padding: 0.75rem 1.5rem;
             border-radius: 4px;
@@ -148,7 +150,7 @@
             transition: background 0.3s;
         }
         .github-link:hover {
-            background: #1976d2;
+            background: #1565c0;
         }
         code {
             background: #f5f5f5;
@@ -178,7 +180,7 @@
         }
         .status-inprogress {
             background: #fff3e0;
-            color: #ef6c00;
+            color: #bf360c;
         }
         footer {
             background: #f5f5f5;
@@ -200,6 +202,11 @@
                 font-size: 2rem;
             }
         }
+        @media print {
+            header { position: static; }
+            nav { display: none; }
+            .github-link { color: #1565c0; }
+        }
     </style>
 </head>
 <body>
@@ -208,8 +215,8 @@
             <a href="../../index.html" class="logo">Thiago Pari</a>
             <nav>
                 <ul>
+                    <li><a href="../../index.html#experience">Experience</a></li>
                     <li><a href="../../index.html#projects">Projects</a></li>
-                    <li><a href="../../index.html#about">About</a></li>
                     <li><a href="../../index.html#contact">Contact</a></li>
                     <li><a href="../../Pari Resume.pdf" target="_blank">Resume</a></li>
                 </ul>
@@ -222,15 +229,14 @@
         <div class="project-meta">
             <span class="meta-tag">Python</span>
             <span class="meta-tag">MuJoCo</span>
-            <span class="meta-tag">Fusion 360</span>
             <span class="meta-tag">Raspberry Pi</span>
             <span class="meta-tag">I2C</span>
             <span class="meta-tag">October 2025 – Present</span>
         </div>
         <div>
-            <span class="status-badge status-complete">✓ Hardware Assembled</span>
-            <span class="status-badge status-complete">✓ CAD Complete</span>
-            <span class="status-badge status-inprogress">⚡ IK/Gait Development</span>
+            <span class="status-badge status-complete">✓ Assembled and standing (Feb 2026)</span>
+            <span class="status-badge status-inprogress">⚡ Legs being reprinted (Sep 2026)</span>
+            <span class="status-badge status-inprogress">⚡ IK/FK tuning on hardware next</span>
         </div>
     </div>
 
@@ -240,11 +246,11 @@
 
         <h2>Overview</h2>
         <p>
-            A 12-DOF quadruped robot built from scratch, spanning CAD design, 3D printing, electronics integration, and software development. The robot currently stands stably using calibrated servo positions and PID-style balance adjustments. Currently developing inverse kinematics and gait generation in MuJoCo simulation for walking locomotion.
+            A 12-DOF quadruped built on Will Cogley's RoboFox mechanical design. My work: 3D printing and assembly, electronics and power integration, servo calibration, and the kinematics and gait code in a MuJoCo model. It stood stably on calibrated servos in February 2026.
         </p>
 
         <div class="highlight-box">
-            <strong>Current Status:</strong> Hardware fully assembled and standing. Developing forward/inverse kinematics model in MuJoCo to enable walking gaits before deploying to physical robot.
+            <strong>Status (Sep 2026):</strong> the legs are being reprinted; IK/FK will then be tuned against the real hardware before walking gaits move from simulation to the robot.
         </div>
 
         <h2>Specifications</h2>
@@ -258,23 +264,21 @@
                 <div class="stat-label">DOF per Leg</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">185mm</div>
-                <div class="stat-label">Standing Height</div>
+                <div class="stat-value">75 mm</div>
+                <div class="stat-label">Four-Bar Link Length</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">250mm</div>
-                <div class="stat-label">Body Length</div>
+                <div class="stat-value">260 mm</div>
+                <div class="stat-label">Body Length (CAD)</div>
             </div>
         </div>
 
         <h2>Mechanical Design</h2>
         <p>
-            Complete mechanical design done in Fusion 360, with all structural components 3D printed. Each leg has 3 degrees of freedom using a 4-bar linkage mechanism with 1:1 gear ratios.
+            The mechanical design is Will Cogley's RoboFox; all structural parts are 3D printed. Each leg has 3 degrees of freedom, using a four-bar linkage with 1:1 gears.
         </p>
         <ul>
-            <li>Parametric CAD model in Fusion 360 with fabrication-ready STL exports</li>
-            <li>4-bar linkage leg mechanism with 75mm link segments</li>
-            <li>Integrated mounting bosses for electronics (Pi, buck converters)</li>
+            <li>Four-bar leg linkage with 75 mm links, re-modeled in OpenSCAD to check dimensions for the kinematics</li>
             <li>Vibration-isolated IMU mount using foam interface for sensor protection</li>
         </ul>
 <!--
@@ -283,9 +287,9 @@
             Three-tier assembly: legs/servos → main body with electronics → power system
         </p>
 -->
-        <img src="media/simulation.gif" alt="Simulation" class="project-image">
+        <video src="media/simulation.mp4" class="project-image" autoplay muted loop playsinline controls aria-label="MuJoCo simulation of the 12-DOF quadruped model"></video>
         <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: -1rem; margin-bottom: 2rem;">
-            Current progress on Mujoco Simulation
+            MuJoCo model of the quadruped (simulation)
         </p>
         <h2>Electronics Integration</h2>
         <p>
@@ -309,7 +313,7 @@
 
         <img src="media/robofox-electronics-detail.jpg" alt="Electronics wiring" class="project-image">
         <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: -1rem; margin-bottom: 2rem;">
-            CAD model on render mode
+            CAD render of the RoboFox frame with the electronics layout
         </p>
 
         <h2>Calibration & Testing</h2>
@@ -324,15 +328,15 @@
             <li>Tuned balance parameters for stable standing posture</li>
         </ul>
 
-        <h2>Current Development: Kinematics in MuJoCo</h2>
+        <h2>Kinematics and Gaits in MuJoCo</h2>
         <p>
-            Currently developing the forward and inverse kinematics model in MuJoCo physics simulation. This approach validates the kinematic model and gait patterns in simulation before deploying to the physical robot.
+            The kinematics and gait code are developed against a MuJoCo model first, then tuned on the physical robot.
         </p>
         <ul>
-            <li>Building URDF/MJCF model matching physical robot dimensions</li>
-            <li>Implementing geometric IK solver for 3-DOF legs</li>
-            <li>Developing gait patterns (trot, walk) with Bezier curve foot trajectories</li>
-            <li>Sim-to-real transfer planned once simulation validates successfully</li>
+            <li>MJCF model (12 DOF, 4 legs &times; 3 joints) sized from the robot's 75 mm links and 260 mm body</li>
+            <li>IK (closed-form hip roll, Newton&ndash;Raphson for pitch and knee) and FK for the four-bar legs, checked with an FK&ndash;IK round-trip test</li>
+            <li>Gait controller (trot, walk, pace, bound) with B&eacute;zier swing trajectories, in simulation</li>
+            <li>Next: tune IK/FK against the reprinted hardware</li>
         </ul>
 
         <h2>Hardware Components</h2>
@@ -348,8 +352,8 @@
         <p>
             <strong>Simulation:</strong> MuJoCo, Python<br>
             <strong>Embedded:</strong> Raspberry Pi 4, I2C (PCA9685, BNO055)<br>
-            <strong>CAD:</strong> Fusion 360, OpenSCAD<br>
-            <strong>Languages:</strong> Python, C++
+            <strong>CAD:</strong> OpenSCAD (leg geometry check)<br>
+            <strong>Languages:</strong> Python
         </p>
 <!--
         <a href="https://github.com/ThiagoPari/ThiagoPari/tree/main/projects/robofox-quadruped" target="_blank" class="github-link">View on GitHub →</a>

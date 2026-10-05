@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multi-Sensor Fusion Localization - Thiago Pari</title>
+    <meta name="description" content="ROS 2 EKF and UKF fusing wheel odometry, IMU and simulated GPS in Gazebo at 50 Hz; 28.8% lower RMS position error than dead reckoning.">
     <style>
         * {
             margin: 0;
@@ -58,7 +59,7 @@
         }
 
         nav a:hover {
-            color: #2196F3;
+            color: #1565c0;
         }
 
         /* Project Content */
@@ -73,6 +74,7 @@
             font-weight: 700;
             color: #222;
             margin-bottom: 1rem;
+            line-height: 1.2;
         }
 
         .project-meta {
@@ -84,7 +86,7 @@
 
         .meta-tag {
             background: #e3f2fd;
-            color: #1976d2;
+            color: #1565c0;
             padding: 0.4rem 1rem;
             border-radius: 4px;
             font-size: 0.9rem;
@@ -152,7 +154,7 @@
         .stat-value {
             font-size: 2rem;
             font-weight: 700;
-            color: #2196F3;
+            color: #1976d2;
             margin-bottom: 0.5rem;
         }
 
@@ -163,7 +165,7 @@
 
         .github-link {
             display: inline-block;
-            background: #2196F3;
+            background: #1976d2;
             color: white;
             padding: 0.75rem 1.5rem;
             border-radius: 4px;
@@ -174,7 +176,7 @@
         }
 
         .github-link:hover {
-            background: #1976d2;
+            background: #1565c0;
         }
 
         code {
@@ -218,6 +220,11 @@
                 font-size: 2rem;
             }
         }
+        @media print {
+            header { position: static; }
+            nav { display: none; }
+            .github-link { color: #1565c0; }
+        }
     </style>
 </head>
 <body>
@@ -227,8 +234,8 @@
             <a href="../../index.html" class="logo">Thiago Pari</a>
             <nav>
                 <ul>
+                    <li><a href="../../index.html#experience">Experience</a></li>
                     <li><a href="../../index.html#projects">Projects</a></li>
-                    <li><a href="../../index.html#about">About</a></li>
                     <li><a href="../../index.html#contact">Contact</a></li>
                     <li><a href="../../Pari Resume.pdf" target="_blank">Resume</a></li>
                 </ul>
@@ -243,9 +250,10 @@
             <span class="meta-tag">ROS2 Jazzy</span>
             <span class="meta-tag">Python</span>
             <span class="meta-tag">EKF/UKF</span>
-            <span class="meta-tag">LiDAR ICP</span>
+            <span class="meta-tag">Gazebo</span>
             <span class="meta-tag">November 2025 - January 2026</span>
         </div>
+        <a href="https://github.com/thiagopari/ekf-localization" target="_blank" class="github-link" style="margin: 0;">Code on GitHub &rarr;</a>
     </div>
 
     <!-- Project Content -->
@@ -255,22 +263,18 @@
 
         <h2>Overview</h2>
         <p>
-            Real-time sensor fusion system combining wheel odometry, IMU and simulated GPS through Extended and Unscented Kalman Filtering for robust mobile robot localization, with a LiDAR scan-matching update. Fusing odometry, IMU and simulated GPS cut RMS position error by <strong>28.8%</strong> compared to a dead-reckoning baseline.
+            Real-time sensor fusion of wheel odometry, IMU and simulated GPS with Extended and Unscented Kalman Filters, for mobile robot localization in Gazebo. Fusing odometry, IMU and simulated GPS cut RMS position error by <strong>28.8%</strong> compared to a dead-reckoning baseline.
         </p>
         <p>
-            <em>Note: LiDAR did not run in the Gazebo simulation (GPU limits under Parallels on Apple Silicon), so the localization results below use odometry, IMU and simulated GPS. The scan-matching figures come from validating the ICP algorithm on its own.</em>
+            <em>Note: LiDAR did not run in the Gazebo simulation (GPU limits under Parallels on Apple Silicon), so the results below use odometry, IMU and simulated GPS only.</em>
         </p>
 
         <div class="highlight-box">
-            <strong>Key Achievement:</strong> Implemented EKF and UKF algorithms from scratch in Python, processing sensor data at 50Hz with proper covariance tracking and uncertainty quantification throughout the entire estimation pipeline.
+            <strong>Key Achievement:</strong> EKF and UKF written from scratch in Python as a ROS 2 node, running at 50 Hz with full covariance propagation.
         </div>
 
         <h2>Performance Metrics</h2>
         <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-value">1.584m</div>
-                <div class="stat-label">RMS Position Error</div>
-            </div>
             <div class="stat-card">
                 <div class="stat-value">28.8%</div>
                 <div class="stat-label">Improvement over Dead Reckoning</div>
@@ -278,10 +282,6 @@
             <div class="stat-card">
                 <div class="stat-value">50 Hz</div>
                 <div class="stat-label">Real-Time Processing</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">96%</div>
-                <div class="stat-label">Scan Match Success Rate (standalone ICP)</div>
             </div>
         </div>
 
@@ -295,23 +295,18 @@
             State vector: <code>x = [x, y, θ]ᵀ</code> where <code>(x, y)</code> is position in meters and <code>θ</code> is heading in radians.
         </p>
         <p>
-            Motion model propagates state using wheel velocities while computing the Jacobian matrix for covariance updates. The update step fuses multiple sensor measurements (GPS position, IMU heading, LiDAR scan matching) using the standard Kalman gain formulation with properly tuned measurement noise matrices.
+            Motion model propagates state using wheel velocities while computing the Jacobian matrix for covariance updates. The update step fuses GPS position and IMU heading measurements using the standard Kalman gain formulation. A LiDAR scan-matching update is written but not yet run in simulation.
         </p>
 
-        <h3>Robust LiDAR Scan Matching</h3>
+        <h3>LiDAR Scan-Matching Update (written, not yet run)</h3>
         <p>
-            Implemented a multi-resolution trimmed ICP (Iterative Closest Point) algorithm, validated on its own but not yet run inside the Gazebo simulation. The pipeline includes:
+            A multi-resolution trimmed ICP update (voxel sizes 0.1, 0.05 and 0.02 m; closest 80% of correspondences kept; measurement
+            noise scaled by fit quality). Tested on synthetic point sets only; it has not run inside the Gazebo simulation.
         </p>
-        <ul>
-            <li><strong>Multi-resolution alignment:</strong> Coarse-to-fine approach with voxel downsampling at [0.1m, 0.05m, 0.02m] scales for computational efficiency</li>
-            <li><strong>Outlier rejection:</strong> Trimmed ICP keeps only closest 80% of point correspondences, dramatically improving robustness to dynamic objects</li>
-            <li><strong>Quality validation:</strong> Each scan match includes fitness score and RMSE metrics to determine measurement reliability</li>
-            <li><strong>Adaptive covariance:</strong> Measurement noise scales based on correspondence quality, fitness, and RMSE</li>
-        </ul>
 
         <h3>Unscented Kalman Filter (UKF) Comparison</h3>
         <p>
-            Parallel UKF implementation using sigma point transforms provides comparison baseline for handling non-linearities. For this application's weakly non-linear motion model, EKF and UKF performance converged to nearly identical results, validating the linearization approach while demonstrating mastery of both filtering techniques.
+            A parallel UKF using sigma-point transforms serves as a comparison baseline. The two filters tie to the millimeter (see Limitations).
         </p>
 
         <h2>System Architecture</h2>
@@ -319,10 +314,10 @@
             The system runs as a ROS2 node orchestrating multiple asynchronous sensor callbacks. Key components include:
         </p>
         <ul>
-            <li><strong>Motion Prediction:</strong> 50Hz updates using wheel odometry velocities with full covariance propagation</li>
-            <li><strong>IMU Updates:</strong> 50Hz heading corrections with 1° accuracy improving orientation estimates</li>
-            <li><strong>GPS Updates:</strong> 1Hz position corrections with ~30cm accuracy as absolute position reference</li>
-            <li><strong>Scan Matching:</strong> 6Hz LiDAR-based position updates with 2.3cm average RMSE when successful (standalone validation; not yet run in the simulation)</li>
+            <li><strong>Motion Prediction:</strong> 50 Hz updates using wheel odometry velocities with full covariance propagation</li>
+            <li><strong>IMU Updates:</strong> 50 Hz heading corrections (configured noise: 1°)</li>
+            <li><strong>GPS Updates:</strong> 1 Hz simulated position fixes (the simulator's /odom pose plus ~30 cm noise)</li>
+            <li><strong>Scan Matching:</strong> trimmed ICP position update (written; not yet run in the simulation)</li>
             <li><strong>Dead Reckoning Baseline:</strong> Pure odometry integration without corrections for performance comparison</li>
         </ul>
 
@@ -330,43 +325,50 @@
         
         <h3>GPS Outage Handling</h3>
         <p>
-            The filter gracefully handles GPS signal loss through sensor dropout simulation. During 15-second GPS outages, the system continues operating with IMU-only updates, maintaining reasonable accuracy through proper uncertainty tracking. Covariance ellipse visualization clearly shows growing uncertainty during outages and convergence after GPS reacquisition.
+            With GPS outage simulation enabled, the filter keeps running through 15-second GPS losses, predicting from odometry and correcting with the IMU. RViz covariance ellipses show the uncertainty growing during an outage and shrinking after GPS returns.
         </p>
 
         <h3>Real-Time Visualization</h3>
         <p>
-            RViz integration provides live visualization of estimated trajectory, uncertainty ellipses, and comparison against ground truth. The uncertainty visualization dynamically updates based on filter confidence, expanding between GPS updates and contracting after measurement corrections.
+            RViz integration provides live visualization of estimated trajectory, uncertainty ellipses, and comparison against the /odom reference pose. The uncertainty visualization dynamically updates based on filter confidence, expanding between GPS updates and contracting after measurement corrections.
         </p>
 
-        <h2>Key Learnings</h2>
-        <ul>
-            <li>Proper covariance tuning is critical - process noise Q and measurement noise R matrices directly impact filter responsiveness vs. stability trade-off</li>
-            <li>Angle normalization to [-π, π] is essential to prevent filter divergence due to angle wrapping discontinuities</li>
-            <li>Multi-rate sensor fusion requires careful timestamp handling and proper update sequencing to maintain consistency</li>
-            <li>Scan matching quality metrics enable adaptive measurement weighting, significantly improving robustness to poor ICP alignments</li>
-        </ul>
-
-        <h2>Hardware Platform</h2>
+        <h2>Simulated Platform (Gazebo)</h2>
         <p>
-            TurtleBot3 Waffle robot equipped with:
+            Simulated TurtleBot3 Waffle with:
         </p>
         <ul>
             <li>Wheel encoders providing differential drive odometry</li>
-            <li>9-DOF IMU for orientation measurements</li>
-            <li>360° LiDAR for scan matching (simulated in Gazebo)</li>
-            <li>Simulated GPS providing ground truth position with realistic noise</li>
+            <li>IMU for heading measurements</li>
+            <li>360° LiDAR (scan-matching update not yet run)</li>
+            <li>Simulated GPS: the /odom pose plus ~30 cm noise</li>
+        </ul>
+
+        <h2>Results</h2>
+        <table style="border-collapse: collapse; width: 100%; margin: 1rem 0 2rem;">
+            <tr style="background: #f5f5f5;"><th style="text-align: left; padding: 0.5rem 0.75rem;">Method</th><th style="text-align: left; padding: 0.5rem 0.75rem;">RMS position error</th></tr>
+            <tr><td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0;">Dead reckoning (odometry only)</td><td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0;">2.224 m</td></tr>
+            <tr><td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0;">EKF (odometry + IMU + simulated GPS)</td><td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0;">1.584 m (&minus;28.8%)</td></tr>
+            <tr><td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0;">UKF (same inputs)</td><td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0;">1.584 m (&minus;28.8%)</td></tr>
+        </table>
+
+        <h2>Limitations</h2>
+        <ul>
+            <li>Simulation only; no hardware run yet.</li>
+            <li>GPS is simulated as the /odom pose plus noise, and error is measured against that same /odom pose, not Gazebo's true pose.</li>
+            <li>The LiDAR scan-matching update has not run in the simulation, so it is not part of the results above.</li>
+            <li>Fused RMS error (1.58 m) is about 5&times; the simulated GPS noise (&sigma; = 0.3 m), and EKF and UKF agree to the millimeter; the cause is not traced yet.</li>
         </ul>
 
         <h2>Future Enhancements</h2>
         <ul>
+            <li><strong>LiDAR in the loop:</strong> Run the ICP update in Gazebo and add it to the results</li>
             <li><strong>EKF-SLAM:</strong> Extend to simultaneous localization and mapping with landmark features</li>
             <li><strong>Hardware Validation:</strong> Deploy to real TurtleBot3 hardware</li>
             <li><strong>Visual Odometry:</strong> Integrate camera-based motion estimation for additional redundancy</li>
             <li><strong>Adaptive Filtering:</strong> Context-aware noise models that adjust based on motion dynamics</li>
         </ul>
-<!--
         <a href="https://github.com/thiagopari/ekf-localization" target="_blank" class="github-link">View on GitHub →</a>
--->
     </div>
 </body>
 </html>

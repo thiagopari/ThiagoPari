@@ -308,7 +308,7 @@
         <ul>
             <li>I2C bus shared between PCA9685 PWM driver and BNO055 IMU</li>
             <li>PCA9685 controlling all 12 Corona DS-843MG servos via PWM</li>
-            <li>FSR402 force sensors on feet for ground contact detection</li>
+            <li>FSR402 force sensors for foot contact detection: bench-tested and working, not yet fitted to the feet</li>
         </ul>
 
         <img src="media/robofox-electronics-detail.jpg" alt="Electronics wiring" class="project-image">
@@ -324,7 +324,7 @@
             <li>Tested voltage rails to verify buck converter output; identified and replaced one defective unit (outputting 14V instead of 5.9V)</li>
             <li>Mapped safe angular limits for each servo to prevent mechanical interference</li>
             <li>Validated BNO055 IMU readings and calibration status</li>
-            <li>Tested FSR402 force sensors for reliable ground contact detection</li>
+            <li>Bench-tested the FSR402 force sensors and confirmed they detect contact; fitting them to the feet is still to do</li>
             <li>Tuned balance parameters for stable standing posture</li>
         </ul>
 
@@ -343,7 +343,7 @@
         <p>
             <strong>Compute:</strong> Raspberry Pi 4<br>
             <strong>Actuators:</strong> 12× Corona DS-843MG servos<br>
-            <strong>Sensors:</strong> BNO055 9-DOF IMU, 4× FSR402 force sensors<br>
+            <strong>Sensors:</strong> BNO055 9-DOF IMU; 4× FSR402 force sensors (bench-tested, not yet fitted)<br>
             <strong>Drivers:</strong> PCA9685 16-channel PWM driver (I2C)<br>
             <strong>Power:</strong> 2S LiPo, 2× XL4015 buck converters<br>
         </p>

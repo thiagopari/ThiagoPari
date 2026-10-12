@@ -249,9 +249,10 @@
         <div class="project-meta">
             <span class="meta-tag">ROS2 Jazzy</span>
             <span class="meta-tag">Python</span>
+            <span class="meta-tag">C++17 (rclcpp, Eigen)</span>
             <span class="meta-tag">EKF/UKF</span>
             <span class="meta-tag">Gazebo</span>
-            <span class="meta-tag">November 2025 - January 2026</span>
+            <span class="meta-tag">November 2025 - January 2026; C++ port October 2026</span>
         </div>
         <a href="https://github.com/thiagopari/ekf-localization" target="_blank" class="github-link" style="margin: 0;">Code on GitHub &rarr;</a>
     </div>
@@ -307,6 +308,8 @@
         <h3>Unscented Kalman Filter (UKF) Comparison</h3>
         <p>
             A parallel UKF using sigma-point transforms serves as a comparison baseline. The two filters tie to the millimeter (see Limitations).
+            The C++ port (below) found a bug in it: the sigma points came from the rows of the Cholesky factor instead of its columns,
+            which is wrong whenever the covariance has correlations. It was fixed in both versions in October 2026.
         </p>
 
         <h2>System Architecture</h2>
@@ -352,17 +355,46 @@
             <tr><td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0;">UKF (same inputs)</td><td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0;">1.584 m (&minus;28.8%)</td></tr>
         </table>
 
+        <h2>C++ Port (October 2026)</h2>
+        <p>
+            The filters, the trimmed-ICP scan matcher and the node are ported to C++17. The filters and matcher form a ROS-free Eigen library,
+            and an rclcpp node keeps the same topics, parameters and rates as the Python node. It builds with colcon, next to the Python package in the same repo.
+        </p>
+        <ul>
+            <li><strong>Golden equivalence test (gtest):</strong> a script runs the original Python <code>ekf.py</code> / <code>ukf.py</code> on a seeded 3000-step sequence: 50 Hz odometry and IMU, 1 Hz GPS, and a 15 s outage. The C++ filters replay it, and the largest state difference is 3.3e-16 for the EKF and 0 (bit-identical) for the UKF.</li>
+            <li><strong>Unit tests:</strong>
+                <ul>
+                    <li>a straight line with &omega; = 0</li>
+                    <li>the covariance stays symmetric positive semi-definite</li>
+                    <li>updates shrink the covariance</li>
+                    <li>ICP recovers a known motion between two synthetic room scans</li>
+                    <li>the UKF's sigma points reproduce a correlated covariance (the regression test for the bug above)</li>
+                </ul></li>
+            <li><strong>CI:</strong> GitHub Actions builds and tests the package in a <code>ros:jazzy</code> container.</li>
+        </ul>
+        <table style="border-collapse: collapse; width: 100%; margin: 1rem 0 1rem;">
+            <tr style="background: #f5f5f5;"><th style="text-align: left; padding: 0.5rem 0.75rem;">Filter</th><th style="text-align: left; padding: 0.5rem 0.75rem;">C++ per step</th><th style="text-align: left; padding: 0.5rem 0.75rem;">Python per step</th><th style="text-align: left; padding: 0.5rem 0.75rem;">Speedup</th></tr>
+            <tr><td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0;">EKF</td><td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0;">0.05 &micro;s</td><td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0;">14 &micro;s</td><td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0;">~260&times;</td></tr>
+            <tr><td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0;">UKF</td><td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0;">0.39 &micro;s</td><td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0;">93 &micro;s</td><td style="padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0;">~235&times;</td></tr>
+        </table>
+        <p>
+            <em>One pinned core, Release build. The Python time is mostly NumPy per-call overhead on 3&times;3 matrices, so this compares
+            NumPy on tiny matrices with fixed-size Eigen, not Python with C++ in general. The C++ node has run against synthetic sensor
+            streams, not yet in Gazebo.</em>
+        </p>
+
         <h2>Limitations</h2>
         <ul>
             <li>Simulation only; no hardware run yet.</li>
             <li>GPS is simulated as the /odom pose plus noise, and error is measured against that same /odom pose, not Gazebo's true pose.</li>
             <li>The LiDAR scan-matching update has not run in the simulation, so it is not part of the results above.</li>
-            <li>Fused RMS error (1.58 m) is about 5&times; the simulated GPS noise (&sigma; = 0.3 m), and EKF and UKF agree to the millimeter; the cause is not traced yet.</li>
+            <li>Fused RMS error (1.58 m) is about 5&times; the simulated GPS noise (&sigma; = 0.3 m), and EKF and UKF agree to the millimeter; the cause is not traced yet. These Gazebo numbers predate the October 2026 UKF fix.</li>
         </ul>
 
         <h2>Future Enhancements</h2>
         <ul>
             <li><strong>LiDAR in the loop:</strong> Run the ICP update in Gazebo and add it to the results</li>
+            <li><strong>C++ node in Gazebo:</strong> Replay the same runs through the C++ node and compare it with the Python node</li>
             <li><strong>EKF-SLAM:</strong> Extend to simultaneous localization and mapping with landmark features</li>
             <li><strong>Hardware Validation:</strong> Deploy to real TurtleBot3 hardware</li>
             <li><strong>Visual Odometry:</strong> Integrate camera-based motion estimation for additional redundancy</li>

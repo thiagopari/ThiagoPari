@@ -426,6 +426,31 @@
                 </div>
             </a>
 
+            <!-- Project: LiDAR Odometry Degradation Study -->
+            <a href="projects/lidar-odometry/index.html" style="text-decoration: none; color: inherit;">
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="images/lidar-odometry.jpg" alt="Top-down trajectories of four LiDAR odometry methods against ground truth on KITTI sequence 07">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">LiDAR Odometry Under Degradation <span class="pill">In progress</span></h3>
+                        <p class="card-context">Personal research project &middot; Oct 2026 &middot; Solo</p>
+                        <p class="project-description">
+                            KISS-ICP, GICP and map-based VGICP on real KITTI scans, under fewer beams, dropout, range noise, shorter range and lower scan rates.
+                            Dropping 90% of points at random barely matters, while cutting to 8 rings breaks GICP. A short max range favours GICP once
+                            KISS-ICP is configured fairly for it.
+                        </p>
+                        <div class="tech-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">KISS-ICP</span>
+                            <span class="tag">small_gicp</span>
+                            <span class="tag">Point Clouds</span>
+                            <span class="tag">KITTI</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
             <!-- Project: Sensor Fusion -->
             <a href="projects/ekf-localization/index.html" style="text-decoration: none; color: inherit;">
                 <div class="project-card">
@@ -434,16 +459,17 @@
                     </div>
                     <div class="project-content">
                         <h3 class="project-title">Multi-Sensor Fusion Localization</h3>
-                        <p class="card-context">Nov 2025 &ndash; Jan 2026 &middot; Solo</p>
+                        <p class="card-context">Nov 2025 &ndash; Jan 2026, C++ port Oct 2026 &middot; Solo</p>
                         <p class="project-description">
                             50 Hz ROS 2 EKF and UKF fusing wheel odometry, IMU and simulated GPS in Gazebo, cutting RMS position error
-                            28.8% vs. dead reckoning, and riding through simulated 15 s GPS outages. A trimmed ICP LiDAR update is written but not yet run in simulation.
+                            28.8% vs. dead reckoning, and riding through simulated 15 s GPS outages. Ported to C++ (rclcpp + Eigen), matching the
+                            Python filters to 3e-16 in gtest, with CI.
                         </p>
                         <div class="tech-tags">
                             <span class="tag">ROS 2</span>
+                            <span class="tag">C++</span>
                             <span class="tag">Python</span>
-                            <span class="tag">EKF</span>
-                            <span class="tag">UKF</span>
+                            <span class="tag">EKF / UKF</span>
                             <span class="tag">Gazebo</span>
                         </div>
                     </div>

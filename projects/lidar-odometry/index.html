@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiDAR Odometry Under Degradation - Thiago Pari</title>
+    <meta name="description" content="Degradation study on real KITTI LiDAR scans: where KISS-ICP, GICP and VGICP odometry break under fewer beams, dropout, range noise, shorter range and lower scan rates.">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #ffffff;
+        }
+        header {
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo { font-size: 1.5rem; font-weight: 700; color: #222; text-decoration: none; }
+        nav ul { display: flex; gap: 2rem; list-style: none; }
+        nav a { color: #555; text-decoration: none; font-weight: 500; transition: color 0.3s; }
+        nav a:hover { color: #1565c0; }
+        .project-header { max-width: 900px; margin: 3rem auto 2rem; padding: 0 2rem; }
+        .project-header h1 { font-size: 2.5rem; font-weight: 700; color: #222; margin-bottom: 1rem; line-height: 1.2; }
+        .context { color: #666; margin-bottom: 1rem; }
+        .project-meta { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .meta-tag {
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 0.4rem 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .btn-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .btn {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            border: 1px solid #1976d2;
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .btn-primary { background: #1976d2; color: #fff; }
+        .btn:hover { background: #1565c0; border-color: #1565c0; color: #fff; }
+        .project-content { max-width: 900px; margin: 0 auto; padding: 0 2rem 4rem; }
+        .project-content h2 { font-size: 1.8rem; font-weight: 700; color: #222; margin: 3rem 0 1rem; }
+        .project-content p { color: #555; margin-bottom: 1rem; line-height: 1.8; }
+        .project-content ul, .project-content ol { margin-left: 2rem; margin-bottom: 1rem; }
+        .project-content li { color: #555; margin-bottom: 0.5rem; line-height: 1.8; }
+        figure { margin: 2rem 0; }
+        figure img { width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        figcaption { color: #666; font-size: 0.9rem; text-align: center; margin-top: 0.75rem; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .stat-card { background: #f5f5f5; padding: 1.5rem; border-radius: 8px; text-align: center; }
+        .stat-value { font-size: 2rem; font-weight: 700; color: #1976d2; margin-bottom: 0.5rem; }
+        .stat-label { color: #666; font-size: 0.9rem; }
+        .table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+        table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+        th, td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0; color: #555; }
+        th { color: #222; background: #f5f5f5; }
+        .highlight-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; gap: 1rem; }
+            nav ul { gap: 1rem; }
+            .project-header h1 { font-size: 2rem; }
+            header { position: static; }
+        }
+        @media print {
+            header { position: static; }
+            nav { display: none; }
+            figure, .stat-card, tr { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="../../index.html" class="logo">Thiago Pari</a>
+            <nav>
+                <ul>
+                    <li><a href="../../index.html#experience">Experience</a></li>
+                    <li><a href="../../index.html#projects">Projects</a></li>
+                    <li><a href="../../index.html#contact">Contact</a></li>
+                    <li><a href="../../Pari Resume.pdf" target="_blank">Resume</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="project-header">
+        <h1>LiDAR Odometry Under Degradation</h1>
+        <p class="context">Personal research project &middot; Oct 2026 &middot; Solo &middot; Draft &middot; Companion to my <a href="../underwater-sfm/index.html">Underwater SfM Degradation Study</a></p>
+        <div class="project-meta">
+            <span class="meta-tag">Python</span>
+            <span class="meta-tag">KISS-ICP</span>
+            <span class="meta-tag">small_gicp (GICP / VGICP)</span>
+            <span class="meta-tag">evo</span>
+            <span class="meta-tag">KITTI</span>
+        </div>
+        <div class="btn-row">
+            <a class="btn btn-primary" href="https://github.com/thiagopari/lidar-odometry-degradation" target="_blank">Code on GitHub &rarr;</a>
+        </div>
+    </div>
+
+    <div class="project-content">
+
+        <figure>
+            <a href="media/07_sweep.png" target="_blank"><img src="media/07_sweep.png" alt="Grid of line charts for KITTI sequence 07: trajectory error and 10 m relative error against six degradations (beam decimation, random dropout, range noise, max-range truncation, scan rate, and scan rate with a ground-truth-seeded first step) for KISS-ICP, scan-to-scan GICP, point-to-point ICP and scan-to-model VGICP; crosses mark diverged runs"></a>
+            <figcaption>KITTI sequence 07: trajectory error (top) and 10 m relative error (bottom) against each degradation, four odometry front ends. &times; = diverged (KITTI drift above 10%). Click to enlarge.</figcaption>
+        </figure>
+
+        <h2>Question</h2>
+        <p>
+            Where do LiDAR odometry front ends break when the input gets worse? The degradations tested are fewer beams, dropped points, range
+            noise, a shorter maximum range, and a lower scan rate. The answer says which sensor downgrade a LiDAR SLAM stack can absorb
+            and which it can't. The study follows the same format as my SfM study: controlled degradations of real data,
+            seeded runs, and the limits stated next to the numbers.
+        </p>
+
+        <h2>Approach</h2>
+        <ul>
+            <li><strong>Data:</strong> real Velodyne HDL-64E scans from KITTI odometry sequences 04 (271 scans, 394 m of straight road) and 07 (1101 scans, a 694 m residential loop). Ground truth is moved into the LiDAR frame with each sequence's calibration, and the frame alignment is checked against the timestamps at load time.</li>
+            <li><strong>Degradations, one at a time:</strong>
+                <ul>
+                    <li>Beam decimation from 64 to 8 rings. The ring index is recovered from the scan's storage order and checked against elevation.</li>
+                    <li>Random dropout up to 90%.</li>
+                    <li>Gaussian range noise up to 10 cm.</li>
+                    <li>Max-range truncation from 80 m down to 10 m.</li>
+                    <li>Scan rate from 10 Hz down to 1.25 Hz.</li>
+                </ul>
+                Random degradations use two seeds, with identical draws for every method.</li>
+            <li><strong>Methods:</strong> KISS-ICP 1.3.0 (default config), plus three small_gicp variants: GICP scan-to-scan, point-to-point ICP scan-to-scan, and VGICP registering against a local Gaussian voxel map. VGICP is the map-keeping GICP, so it separates "map vs. no map" from the cost function.</li>
+            <li><strong>Scoring:</strong> evo trajectory error (ATE, SE(3)-aligned), 10 m and 50 m relative error, and the KITTI drift metric. A run counts as diverged above 10% drift.</li>
+        </ul>
+
+        <h2>Key Results</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">&le; 1.1%</div>
+                <div class="stat-label">Drift with 90% of points randomly dropped (seq 04; KISS-ICP 0.52%, GICP &le; 1.09%)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">100% &rarr; 7.0%</div>
+                <div class="stat-label">KISS-ICP drift at a 20 m max range once its config knows the range (seq 04; GICP 2.2%)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">0.48%</div>
+                <div class="stat-label">Best clean drift: GICP with a local map (VGICP) on seq 07; KISS-ICP 0.70%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">89% &rarr; 0.53%</div>
+                <div class="stat-label">VGICP at 2.5 Hz on seq 04 once its first registration starts from the true motion: a start-up failure, not a tracking limit</div>
+            </div>
+        </div>
+
+        <ol>
+            <li><strong>How points are removed matters more than how many.</strong> 90% random dropout leaves 12.6k points per scan, fewer than the 16.1k left at 8 rings. Yet under dropout scan-to-scan GICP drifts about 1.1%, while at 8 rings it diverges (64.8%, seq 04). Range noise up to &sigma; = 10 cm barely moves any method.</li>
+            <li><strong>Fewer rings: KISS-ICP barely notices, and GICP does whether or not it keeps a map.</strong> On seq 04, KISS-ICP drifts 0.61% at 8 rings. Scan-to-scan GICP diverges at 8 rings, and VGICP already at 16 (26.7%).</li>
+            <li><strong>Short range favours GICP, but less than it first looked.</strong>
+                <ul>
+                    <li>KISS-ICP's default config uses 1 m voxels, sized for a 100 m sensor.</li>
+                    <li>Told the truncated range instead, its drift at 20 m on seq 04 falls from 100.5% to 6.99%. That is still behind GICP (2.23%) and VGICP (2.25%).</li>
+                    <li>At 10 m every method fails on seq 04. On seq 07 at 10 m, GICP keeps 5.80% and range-matched KISS-ICP 9.27%.</li>
+                </ul></li>
+            <li><strong>Some low-rate failures happen at start-up.</strong> On seq 04 every method diverged at 2.5 Hz when starting from a zero-motion guess. Seeding VGICP's first registration from ground truth brings it back to 0.53% (0.60% at 1.25 Hz). On seq 07 at 1.25 Hz, seeding doesn't help (61%): that is a real tracking limit on a route with turns.</li>
+            <li><strong>The KISS-ICP baseline is fair.</strong> Its poses match kiss-icp's own KITTI pipeline to 2e-13. Deskewing each scan with azimuth timestamps wasn't a consistent win, so the official configuration stays the baseline.</li>
+        </ol>
+
+        <h2>Clean-Input Baseline</h2>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>Method</th><th>Seq 04 drift</th><th>Seq 04 ATE</th><th>Seq 07 drift</th><th>Seq 07 ATE</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>KISS-ICP (default)</td><td>0.46%</td><td>0.20 m</td><td>0.70%</td><td>0.63 m</td></tr>
+                    <tr><td>GICP, scan-to-scan</td><td>0.52%</td><td>0.34 m</td><td>1.19%</td><td>1.29 m</td></tr>
+                    <tr><td>VGICP, scan-to-model</td><td>0.50%</td><td>0.42 m</td><td>0.48%</td><td>0.45 m</td></tr>
+                    <tr><td>Point-to-point ICP, scan-to-scan</td><td>2.16%</td><td>1.09 m</td><td>2.65%</td><td>4.05 m</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <figure>
+            <img src="media/07_clean_traj.png" alt="Top-down trajectories of KITTI sequence 07 for ground truth and the four methods on clean input; all follow the loop closely, with point-to-point ICP drifting most">
+            <figcaption>Sequence 07, clean input: every method starts at identity, with no alignment.</figcaption>
+        </figure>
+
+        <figure>
+            <a href="media/04_sweep.png" target="_blank"><img src="media/04_sweep.png" alt="Grid of line charts for KITTI sequence 04 showing trajectory error and 10 m relative error against the six degradations for the four methods"></a>
+            <figcaption>Sequence 04 (straight road): the same sweep. Click to enlarge.</figcaption>
+        </figure>
+
+        <h2>Limitations</h2>
+        <ul>
+            <li><strong>Two sequences</strong>, with nothing averaged across them.</li>
+            <li><strong>Synthetic degradations of real scans.</strong>
+                <ul>
+                    <li>Dropout is random per point, while real dropout is structured.</li>
+                    <li>Range noise is Gaussian.</li>
+                    <li>Truncation doesn't add the spurious near returns that fog and dust produce.</li>
+                    <li>Decimated rings keep the HDL-64E's elevation pattern, not that of a real 16- or 32-beam sensor.</li>
+                </ul></li>
+            <li><strong>Defaults, not tuned systems:</strong> nothing was re-tuned per degradation, apart from the range-matched KISS-ICP check.</li>
+            <li><strong>Timing isn't reported here:</strong> one run per condition on a shared laptop.</li>
+            <li><strong>No IMU yet:</strong> LiDAR-inertial methods such as FAST-LIO2 are the next comparison.</li>
+        </ul>
+
+        <h2>How It Was Built</h2>
+        <ul>
+            <li><code>run_all.sh</code> does everything from the repo: a self-check, the download from the official KITTI mirror, extraction, the sweep, and the plots. Each run adds one CSV row.</li>
+            <li>The ring recovery and the degradations are tested on synthetic scans. Frame alignment and the 64-ring structure are asserted on every scan at load time.</li>
+            <li>Data license: KITTI is CC BY-NC-SA 3.0. No KITTI data is redistributed; the figures on this page are derived from KITTI and shared under the same terms. The code is MIT.</li>
+        </ul>
+
+        <h2>Next Steps</h2>
+        <ul>
+            <li>LiDAR-inertial odometry (FAST-LIO2) on a dataset with IMU data.</li>
+            <li>More sequences, averaged.</li>
+            <li>Real degraded data (rain, fog, dust) instead of synthetic degradations.</li>
+        </ul>
+    </div>
+</body>
+</html>

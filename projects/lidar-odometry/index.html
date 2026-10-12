@@ -181,8 +181,8 @@
                 <div class="stat-label">Best clean drift: GICP with a local map (VGICP) on seq 07; KISS-ICP 0.70%</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">89% &rarr; 0.53%</div>
-                <div class="stat-label">VGICP at 2.5 Hz on seq 04 once its first registration starts from the true motion: a start-up failure, not a tracking limit</div>
+                <div class="stat-value">89&ndash;100% &rarr; &le; 1.3%</div>
+                <div class="stat-label">Every method at 2.5 Hz on seq 04 once its first registration starts from the true motion: a start-up failure, not a tracking limit</div>
             </div>
         </div>
 
@@ -195,7 +195,7 @@
                     <li>Told the truncated range instead, its drift at 20 m on seq 04 falls from 100.5% to 6.99%. That is still behind GICP (2.23%) and VGICP (2.25%).</li>
                     <li>At 10 m every method fails on seq 04. On seq 07 at 10 m, GICP keeps 5.80% and range-matched KISS-ICP 9.27%.</li>
                 </ul></li>
-            <li><strong>Some low-rate failures happen at start-up.</strong> On seq 04 every method diverged at 2.5 Hz when starting from a zero-motion guess. Seeding VGICP's first registration from ground truth brings it back to 0.53% (0.60% at 1.25 Hz). On seq 07 at 1.25 Hz, seeding doesn't help (61%): that is a real tracking limit on a route with turns.</li>
+            <li><strong>Some low-rate failures happen at start-up.</strong> On seq 04 every method diverged at 2.5 Hz when starting from a zero-motion guess. Seeding each method's first registration from ground truth brings all four back to 0.43&ndash;1.38% drift, even at 1.25 Hz with about 12 m between scans. On seq 07 at 1.25 Hz, seeding doesn't help (GICP 9.0%, VGICP 61%): that is a real tracking limit on a route with turns.</li>
             <li><strong>The KISS-ICP baseline is fair.</strong> Its poses match kiss-icp's own KITTI pipeline to 2e-13. Deskewing each scan with azimuth timestamps wasn't a consistent win, so the official configuration stays the baseline.</li>
         </ol>
 

@@ -371,6 +371,7 @@
                     <li>the UKF's sigma points reproduce a correlated covariance (the regression test for the bug above)</li>
                 </ul></li>
             <li><strong>CI:</strong> GitHub Actions builds and tests the package in a <code>ros:jazzy</code> container.</li>
+            <li><strong>Node-level A/B:</strong> one seeded 60 s bag played into the Python and C++ nodes at once. Both published all 3000 poses with the same 0.226 m RMS error (dead reckoning: 1.380 m), and the C++ node used 2.7&ndash;2.9% of a core against 41% for Python.</li>
         </ul>
         <table style="border-collapse: collapse; width: 100%; margin: 1rem 0 1rem;">
             <tr style="background: #f5f5f5;"><th style="text-align: left; padding: 0.5rem 0.75rem;">Filter</th><th style="text-align: left; padding: 0.5rem 0.75rem;">C++ per step</th><th style="text-align: left; padding: 0.5rem 0.75rem;">Python per step</th><th style="text-align: left; padding: 0.5rem 0.75rem;">Speedup</th></tr>
@@ -379,8 +380,8 @@
         </table>
         <p>
             <em>One pinned core, Release build. The Python time is mostly NumPy per-call overhead on 3&times;3 matrices, so this compares
-            NumPy on tiny matrices with fixed-size Eigen, not Python with C++ in general. The C++ node has run against synthetic sensor
-            streams, not yet in Gazebo.</em>
+            NumPy on tiny matrices with fixed-size Eigen, not Python with C++ in general. The C++ node has been checked against the Python node on a synthetic
+            bag, not yet in Gazebo.</em>
         </p>
 
         <h2>Limitations</h2>

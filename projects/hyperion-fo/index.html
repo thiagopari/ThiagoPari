@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hyperion &times; Fo: Technician Dispatch for Robot Faults - Thiago Pari</title>
+    <meta name="description" content="Continuation of Hyperion: when a simulated warehouse robot faults, Claude uses the Fo MCP to phone real technicians, book the repair and email the report, with every Fo action gated by rules in code. Wajo AI x Anthropic hackathon, Oct 2026.">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #ffffff;
+        }
+        header {
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo { font-size: 1.5rem; font-weight: 700; color: #222; text-decoration: none; }
+        nav ul { display: flex; gap: 2rem; list-style: none; }
+        nav a { color: #555; text-decoration: none; font-weight: 500; transition: color 0.3s; }
+        nav a:hover { color: #1565c0; }
+        .project-header { max-width: 900px; margin: 3rem auto 2rem; padding: 0 2rem; }
+        .project-header h1 { font-size: 2.5rem; font-weight: 700; color: #222; margin-bottom: 1rem; line-height: 1.2; }
+        .context { color: #666; margin-bottom: 1rem; }
+        .project-meta { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .meta-tag {
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 0.4rem 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin: 0 0.5rem 0.5rem 0;
+        }
+        .status-complete { background: #e8f5e9; color: #2e7d32; }
+        .project-content { max-width: 900px; margin: 0 auto; padding: 0 2rem 4rem; }
+        .project-content h2 { font-size: 1.8rem; font-weight: 700; color: #222; margin: 3rem 0 1rem; }
+        .project-content p { color: #555; margin-bottom: 1rem; line-height: 1.8; }
+        .project-content ul, .project-content ol { margin-left: 2rem; margin-bottom: 1rem; }
+        .project-content li { color: #555; margin-bottom: 0.5rem; line-height: 1.8; }
+        figure { margin: 2rem 0; }
+        figure img { width: 100%; height: auto; display: block; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        figcaption { color: #666; font-size: 0.9rem; text-align: center; margin-top: 0.75rem; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .stat-card { background: #f5f5f5; padding: 1.5rem; border-radius: 8px; text-align: center; }
+        .stat-value { font-size: 2rem; font-weight: 700; color: #1976d2; margin-bottom: 0.5rem; }
+        .stat-label { color: #666; font-size: 0.9rem; }
+        .table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+        table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+        th, td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0; color: #555; vertical-align: top; }
+        th { color: #222; background: #f5f5f5; }
+        td:first-child { white-space: nowrap; }
+        .highlight-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; gap: 1rem; }
+            nav ul { gap: 1rem; }
+            .project-header h1 { font-size: 2rem; }
+            header { position: static; }
+        }
+        @media print {
+            header { position: static; }
+            nav { display: none; }
+            figure, .stat-card, tr { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="../../index.html" class="logo">Thiago Pari</a>
+            <nav>
+                <ul>
+                    <li><a href="../../index.html#experience">Experience</a></li>
+                    <li><a href="../../index.html#projects">Projects</a></li>
+                    <li><a href="../../index.html#contact">Contact</a></li>
+                    <li><a href="../../Pari Resume.pdf" target="_blank">Resume</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="project-header">
+        <h1>Hyperion &times; Fo: Technician Dispatch for Robot Faults</h1>
+        <p class="context">Wajo AI &times; Anthropic &ldquo;Get Sh*t Done&rdquo; Hackathon, Oct 2026 (team of 3, with Megha Manoj and Ferbin Richard) &middot; continues <a href="../skill-gate/index.html">Hyperion</a> from the Dell &times; NVIDIA GB10 Hackathon</p>
+        <div class="project-meta">
+            <span class="meta-tag">Claude Code (Sonnet)</span>
+            <span class="meta-tag">Fo MCP</span>
+            <span class="meta-tag">NVIDIA Isaac Sim</span>
+            <span class="meta-tag">Nova Carter</span>
+            <span class="meta-tag">AI agents</span>
+        </div>
+        <div>
+            <span class="status-badge status-complete">&#10003; Demoed with real calls, calendar and email</span>
+        </div>
+    </div>
+
+    <div class="project-content">
+
+        <div class="highlight-box">
+            <strong>Real vs. simulated:</strong> Fo's phone calls, calendar bookings and emails are real. The robots, faults and
+            technician travel are simulated (NVIDIA Isaac Sim plus Hyperion's fleet model). Faults are injected from the desk, and the on-call list is the team.
+        </div>
+
+        <h2>Problem</h2>
+        <p>
+            It's 9 PM and one of twenty warehouse robots stops in aisle 1. The repair itself is short; getting someone there can take hours:
+            notice the fault, call around, find who's free, book it, brief them.
+        </p>
+
+        <h2>From Hyperion to Hyperion &times; Fo</h2>
+        <p>
+            <a href="../skill-gate/index.html">Hyperion</a>, built on Oct 3 at the GB10 hackathon, already ran the warehouse: 20 NVIDIA Nova Carter
+            robots in Isaac Sim driven by our fleet code, with fault detection, tickets and a live dashboard, under one design rule:
+            <em>code enforces, models explain</em>. Its dispatch stopped at Discord messages written by local LLMs, though; nobody was actually called.
+        </p>
+        <p>
+            This version adds the missing step. Claude (Sonnet, running in Claude Code) drives Fo, Wajo AI's assistant, through the Fo MCP server,
+            and Fo places real phone calls and handles the calendar and email. Four Claude agents watch the fleet: surveillance, war room, scheduler and allocator.
+        </p>
+
+        <h2>How a Fault Gets Handled</h2>
+        <ol>
+            <li><strong>Detect.</strong> Robot 7 reports a drive fault, and a Claude agent writes the incident brief.</li>
+            <li><strong>Check.</strong> Before Fo is asked anything, code checks the request: is this person on the approved list, and are calls left for this incident?</li>
+            <li><strong>Call.</strong> Fo phones the on-call technician with the brief. Code reads the answer: an arrival time counts only if it is 1&ndash;120 minutes. Can't come, or no time given? Fo calls the next person on the list.</li>
+            <li><strong>Book.</strong> With a valid arrival time, Fo checks the calendar, books the slot and emails the incident report.</li>
+            <li><strong>Recover.</strong> The arrival time becomes the repair timer in the sim. When the technician arrives, the robot goes back to work and Fo sends the closing email.</li>
+        </ol>
+        <figure>
+            <img src="media/ops-desk-call.jpg" alt="Isaac Sim warehouse on the left, the Hyperion Ops Desk on the right, and a real phone call card where the technician answers 'Half hour.'" loading="lazy">
+            <figcaption>Unedited screen from the final run: Isaac Sim (left), the Hyperion Ops Desk (right) and Fo's real call to the next technician on the list.</figcaption>
+        </figure>
+
+        <h2>One Run, End to End</h2>
+        <p>The final demo run (incident INC-2), read from the agent trace shown in the demo video. Times are seconds after detection.</p>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>Time</th><th>What happened</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>+0 s</td><td>Robot 7 drive fault detected</td></tr>
+                    <tr><td>+4 s</td><td>Brief written; policy check passes; Fo asked to call Megha (on call)</td></tr>
+                    <tr><td>+363 s</td><td>Megha's call never came back as finished. After the 5-minute timeout the policy check passes again and Fo is asked to call Thiago (backup)</td></tr>
+                    <tr><td>+445 s</td><td>&ldquo;Half hour&rdquo;: 30 minutes accepted (inside 1&ndash;120)</td></tr>
+                    <tr><td>Next</td><td>A 9:22&ndash;9:52 repair is already on the calendar, so the repair is booked at 9:52 PM and the incident email goes out</td></tr>
+                    <tr><td>Close</td><td>Robot 7 back in service and closing email sent; 570 s of downtime on the demo clock</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Rules in Code, Not in the Prompt</h2>
+        <p>
+            Fo can call anyone, email anyone, book calendars and spend money. Hyperion's rules limit what it may do here, and they are
+            enforced twice: before each request to Fo is built, and again by a hook on every Fo tool call, so the model can't route around them.
+        </p>
+        <ul>
+            <li>Approved contact list only.</li>
+            <li>At most 2 calls per incident, and 1 per person.</li>
+            <li>No spending.</li>
+            <li>An arrival time must be 1&ndash;120 minutes.</li>
+            <li>A kill switch.</li>
+            <li>When a rule says no, the incident goes to <code>NEEDS_HUMAN</code>: the ops lead gets an email and an approve button, and nothing is booked.</li>
+        </ul>
+        <figure>
+            <img src="media/rules.jpg" alt="Side by side: what Fo can do (call anyone, email anyone, book calendars, spend money) and what Hyperion's rules in code allow" loading="lazy">
+            <figcaption>Frame from the demo video.</figcaption>
+        </figure>
+        <p>
+            At the GB10 event only the agent's prompt respected Hyperion's trust gate. Here every rule is checked in code.
+        </p>
+
+        <h2>What Went Wrong in Live Runs</h2>
+        <ul>
+            <li><strong>&ldquo;Sixty-seven days.&rdquo;</strong> A technician gave an arrival time of 67 days. That's outside 1&ndash;120 minutes, so nothing was booked; the incident went to <code>NEEDS_HUMAN</code> and the ops lead approved the repair.</li>
+            <li><strong>A name not on the list.</strong> Asked to send &ldquo;Amal&rdquo; instead, Fo declined and nobody else was called: Amal isn't on the approved list.</li>
+            <li><strong>A misheard answer.</strong> After Megha said she couldn't come, Fo's progress line still read &ldquo;I can come on site&rdquo;. It carried no arrival time, so nothing was booked.</li>
+            <li><strong>What didn't work:</strong> polling Fo for the call result. Megha's call never came back as finished, so Hyperion waited out a 5-minute timeout before calling the next person (sped up in the video).</li>
+        </ul>
+        <figure>
+            <img src="media/eta-67-days.jpg" alt="Incident panel: '67 days' is outside 1-120 minutes, so it is rejected and nothing is booked; the incident goes to NEEDS HUMAN" loading="lazy">
+            <figcaption>The &ldquo;67 days&rdquo; run (an earlier incident, INC-1): rejected by the arrival-time rule and sent to a human.</figcaption>
+        </figure>
+
+        <h2>Results</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">10</div>
+                <div class="stat-label">Real phone calls placed by Fo across the live runs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">20</div>
+                <div class="stat-label">Nova Carter robots simulated in Isaac Sim</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">2</div>
+                <div class="stat-label">Rule checks on every Fo action: before the request, and in a tool-call hook</div>
+            </div>
+        </div>
+        <p>
+            Demo video and build thread: <a href="https://x.com/Ferbin08/status/2112234117777818105" target="_blank" rel="noopener">Ferbin's post on X</a>
+            &middot; <a href="https://www.linkedin.com/feed/update/urn:li:activity:7518104277949546496/" target="_blank" rel="noopener">write-up on LinkedIn</a>.
+        </p>
+    </div>
+</body>
+</html>

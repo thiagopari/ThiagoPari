@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Thiago Pari</title>
+<meta name="description" content="Thiago Pari · M.S. Robotics, Northeastern · Perception, 3D mapping, state estimation">
+<meta property="og:title" content="Thiago Pari">
+<meta property="og:description" content="Perception · 3D Mapping · State Estimation. M.S. Robotics, Northeastern (May 2027).">
+<meta property="og:image" content="https://thiagopari.github.io/ThiagoPari/card/thiago.jpg">
+<meta name="theme-color" content="#000000">
+<style>
+  /* Apple HIG: Contacts-app layout, system font + system colours, glass actions over content, inset grouped list. Follows light/dark. */
+  :root { --bg: #F2F2F7; --group: #FFFFFF; --label: #000; --label2: rgba(60,60,67,.6); --sep: rgba(60,60,67,.18);
+    --tint: #007AFF; --glass: rgba(255,255,255,.55); --glass-edge: rgba(255,255,255,.8); color-scheme: dark; }
+  @media all {
+    :root { --bg: #000; --group: #1C1C1E; --label: #fff; --label2: rgba(235,235,245,.6); --sep: rgba(84,84,88,.6);
+      --tint: #FF9F0A; --glass: rgba(58,58,60,.62); --glass-edge: rgba(255,255,255,.18); }
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--label);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  /* the blurred photo behind the header gives the glass something real to refract */
+  .poster { position: absolute; inset: 0 0 auto; height: 420px; overflow: hidden; z-index: 0; pointer-events: none;
+    -webkit-mask-image: linear-gradient(#000 40%, transparent); mask-image: linear-gradient(#000 40%, transparent); }
+  .poster img { width: 100%; height: 100%; object-fit: cover; filter: blur(40px) saturate(1.6); transform: scale(1.3); opacity: .55; }
+  main { position: relative; z-index: 1; max-width: 430px; margin: 0 auto; padding: calc(env(safe-area-inset-top) + 48px) 16px 40px; }
+  header { text-align: center; }
+  .avatar { width: 128px; height: 128px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto 14px;
+    box-shadow: 0 8px 28px rgba(0,0,0,.18); }
+  h1 { margin: 0; font-size: 34px; font-weight: 700; letter-spacing: .37px; }
+  .sub { margin: 4px 0 0; font-size: 17px; color: var(--label2); letter-spacing: -.41px; }
+  /* Contacts-style action row: glass, interactive, one shared shape */
+  .actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 24px 0 28px; }
+  .actions a { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 0 8px; border-radius: 14px;
+    text-decoration: none; color: var(--tint); font-size: 12px; font-weight: 500;
+    background: var(--glass); border: .5px solid var(--glass-edge); -webkit-backdrop-filter: blur(20px) saturate(1.8); backdrop-filter: blur(20px) saturate(1.8);
+    box-shadow: inset 0 1px 0 var(--glass-edge), 0 2px 10px rgba(0,0,0,.06); transition: transform .15s; }
+  .actions a:active { transform: scale(.94); }
+  .actions svg { width: 24px; height: 24px; }
+  .actions a.primary { background: var(--tint); color: #fff; border-color: transparent; box-shadow: 0 4px 16px rgba(0,122,255,.35); }
+  .caption { margin: 0 16px 6px; font-size: 13px; color: var(--label2); text-transform: uppercase; letter-spacing: -.08px; }
+  /* inset grouped list, iOS Settings style */
+  .group { background: var(--group); border-radius: 12px; overflow: hidden; margin-bottom: 28px; }
+  .row { display: flex; align-items: center; gap: 12px; padding: 0 16px; min-height: 52px; text-decoration: none; color: var(--label); }
+  .row:active { background: var(--sep); }
+  .row + .row { background: linear-gradient(var(--sep), var(--sep)) right top / calc(100% - 58px) .5px no-repeat; }
+  .gh { background: #24292F; }
+  @media all { .gh { background: #3A3A3C; } }
+  .icon { flex: none; width: 30px; height: 30px; border-radius: 7px; display: grid; place-items: center; color: #fff; }
+  .icon svg { width: 18px; height: 18px; }
+  .text { flex: 1; display: flex; align-items: center; justify-content: space-between; gap: 8px; align-self: stretch; padding-right: 2px; font-size: 17px; letter-spacing: -.41px; }
+  .text small { color: var(--label2); font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .chev { flex: none; width: 8px; height: 14px; color: var(--label2); opacity: .6; }
+  .info { padding: 12px 16px; font-size: 15px; line-height: 1.45; }
+  .info + .info { border-top: .5px solid var(--sep); }
+  .info span { display: block; font-size: 13px; color: var(--label2); margin-bottom: 2px; }
+  footer { text-align: center; font-size: 13px; color: var(--label2); }
+
+  /* Tinted: one accent everywhere, like the iOS tinted home screen */
+  .icon, .gh { background: rgba(255,159,10,.18) !important; color: var(--tint); }
+  .actions a.primary { color: #000; box-shadow: 0 4px 16px rgba(255,159,10,.35); }
+  .poster img { filter: blur(40px) saturate(0) brightness(.8); }
+</style>
+</head>
+<body>
+<div class="poster" aria-hidden="true"><img src="../thiago.jpg" alt=""></div>
+<main>
+  <header>
+    <img class="avatar" src="../thiago.jpg" alt="Thiago Pari" width="128" height="128">
+    <h1>Thiago Pari</h1>
+    <p class="sub">Robotics Engineer · Perception &amp; 3D Mapping</p>
+  </header>
+
+  <nav class="actions">
+    <a class="primary" href="../thiago-pari.vcf" download>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="8" r="4"/><path d="M3 21c0-4 3-6 7-6 1.3 0 2.5.2 3.5.6M19 14v6M16 17h6"/></svg>Save</a>
+    <a href="mailto:parimaquera.t@northeastern.edu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m3 7 9 6 9-6"/></svg>Email</a>
+    <a href="https://linkedin.com/in/thiago-pari">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.2c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21h-4z"/></svg>LinkedIn</a>
+    <a href="../../Pari%20Resume.pdf">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>Resume</a>
+  </nav>
+
+  <p class="caption">Links</p>
+  <div class="group">
+    <a class="row" href="https://thiagopari.github.io/ThiagoPari/">
+      <span class="icon" style="background:#FF9500"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></span>
+      <span class="text">Portfolio<small>Projects</small></span>
+      <svg class="chev" viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2"><path d="m1 1 6 6-6 6"/></svg></a>
+    <a class="row" href="https://linkedin.com/in/thiago-pari">
+      <span class="icon" style="background:#0A66C2"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.2c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21h-4z"/></svg></span>
+      <span class="text">LinkedIn<small>thiago-pari</small></span>
+      <svg class="chev" viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2"><path d="m1 1 6 6-6 6"/></svg></a>
+    <a class="row" href="https://github.com/thiagopari">
+      <span class="icon gh"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.4-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.6.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7 3.6 3.6 0 0 1 .1-2.7s.8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></svg></span>
+      <span class="text">GitHub<small>thiagopari</small></span>
+      <svg class="chev" viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2"><path d="m1 1 6 6-6 6"/></svg></a>
+    <a class="row" href="../../Pari%20Resume.pdf">
+      <span class="icon" style="background:#FF3B30"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h6"/></svg></span>
+      <span class="text">Resume<small>PDF</small></span>
+      <svg class="chev" viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2"><path d="m1 1 6 6-6 6"/></svg></a>
+  </div>
+
+  <p class="caption">About</p>
+  <div class="group">
+    <div class="info"><span>Focus</span>Perception · 3D Mapping · State Estimation</div>
+    <div class="info"><span>Education</span>M.S. Robotics, Northeastern · May 2027</div>
+    <div class="info"><span>Status</span>Open to full-time roles</div>
+  </div>
+
+  <footer>Boston, MA</footer>
+</main>
+</body>
+</html>

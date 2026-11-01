@@ -1,0 +1,13 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Pari;Thiago;;;
+FN:Thiago Pari
+TITLE:M.S. Robotics - Perception & 3D Mapping
+ORG:Northeastern University
+EMAIL;TYPE=INTERNET:parimaquera.t@northeastern.edu
+URL:https://thiagopari.github.io/ThiagoPari/
+X-SOCIALPROFILE;TYPE=linkedin:https://linkedin.com/in/thiago-pari
+URL;TYPE=LinkedIn:https://linkedin.com/in/thiago-pari
+URL;TYPE=GitHub:https://github.com/thiagopari
+NOTE:Met via NFC card. Open to full-time robotics roles from May 2027.
+END:VCARD

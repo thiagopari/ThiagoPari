@@ -8,16 +8,13 @@
 <meta property="og:title" content="Thiago Pari">
 <meta property="og:description" content="Perception · 3D Mapping · State Estimation. M.S. Robotics, Northeastern (May 2027).">
 <meta property="og:image" content="https://thiagopari.github.io/ThiagoPari/card/thiago.jpg">
-<meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F2F2F7">
 <style>
-  /* Apple HIG: Contacts-app layout, system font + system colours, glass actions over content, inset grouped list. Follows light/dark. */
+  /* Apple HIG: Contacts-app layout, system font + system colours, glass actions over content, inset grouped list. Light 7 AM–7 PM in the viewer's own time, dark otherwise; the button flips it and the sun swings round into the moon. */
   :root { --bg: #F2F2F7; --group: #FFFFFF; --label: #000; --label2: rgba(60,60,67,.6); --sep: rgba(60,60,67,.18);
-    --tint: #007AFF; --glass: rgba(255,255,255,.55); --glass-edge: rgba(255,255,255,.8); color-scheme: light dark; }
-  @media (prefers-color-scheme: dark) {
-    :root { --bg: #000; --group: #1C1C1E; --label: #fff; --label2: rgba(235,235,245,.6); --sep: rgba(84,84,88,.6);
+    --tint: #007AFF; --glass: rgba(255,255,255,.55); --glass-edge: rgba(255,255,255,.8); color-scheme: light; }
+  :root[data-theme="dark"] { color-scheme: dark; --bg: #000; --group: #1C1C1E; --label: #fff; --label2: rgba(235,235,245,.6); --sep: rgba(84,84,88,.6);
       --tint: #0A84FF; --glass: rgba(58,58,60,.62); --glass-edge: rgba(255,255,255,.18); }
-  }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--label);
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased; }
@@ -47,7 +44,7 @@
   .row:active { background: var(--sep); }
   .row + .row { background: linear-gradient(var(--sep), var(--sep)) right top / calc(100% - 58px) .5px no-repeat; }
   .gh { background: #24292F; }
-  @media (prefers-color-scheme: dark) { .gh { background: #3A3A3C; } }
+  [data-theme="dark"] .gh { background: #3A3A3C; }
   .icon { flex: none; width: 30px; height: 30px; border-radius: 7px; display: grid; place-items: center; color: #fff; }
   .icon svg { width: 18px; height: 18px; }
   .text { flex: 1; display: flex; align-items: center; justify-content: space-between; gap: 8px; align-self: stretch; padding-right: 2px; font-size: 17px; letter-spacing: -.41px; }
@@ -56,11 +53,56 @@
   .info { padding: 12px 16px; font-size: 15px; line-height: 1.45; }
   .info + .info { border-top: .5px solid var(--sep); }
   .info span { display: block; font-size: 13px; color: var(--label2); margin-bottom: 2px; }
+  body, .group, .actions a, .row, .info, .gh, .text small, .sub, .caption, footer { transition: background-color .9s, color .9s, border-color .9s; }
+  /* sky: sun and moon ride one orbit whose pivot sits off the right edge; dark turns it half a circle */
+  .sky { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .orbit { position: absolute; top: -30px; right: -180px; width: 280px; height: 280px; transition: transform 1.4s cubic-bezier(.65,0,.35,1); }
+  [data-theme="dark"] .orbit { transform: rotate(180deg); }
+  .sun, .moon { position: absolute; top: 50%; width: 56px; height: 56px; margin-top: -28px; border-radius: 50%; }
+  .sun { left: -28px; background: radial-gradient(circle at 40% 38%, #FFE68A, #FFB800 70%); box-shadow: 0 0 46px 14px rgba(255,184,0,.32); }
+  .moon { right: -28px; background: radial-gradient(circle at 35% 40%, #FFFBEA, #DCD8C4); filter: drop-shadow(0 0 18px rgba(255,251,234,.35));
+    -webkit-mask: radial-gradient(circle at 70% 30%, transparent 17px, #000 18px); mask: radial-gradient(circle at 70% 30%, transparent 17px, #000 18px); }
+  .stars { position: absolute; inset: 0 0 auto; height: 380px; opacity: 0; transition: opacity 1.4s;
+    background-image: radial-gradient(1.5px 1.5px at 12% 18%, #fff, transparent), radial-gradient(1px 1px at 28% 8%, #fff, transparent),
+      radial-gradient(1.2px 1.2px at 46% 22%, #fff, transparent), radial-gradient(1px 1px at 64% 12%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 84% 30%, #fff, transparent), radial-gradient(1px 1px at 8% 40%, #fff, transparent),
+      radial-gradient(1.2px 1.2px at 92% 6%, #fff, transparent), radial-gradient(1px 1px at 38% 36%, #fff, transparent); }
+  [data-theme="dark"] .stars { opacity: .7; }
+  .mode { position: fixed; z-index: 2; top: calc(env(safe-area-inset-top) + 12px); right: 12px; width: 40px; height: 40px; border-radius: 50%;
+    display: grid; place-items: center; padding: 0; cursor: pointer; color: var(--label); background: var(--glass); border: .5px solid var(--glass-edge);
+    -webkit-backdrop-filter: blur(20px) saturate(1.8); backdrop-filter: blur(20px) saturate(1.8); box-shadow: 0 2px 10px rgba(0,0,0,.08); transition: transform .15s, background-color .9s, color .9s; }
+  .mode:active { transform: scale(.9); }
+  .mode svg { grid-area: 1 / 1; width: 20px; height: 20px; transition: opacity .5s, transform .7s; }
+  .mode .i-sun, [data-theme="dark"] .mode .i-moon { opacity: 0; transform: rotate(-90deg) scale(.5); }
+  [data-theme="dark"] .mode .i-sun { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { *, .orbit, .stars { transition: none !important; } }
   footer { text-align: center; font-size: 13px; color: var(--label2); }
 </style>
+<script>
+  // light 7:00–18:59 on the viewer's clock, dark otherwise; the button flips it for this visit
+  (() => {
+    const root = document.documentElement;
+    const set = t => {
+      root.dataset.theme = t;
+      document.querySelector('meta[name="theme-color"]').content = t === 'dark' ? '#000000' : '#F2F2F7';
+      document.querySelector('.mode')?.setAttribute('aria-label', `Switch to ${t === 'dark' ? 'light' : 'dark'} mode`);
+    };
+    const h = new Date().getHours();
+    set(h >= 7 && h < 19 ? 'light' : 'dark');
+    addEventListener('DOMContentLoaded', () => {
+      set(root.dataset.theme);
+      document.querySelector('.mode').onclick = () => set(root.dataset.theme === 'dark' ? 'light' : 'dark');
+    });
+  })();
+</script>
 </head>
 <body>
 <div class="poster" aria-hidden="true"><img src="../thiago.jpg" alt=""></div>
+<div class="sky" aria-hidden="true"><div class="stars"></div><div class="orbit"><div class="sun"></div><div class="moon"></div></div></div>
+<button class="mode" type="button" aria-label="Switch theme">
+  <svg class="i-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/></svg>
+  <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><path d="M12 1.5v2.5M12 20v2.5M1.5 12H4M20 12h2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
+</button>
 <main>
   <header>
     <img class="avatar" src="../thiago.jpg" alt="Thiago Pari" width="128" height="128">

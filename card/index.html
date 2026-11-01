@@ -175,7 +175,7 @@
 /* Android browsers can't open the Contacts app from a web page (Chrome only launches "browsable" apps), so the .vcf downloads; say what to tap next. iPhone Safari shows its own contact card. */
 if (/Android/i.test(navigator.userAgent)) document.querySelector('a[href="thiago-pari.vcf"]').addEventListener('click', () => {
   if (document.querySelector('.vcf-hint')) return;
-  document.querySelector('.actions').insertAdjacentHTML('afterend', '<p class="sub vcf-hint" style="text-align:center;margin:10px 0 0">Open <b>thiago-pari.vcf</b> from your downloads to add it to Contacts</p>');
+  document.querySelector('.actions').insertAdjacentHTML('afterend', '<p class="sub vcf-hint" style="text-align:center;margin:10px 0 14px">Open <b>thiago-pari.vcf</b> from your downloads to add it to Contacts</p>');
 });
 </script>
 </body>

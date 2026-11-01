@@ -172,17 +172,11 @@
   <footer>Boston, MA</footer>
 </main>
 <script>
-/* Android: open the phone's own "new contact" screen, pre-filled (one tap to save). If no app takes it, Chrome falls back to the .vcf. */
-if (/Android/i.test(navigator.userAgent)) {
-  const save = document.querySelector('a[href="thiago-pari.vcf"]'), e = encodeURIComponent;
-  const x = { name: 'Thiago Pari', email: 'parimaquera.t@northeastern.edu', company: 'Northeastern University',
-    job_title: 'M.S. Robotics - Perception & 3D Mapping',
-    notes: 'Portfolio: https://thiagopari.github.io/ThiagoPari/\nLinkedIn: https://linkedin.com/in/thiago-pari\nGitHub: https://github.com/thiagopari' };
-  save.removeAttribute('download');
-  save.href = 'intent:#Intent;action=android.intent.action.INSERT;type=vnd.android.cursor.dir/contact;'
-    + Object.entries(x).map(([k, v]) => `S.${k}=${e(v)};`).join('')
-    + `S.browser_fallback_url=${e(new URL('thiago-pari.vcf', location.href).href)};end`;
-}
+/* Android browsers can't open the Contacts app from a web page (Chrome only launches "browsable" apps), so the .vcf downloads; say what to tap next. iPhone Safari shows its own contact card. */
+if (/Android/i.test(navigator.userAgent)) document.querySelector('a[href="thiago-pari.vcf"]').addEventListener('click', () => {
+  if (document.querySelector('.vcf-hint')) return;
+  document.querySelector('.actions').insertAdjacentHTML('afterend', '<p class="sub vcf-hint" style="text-align:center;margin:10px 0 0">Open <b>thiago-pari.vcf</b> from your downloads to add it to Contacts</p>');
+});
 </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -8,71 +8,168 @@
 <meta property="og:title" content="Thiago Pari">
 <meta property="og:description" content="Perception · 3D Mapping · State Estimation. M.S. Robotics, Northeastern (May 2027).">
 <meta property="og:image" content="https://thiagopari.github.io/ThiagoPari/card/thiago.jpg">
-<meta name="theme-color" content="#070B12">
+<meta name="theme-color" content="#F2F2F7">
 <style>
-  /* Blueprint/HUD: navy ground + cyan drafting grid, monospace annotations, safety orange only on the main action */
-  :root { --bg: #070B12; --panel: rgba(12,20,32,.82); --line: rgba(56,189,248,.18); --text: #E6EDF5; --dim: #7C8A9E;
-    --cyan: #38BDF8; --orange: #FF6A13; --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; color-scheme: dark; }
-  * { box-sizing: border-box; }
-  body { margin: 0; min-height: 100vh; color: var(--text); display: flex; justify-content: center; background-color: var(--bg);
-    background-image:
-      radial-gradient(90% 50% at 50% 0%, rgba(56,189,248,.16), transparent 70%),
-      linear-gradient(rgba(56,189,248,.09) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,.09) 1px, transparent 1px),
-      linear-gradient(rgba(56,189,248,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,.035) 1px, transparent 1px);
-    background-size: 100% 100%, 96px 96px, 96px 96px, 16px 16px, 16px 16px; background-position: 0 0, -1px -1px, -1px -1px, -1px -1px, -1px -1px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
-  main { width: 100%; max-width: 420px; padding: calc(env(safe-area-inset-top) + 40px) 20px 32px; text-align: center; }
-  .tag { font: 11px/1 var(--mono); color: var(--dim); letter-spacing: 1.5px; text-transform: uppercase; }
-  .frame { position: relative; width: 140px; height: 140px; margin: 14px auto 18px; display: grid; place-items: center; }
-  .frame::before, .frame::after { content: ''; position: absolute; inset: 0; border: 2px solid var(--cyan); }
-  .frame::before { clip-path: polygon(0 0, 22% 0, 22% 2px, 2px 2px, 2px 22%, 0 22%, 0 78%, 2px 78%, 2px calc(100% - 2px), 22% calc(100% - 2px), 22% 100%, 0 100%); }
-  .frame::after { clip-path: polygon(100% 0, 78% 0, 78% 2px, calc(100% - 2px) 2px, calc(100% - 2px) 22%, 100% 22%, 100% 78%, calc(100% - 2px) 78%, calc(100% - 2px) calc(100% - 2px), 78% calc(100% - 2px), 78% 100%, 100% 100%); }
-  .frame img { width: 112px; height: 112px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 1px var(--line), 0 0 36px rgba(56,189,248,.25); }
-  .frame svg { position: absolute; left: -6px; bottom: -6px; width: 34px; height: 34px; }
-  h1 { margin: 0; font-size: 30px; letter-spacing: -.5px; }
-  .focus { margin: 10px 0 8px; font: 600 11.5px/1.4 var(--mono); color: var(--cyan); }
-  .status { margin: 0 0 26px; color: var(--dim); font-size: 14px; line-height: 1.5; }
-  a.btn { display: flex; align-items: center; gap: 14px; padding: 14px 16px; margin-bottom: 10px; border-radius: 4px; text-decoration: none;
-    color: var(--text); background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--cyan);
-    font-weight: 600; font-size: 16px; text-align: left; transition: transform .1s, border-color .2s; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
-  a.btn:active { transform: scale(.98); }
-  a.btn:hover { border-color: var(--cyan); }
-  a.btn svg { flex: none; width: 22px; height: 22px; color: var(--cyan); }
-  a.btn small { display: block; color: var(--dim); font: 400 12px/1.4 var(--mono); margin-top: 3px; }
-  a.btn.main { background: var(--orange); border-color: var(--orange); color: #0A0A0A; box-shadow: 0 6px 26px rgba(255,106,19,.28); }
-  a.btn.main svg { color: #0A0A0A; }
-  a.btn.main small { color: rgba(10,10,10,.72); }
-  footer { margin-top: 22px; font: 11px/1.6 var(--mono); color: var(--dim); letter-spacing: 1px; }
+  /* Apple HIG: Contacts-app layout, system font + system colours, glass actions over content, inset grouped list. Light 7 AM–7 PM in the viewer's own time, dark otherwise; the button flips it. Solar dial, after the Apple Watch face: a 24-hour ring round the photo, 1 PM on top and 7 AM / 7 PM on the horizon. The sun sits at the viewer's own time with the moon opposite; the button turns the ring half a day, always clockwise. */
+  :root { --bg: #F2F2F7; --group: #FFFFFF; --label: #000; --label2: rgba(60,60,67,.6); --sep: rgba(60,60,67,.18);
+    --tint: #007AFF; --glass: rgba(255,255,255,.55); --glass-edge: rgba(255,255,255,.8); color-scheme: light; }
+  :root[data-theme="dark"] { color-scheme: dark; --bg: #000; --group: #1C1C1E; --label: #fff; --label2: rgba(235,235,245,.6); --sep: rgba(84,84,88,.6);
+      --tint: #0A84FF; --glass: rgba(58,58,60,.62); --glass-edge: rgba(255,255,255,.18); }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--label);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  /* the blurred photo behind the header gives the glass something real to refract */
+  .poster { position: absolute; inset: 0 0 auto; height: 420px; overflow: hidden; z-index: 0; pointer-events: none;
+    -webkit-mask-image: linear-gradient(#000 40%, transparent); mask-image: linear-gradient(#000 40%, transparent); }
+  .poster img { width: 100%; height: 100%; object-fit: cover; filter: blur(40px) saturate(1.6); transform: scale(1.3); opacity: .55; }
+  main { position: relative; z-index: 1; max-width: 430px; margin: 0 auto; padding: calc(env(safe-area-inset-top) + 48px) 16px 40px; }
+  header { text-align: center; }
+  .avatar { width: 128px; height: 128px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto 14px;
+    box-shadow: 0 8px 28px rgba(0,0,0,.18); }
+  h1 { margin: 0; font-size: 34px; font-weight: 700; letter-spacing: .37px; }
+  .sub { margin: 4px 0 0; font-size: 17px; color: var(--label2); letter-spacing: -.41px; }
+  /* Contacts-style action row: glass, interactive, one shared shape */
+  .actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 24px 0 28px; }
+  .actions a { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 0 8px; border-radius: 14px;
+    text-decoration: none; color: var(--tint); font-size: 12px; font-weight: 500;
+    background: var(--glass); border: .5px solid var(--glass-edge); -webkit-backdrop-filter: blur(20px) saturate(1.8); backdrop-filter: blur(20px) saturate(1.8);
+    box-shadow: inset 0 1px 0 var(--glass-edge), 0 2px 10px rgba(0,0,0,.06); transition: transform .15s; }
+  .actions a:active { transform: scale(.94); }
+  .actions svg { width: 24px; height: 24px; }
+  .actions a.primary { background: var(--tint); color: #fff; border-color: transparent; box-shadow: 0 4px 16px rgba(0,122,255,.35); }
+  .caption { margin: 0 16px 6px; font-size: 13px; color: var(--label2); text-transform: uppercase; letter-spacing: -.08px; }
+  /* inset grouped list, iOS Settings style */
+  .group { background: var(--group); border-radius: 12px; overflow: hidden; margin-bottom: 28px; }
+  .row { display: flex; align-items: center; gap: 12px; padding: 0 16px; min-height: 52px; text-decoration: none; color: var(--label); }
+  .row:active { background: var(--sep); }
+  .row + .row { background: linear-gradient(var(--sep), var(--sep)) right top / calc(100% - 58px) .5px no-repeat; }
+  .gh { background: #24292F; }
+  [data-theme="dark"] .gh { background: #3A3A3C; }
+  .icon { flex: none; width: 30px; height: 30px; border-radius: 7px; display: grid; place-items: center; color: #fff; }
+  .icon svg { width: 18px; height: 18px; }
+  .text { flex: 1; display: flex; align-items: center; justify-content: space-between; gap: 8px; align-self: stretch; padding-right: 2px; font-size: 17px; letter-spacing: -.41px; }
+  .text small { color: var(--label2); font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .chev { flex: none; width: 8px; height: 14px; color: var(--label2); opacity: .6; }
+  .info { padding: 12px 16px; font-size: 15px; line-height: 1.45; }
+  .info + .info { border-top: .5px solid var(--sep); }
+  .info span { display: block; font-size: 13px; color: var(--label2); margin-bottom: 2px; }
+  body, .group, .actions a, .row, .info, .gh, .text small, .sub, .caption, footer { transition: background-color .9s, color .9s, border-color .9s; }
+  .mode { position: fixed; z-index: 2; top: calc(env(safe-area-inset-top) + 12px); right: 12px; width: 40px; height: 40px; border-radius: 50%;
+    display: grid; place-items: center; padding: 0; cursor: pointer; color: var(--label); background: var(--glass); border: .5px solid var(--glass-edge);
+    -webkit-backdrop-filter: blur(20px) saturate(1.8); backdrop-filter: blur(20px) saturate(1.8); box-shadow: 0 2px 10px rgba(0,0,0,.08); transition: transform .15s, background-color .9s, color .9s; }
+  .mode:active { transform: scale(.9); }
+  /* the button's sun turns into a moon: an inset shadow bites a crescent out of the disc and the rays spin away */
+  .mode .orb, .mode .rays { grid-area: 1 / 1; transition: transform .7s cubic-bezier(.5,1.5,.5,1), box-shadow .7s, opacity .4s; }
+  .mode .orb { width: 16px; height: 16px; border-radius: 50%; box-shadow: inset 5px -5px 0 0 currentColor; transform: rotate(-15deg); }
+  .mode .rays { width: 20px; height: 20px; opacity: 0; transform: rotate(-90deg) scale(.4); }
+  [data-theme="dark"] .mode .orb { box-shadow: inset 0 0 0 8px currentColor; transform: rotate(90deg) scale(.56); }
+  [data-theme="dark"] .mode .rays { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+  .stars { position: absolute; inset: 0 0 auto; height: 420px; z-index: 0; pointer-events: none; opacity: 0; transition: opacity 1.4s;
+    background-image: radial-gradient(1.5px 1.5px at 12% 18%, #fff, transparent), radial-gradient(1px 1px at 28% 8%, #fff, transparent),
+      radial-gradient(1.2px 1.2px at 46% 22%, #fff, transparent), radial-gradient(1px 1px at 64% 12%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 84% 30%, #fff, transparent), radial-gradient(1px 1px at 8% 40%, #fff, transparent),
+      radial-gradient(1.2px 1.2px at 92% 6%, #fff, transparent), radial-gradient(1px 1px at 38% 36%, #fff, transparent),
+      radial-gradient(1px 1px at 20% 54%, #fff, transparent), radial-gradient(1.3px 1.3px at 74% 46%, #fff, transparent),
+      radial-gradient(1px 1px at 56% 4%, #fff, transparent), radial-gradient(1.2px 1.2px at 96% 58%, #fff, transparent); }
+  [data-theme="dark"] .stars { opacity: .75; }
+  /* solar dial: ticks every hour, longer ones at 1 AM / 7 AM / 1 PM / 7 PM. Everything below the horizon (the photo's midline) fades out */
+  main { padding-top: calc(env(safe-area-inset-top) + 64px); }
+  .solar { position: relative; width: 128px; height: 128px; margin: 0 auto 14px; }
+  .solar .avatar { position: relative; z-index: 1; margin: 0; }
+  .dome { position: absolute; left: 50%; top: 50%; width: 240px; height: 240px; margin: -120px 0 0 -120px;
+    -webkit-mask-image: linear-gradient(#000 50%, transparent 63%); mask-image: linear-gradient(#000 50%, transparent 63%); }
+  .dome svg { display: block; width: 100%; height: 100%; overflow: visible; }
+  .ticks { fill: none; stroke: var(--label); stroke-opacity: .3; stroke-width: 5; stroke-dasharray: .6 9.4; stroke-dashoffset: .3; transition: stroke .9s; }
+  .ticks.major { stroke-opacity: .55; stroke-width: 10; stroke-dasharray: 1 59; stroke-dashoffset: .5; }
+  .rotor { position: absolute; left: 29px; top: 29px; width: 182px; height: 182px; transform: rotate(var(--rot)); transition: transform 2s cubic-bezier(.65,0,.35,1); }
+  .rotor i { position: absolute; left: 50%; border-radius: 50%; }
+  .rotor .sun { top: 0; width: 18px; height: 18px; margin: -9px 0 0 -9px; background: radial-gradient(circle at 42% 40%, #FFF6C2, #FFD04A 58%, #FFAE2E);
+    box-shadow: 0 0 14px 5px rgba(255,196,70,.55); }
+  .rotor .moon { bottom: 0; width: 16px; height: 16px; margin: 0 0 -8px -8px; filter: drop-shadow(0 0 6px rgba(255,248,220,.6)); }
+  .rotor .moon b { display: block; width: 100%; height: 100%; border-radius: 50%; background: #F4F0DE;
+    -webkit-mask: radial-gradient(circle at 74% 26%, transparent 5.5px, #000 6px); mask: radial-gradient(circle at 74% 26%, transparent 5.5px, #000 6px); }
+  footer { text-align: center; font-size: 13px; color: var(--label2); }
 </style>
+<script>
+  // light 7:00–18:59 on the viewer's clock, dark otherwise; the button flips it for this visit
+  (() => {
+    const root = document.documentElement, bar = { light: '#F2F2F7', dark: '#000000' }, now = new Date(), h = now.getHours();
+    const set = t => {
+      root.dataset.theme = t;
+      document.querySelector('meta[name="theme-color"]').content = bar[t];
+      document.querySelector('.mode')?.setAttribute('aria-label', `Switch to ${t === 'dark' ? 'light' : 'dark'} mode`);
+    };
+    let flip = () => set(root.dataset.theme === 'dark' ? 'light' : 'dark');
+    set(h >= 7 && h < 19 ? 'light' : 'dark');
+    // solar dial: sun angle from the viewer's time, 1 PM straight up, 15° per hour; each flip adds half a day
+    let rot = (h + now.getMinutes() / 60 - 13) * 15;
+    const turn = () => root.style.setProperty('--rot', `${rot}deg`);
+    turn();
+    const plain = flip;
+    flip = () => { rot += 180; turn(); plain(); };
+    addEventListener('DOMContentLoaded', () => {
+      set(root.dataset.theme);
+      document.querySelector('.mode').onclick = () => flip();
+    });
+  })();
+</script>
 </head>
 <body>
+<div class="poster" aria-hidden="true"><img src="thiago.jpg" alt=""></div>
+<div class="stars" aria-hidden="true"></div>
+<button class="mode" type="button" aria-label="Switch theme"><span class="orb"></span>
+  <svg class="rays" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1.5v2.5M12 20v2.5M1.5 12H4M20 12h2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
+</button>
 <main>
-  <div class="tag">// robotics engineer</div>
-  <div class="frame"><img src="thiago.jpg" alt="Thiago Pari" width="112" height="112">
-    <svg viewBox="0 0 34 34" aria-hidden="true" stroke-width="2.5" stroke-linecap="round"><path d="M6 28h22" stroke="#EF4444"/><path d="M6 28V6" stroke="#22C55E"/><circle cx="6" cy="28" r="3.5" fill="#3B82F6"/></svg></div>
-  <h1>Thiago Pari</h1>
-  <p class="focus">Perception · 3D Mapping · State Estimation</p>
-  <p class="status">M.S. Robotics, Northeastern University<br>Graduating May 2027 · Open to full-time roles</p>
+  <header>
+    <div class="solar"><div class="dome" aria-hidden="true">
+      <svg viewBox="-120 -120 240 240"><circle class="ticks" r="91" pathLength="240"/><circle class="ticks major" r="91" pathLength="240"/></svg>
+      <div class="rotor"><i class="sun"></i><i class="moon"><b></b></i></div>
+    </div><img class="avatar" src="thiago.jpg" alt="Thiago Pari" width="128" height="128"></div>
+    <h1>Thiago Pari</h1>
+    <p class="sub">Robotics Engineer · Perception &amp; 3D Mapping</p>
+  </header>
 
-  <a class="btn main" href="thiago-pari.vcf" download>
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
-    <span>Save my contact<small>Adds me to your phone's contacts</small></span></a>
-  <a class="btn" href="https://linkedin.com/in/thiago-pari">
-    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.2c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21h-4z"/></svg>
-    <span>LinkedIn<small>linkedin.com/in/thiago-pari</small></span></a>
-  <a class="btn" href="https://thiagopari.github.io/ThiagoPari/">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>
-    <span>Portfolio<small>Perception, SfM, robotics projects</small></span></a>
-  <a class="btn" href="../Pari%20Resume.pdf">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h6"/></svg>
-    <span>Resume<small>PDF</small></span></a>
-  <a class="btn" href="https://github.com/thiagopari">
-    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.4-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.6.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7 3.6 3.6 0 0 1 .1-2.7s.8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></svg>
-    <span>GitHub<small>github.com/thiagopari</small></span></a>
-  <a class="btn" href="mailto:parimaquera.t@northeastern.edu">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-    <span>Email<small>parimaquera.t@northeastern.edu</small></span></a>
-  <footer>42.3398° N · 71.0892° W<br>BOSTON, MA</footer>
+  <nav class="actions">
+    <a class="primary" href="thiago-pari.vcf" download>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="8" r="4"/><path d="M3 21c0-4 3-6 7-6 1.3 0 2.5.2 3.5.6M19 14v6M16 17h6"/></svg>Save</a>
+    <a href="mailto:parimaquera.t@northeastern.edu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m3 7 9 6 9-6"/></svg>Email</a>
+    <a href="https://linkedin.com/in/thiago-pari">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.2c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21h-4z"/></svg>LinkedIn</a>
+    <a href="../Pari%20Resume.pdf">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>Resume</a>
+  </nav>
+
+  <p class="caption">Links</p>
+  <div class="group">
+    <a class="row" href="https://thiagopari.github.io/ThiagoPari/">
+      <span class="icon" style="background:#FF9500"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></span>
+      <span class="text">Portfolio<small>Projects</small></span>
+      <svg class="chev" viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2"><path d="m1 1 6 6-6 6"/></svg></a>
+    <a class="row" href="https://linkedin.com/in/thiago-pari">
+      <span class="icon" style="background:#0A66C2"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.2c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21h-4z"/></svg></span>
+      <span class="text">LinkedIn<small>thiago-pari</small></span>
+      <svg class="chev" viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2"><path d="m1 1 6 6-6 6"/></svg></a>
+    <a class="row" href="https://github.com/thiagopari">
+      <span class="icon gh"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.4-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 2.9.8.1-.6.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7 3.6 3.6 0 0 1 .1-2.7s.8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></svg></span>
+      <span class="text">GitHub<small>thiagopari</small></span>
+      <svg class="chev" viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2"><path d="m1 1 6 6-6 6"/></svg></a>
+    <a class="row" href="../Pari%20Resume.pdf">
+      <span class="icon" style="background:#FF3B30"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h6"/></svg></span>
+      <span class="text">Resume<small>PDF</small></span>
+      <svg class="chev" viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2"><path d="m1 1 6 6-6 6"/></svg></a>
+  </div>
+
+  <p class="caption">About</p>
+  <div class="group">
+    <div class="info"><span>Focus</span>Perception · 3D Mapping · State Estimation</div>
+    <div class="info"><span>Education</span>M.S. Robotics, Northeastern · May 2027</div>
+    <div class="info"><span>Status</span>Open to full-time roles</div>
+  </div>
+
+  <footer>Boston, MA</footer>
 </main>
 </body>
 </html>

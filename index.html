@@ -349,6 +349,7 @@
         <h1>Thiago Pari</h1>
         <p class="focus">Perception &middot; 3D Mapping &middot; State Estimation</p>
         <p class="status">M.S. Robotics, Northeastern University &middot; Graduating May 2027 &middot; Open to full-time roles</p>
+        <p class="status">2nd place &times;2 in Oct 2026: Hackachusetts (Robotics track) &middot; Wajo AI &times; Anthropic Hackathon (Hyperion &times; Fo)</p>
         <p class="summary">
             I work on perception and mapping for places where cameras and GPS stop being reliable.
             At Archenaux Robotics I owned the 3D mapping architecture for an underwater hull-inspection robot
@@ -513,7 +514,7 @@
                         <p class="project-description">
                             An AI agent may trigger a robot skill only after trials show P(success &ge; 0.8) &ge; 0.95 under a Beta posterior.
                             On a Dell GB10, the gate ran 20 GR00T N1.7 episodes in LIBERO simulation and opened only for the checkpoint
-                            that went 15/15. At the event only the agent's prompt enforced it; now moving it into a Cedar-enforced control plane.
+                            that went 15/15. At the event only the agent's prompt enforced it; the follow-up, Learner's Permit (Nebius &times; NVIDIA, Oct 2026), enforces skill licences with Cedar.
                         </p>
                         <div class="tech-tags">
                             <span class="tag">Python</span>
@@ -533,7 +534,7 @@
                         <img src="images/hyperion-fo.jpg" alt="Isaac Sim warehouse with a real phone call card: Fo calls the next technician on the list, who answers 'Half hour.'">
                     </div>
                     <div class="project-content">
-                        <h3 class="project-title">Hyperion &times; Fo: Technician Dispatch for Robot Faults <span class="pill">&#9654; Demo video</span></h3>
+                        <h3 class="project-title">Hyperion &times; Fo: Technician Dispatch for Robot Faults <span class="pill">2nd place</span> <span class="pill">&#9654; Demo video</span></h3>
                         <p class="card-context">Wajo AI &times; Anthropic Hackathon &middot; Oct 2026 &middot; Team of 3 &middot; Continues Hyperion</p>
                         <p class="project-description">
                             When one of 20 simulated Nova Carter robots faults, Claude uses the Fo MCP to phone real technicians, book the
@@ -562,8 +563,8 @@
                         <p class="card-context">Personal project &middot; Oct 2025 &ndash; present &middot; Based on Will Cogley's RoboFox design</p>
                         <p class="project-description">
                             Printed, wired and calibrated a 12-servo quadruped (Raspberry Pi, PCA9685, BNO055 IMU) that stood stably in Feb 2026;
-                            IK and gait code developed on a MuJoCo model. Status, Sep 2026: legs being
-                            reprinted before IK tuning on the hardware.
+                            IK and gait code developed on a MuJoCo model. Since Oct 2026: an RL-ready Isaac Lab model of the real leg mechanism, and a
+                            sim-first VIO study where OpenVINS reaches 0.015 m ATE over a 10.46 m path (mono VO: 0.027 m) but diverges with a 20 ms camera&ndash;IMU offset.
                         </p>
                         <div class="tech-tags">
                             <span class="tag">Python</span>
@@ -577,6 +578,33 @@
             </a>
 
         </div>
+
+        <h3 class="project-title">Hackathon Builds</h3>
+        <ul class="compact-list">
+            <li>
+                <a href="https://github.com/mochi-bunny/navfix/tree/hackachusetts-craigie">Craigie Bridge Inspector</a> <span class="when">&middot; Hackachusetts, Oct 2026 &middot; 2nd in Robotics &middot; Team of 3</span><br>
+                A drone flown by real ArduPilot SITL inspects Boston's Craigie Drawbridge and Charles River Dam canal in Isaac Sim,
+                threading under the deck where GNSS degrades; ROS 2 / RViz2 and QGroundControl, with simulated thermal labelled as simulated.
+            </li>
+            <li>
+                <a href="https://github.com/thiagopari/mission-preflight">Mission Preflight</a> <span class="when">&middot; Vultr Agent Rush (lablab.ai), Nov 2026 &middot; Solo</span><br>
+                Tests every ROV mission in a throwaway sandbox before it goes in the water: each step runs in its own Kata microVM,
+                with Vultr Serverless Inference and Cloud Compute; built with Kiro.
+            </li>
+            <li>
+                <a href="https://github.com/thiagopari/pierside">Pierside</a> <span class="when">&middot; PayPal AI Hackathon, Nov 2026 &middot; Team entry</span><br>
+                An AI agent scopes an underwater ROV inspection, prices it from a fixed rate card and books it with a PayPal (sandbox) deposit.
+            </li>
+            <li>
+                <a href="https://github.com/thiagopari/mandate-wallet">Mandate Wallet</a> <span class="when">&middot; PayPal AI Hackathon, Nov 2026 &middot; Team entry</span><br>
+                Signed spending mandates for AI agents that pay with PayPal: Claude shops, and a rule gate decides each payment.
+            </li>
+            <li>
+                <a href="https://github.com/thiagopari/learners-permit">Learner's Permit</a> <span class="when">&middot; Nebius &times; NVIDIA Global AI Hackathon, Oct 2026 &middot; Team entry</span><br>
+                Robots earn the right to be commanded by AI: GR00T skills licensed by Nebius evals, Cedar RBAC and a Nemotron planner.
+                Continues the Bayesian Skill Gate above.
+            </li>
+        </ul>
 
         <h3 class="project-title">Other Projects</h3>
         <ul class="compact-list">

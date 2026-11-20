@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:,">
     <title>Underwater SfM Degradation Study - Thiago Pari</title>
     <meta name="description" content="Simulation study of when COLMAP structure-from-motion stops recovering camera poses underwater: measured Jerlov water optics, a camera noise model and 64 seeded runs.">
     <style>
@@ -92,6 +93,25 @@
             font-family: 'Courier New', monospace;
             font-size: 0.9em;
         }
+        .explorer { margin: 2.5rem 0 3rem; padding: 1.4rem; background: #f5f9fc; border: 1px solid #dce8f2; border-radius: 10px; }
+        .explorer h2 { margin: 0 0 .5rem; }
+        .explorer-intro { margin-bottom: 1rem !important; }
+        .water-slider { width: 100%; accent-color: #1565c0; }
+        .water-labels { display: flex; justify-content: space-between; gap: .2rem; color: #637487; font-size: .72rem; margin: .2rem 0 1rem; }
+        .explorer-views { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start; }
+        .explorer-views figure { margin: 0; }
+        .explorer-views figure img { display: block; aspect-ratio: 4/3; object-fit: cover; }
+        .explorer-cloud { position: relative; aspect-ratio: 4/3; background: #101923; border-radius: 8px; overflow: hidden; }
+        .explorer-cloud canvas, .explorer-fallback { position: absolute; inset: 0; width: 100%; height: 100%; }
+        .explorer-fallback { object-fit: cover; }
+        .gauge-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .6rem; margin: 1rem 0; }
+        .gauge { min-width: 0; padding: .65rem; background: white; border-radius: 6px; font-size: .8rem; }
+        .gauge strong { display: block; color: #20364a; font-size: .95rem; }
+        .gauge-track { height: 5px; background: #e4edf5; border-radius: 5px; margin-top: .45rem; overflow: hidden; }
+        .gauge-fill { height: 100%; background: #1976d2; transition: width .3s; }
+        .regime { min-height: 1.8rem; font-weight: 600; color: #1565c0 !important; margin-bottom: .4rem !important; }
+        .explorer-note { font-size: .76rem; color: #687786 !important; margin: .5rem 0 0 !important; line-height: 1.5 !important; }
+        @media (max-width: 650px) { .explorer-views { grid-template-columns: 1fr; } .gauge-grid { grid-template-columns: repeat(2,1fr); } .explorer { padding: 1rem; } }
         @media (max-width: 768px) {
             .header-content { flex-direction: column; gap: 1rem; }
             nav ul { gap: 1rem; }
@@ -143,6 +163,26 @@
             <picture><source media="(max-width: 600px)" srcset="media/hero_grid.jpg"><img src="media/hero.jpg" alt="The same building photo rendered for clear air and Jerlov water types IB, II, III, 1C, 3C and 5C, growing greener and hazier left to right"></picture>
             <figcaption>One frame at a 3 m median standoff: clear air, then Jerlov IB, II, III, 1C, 3C and 5C.</figcaption>
         </figure>
+
+        <section class="explorer" id="explorer" aria-labelledby="explorer-title">
+            <h2 id="explorer-title">Try it: make the water murkier</h2>
+            <p class="explorer-intro">Move through the water types and watch the rendered image, recovered 3D map and study measurements change together.</p>
+            <label for="water-level"><strong>Water clarity</strong></label>
+            <input class="water-slider" id="water-level" type="range" min="0" max="6" step="1" value="0" aria-valuetext="Clear air">
+            <div class="water-labels" aria-hidden="true"><span>Clear</span><span>IB</span><span>II</span><span>III</span><span>1C</span><span>3C</span><span>5C</span></div>
+            <div class="explorer-views">
+                <figure><img id="level-frame" src="media/frames/clear.jpg" alt="Rendered scene in clear air"><figcaption id="frame-caption">Clear air frame</figcaption></figure>
+                <div><div class="explorer-cloud" id="level-cloud"><img class="explorer-fallback" src="media/frames/clear.jpg" alt="Static preview of the clear-air 3D reconstruction"></div><p class="explorer-note">Drag the 3D view to orbit.</p></div>
+            </div>
+            <div class="gauge-grid" id="level-gauges" aria-live="polite">
+                <div class="gauge">Cameras<strong data-value="cameras">30 / 30</strong><div class="gauge-track"><div class="gauge-fill" data-bar="cameras"></div></div></div>
+                <div class="gauge">Accurate poses<strong data-value="accurate">30 / 30</strong><div class="gauge-track"><div class="gauge-fill" data-bar="accurate"></div></div></div>
+                <div class="gauge">ATE<strong data-value="ate_mm">0.3 mm</strong><div class="gauge-track"><div class="gauge-fill" data-bar="ate_mm"></div></div></div>
+                <div class="gauge">3D points<strong data-value="points">13,044</strong><div class="gauge-track"><div class="gauge-fill" data-bar="points"></div></div></div>
+            </div>
+            <p class="regime" id="regime" aria-live="polite">One complete map: every camera registered.</p>
+            <p class="explorer-note">3D view: one COLMAP 3.9.1 run on the 800×600 frames shown here, aligned to the clear model (it fails earlier than the full-resolution study: 16/30 cameras at 3C, 2/30 at 5C). Gauges: study numbers, 1600×1200, mean of 2–3 seeds.</p>
+        </section>
 
         <h2>Question</h2>
         <p>
@@ -241,5 +281,35 @@
             <li>Multiple-scattering path radiance and vehicle-mounted lighting.</li>
         </ul>
     </div>
+    <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+    <script type="module">
+        import { mountCloud } from '../../assets/sfm/cloud.js';
+        const levels = ['clear','IB','II','III','1C','3C','5C'];
+        const slider = document.getElementById('water-level');
+        const initialTag = new URLSearchParams(location.search).get('level');
+        if (levels.includes(initialTag)) slider.value = String(levels.indexOf(initialTag));
+        const frame = document.getElementById('level-frame');
+        const regime = document.getElementById('regime');
+        let cloud;
+        const set = async (index) => {
+            const tag = levels[index];
+            frame.src = `media/frames/${tag}.jpg`;
+            frame.alt = `Rendered scene in ${tag === 'clear' ? 'clear air' : `Jerlov ${tag} water`}`;
+            document.getElementById('frame-caption').textContent = `${tag === 'clear' ? 'Clear air' : `Jerlov ${tag}`} frame`;
+            slider.setAttribute('aria-valuetext', tag === 'clear' ? 'Clear air' : `Jerlov ${tag}`);
+            try { const response = await fetch('../../assets/sfm/study.json'); const data = await response.json(); const d = data.levels.find(x => x.tag === tag); const base = data.levels[0];
+                for (const key of ['cameras','accurate','ate_mm','points']) {
+                    const value = document.querySelector(`[data-value="${key}"]`); const bar = document.querySelector(`[data-bar="${key}"]`);
+                    value.textContent = key === 'ate_mm' ? `${d[key]} mm` : key === 'points' ? d[key].toLocaleString() : `${d[key]} / 30`;
+                    const ratio = key === 'ate_mm' ? base[key] / d[key] : d[key] / base[key]; bar.style.width = `${Math.max(2, Math.min(100, ratio * 100))}%`;
+                }
+            } catch (_) {}
+            regime.textContent = index <= 4 ? 'One complete map: every camera registered.' : index === 5 ? 'Points thin out; cameras still hold.' : 'The map collapses: most cameras are lost.';
+            if (cloud) cloud.setLevel(tag);
+        };
+        slider.addEventListener('input', () => set(Number(slider.value)));
+        set(Number(slider.value));
+        try { cloud = await mountCloud(document.getElementById('level-cloud'), { level: levels[Number(slider.value)], cameras: true }); } catch (_) {}
+    </script>
 </body>
 </html>

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:,">
     <title>Thiago Pari | Perception &amp; 3D Mapping</title>
     <meta property="og:title" content="Thiago Pari | Perception &amp; 3D Mapping">
     <meta property="og:description" content="M.S. Robotics, Northeastern (May 2027). Underwater perception and 3D mapping, structure-from-motion, sensor fusion.">
@@ -218,6 +219,33 @@
             font-size: 1.05rem;
             color: #555;
         }
+        .hero-layout { display: grid; gap: 2rem; align-items: center; }
+        .hero-copy { min-width: 0; }
+        .hero-copy .summary { margin-left: auto; margin-right: auto; }
+        .hero-cloud { width: 100%; height: 260px; position: relative; background: #101923; border-radius: 8px; overflow: hidden; }
+        .hero-cloud canvas { width: 100%; height: 100%; display: block; }
+        .hero-cloud-fallback { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+        .hero .cloud-caption { color: #666; font-size: .8rem; line-height: 1.4; margin: .5rem 0 0; text-align: left; }
+        .hero .cloud-caption a { color: inherit; text-decoration: none; border-bottom: 1px dotted #999; }
+        @media (min-width: 900px) {
+            .hero { text-align: left; }
+            .hero-layout { grid-template-columns: minmax(0, 1fr) minmax(360px, 420px); }
+            .hero .summary { margin-left: 0; }
+            .hero .social-links { justify-content: flex-start; }
+            .hero-cloud { height: 420px; }
+        }
+        @media (max-width: 899px) {
+            .hero-cloud-panel[data-save-data="true"] { display: none; }
+        }
+        .telemetry { margin-top: 1rem; padding: .8rem; background: #101923; color: #dce8f4; border-radius: 6px; font:  .72rem/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; }
+        .telemetry-chips { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .7rem; }
+        .telemetry-chip { padding: .2rem .45rem; border: 1px solid #31506b; border-radius: 3px; color: #b8d8f4; }
+        .telemetry-gauges { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; }
+        .telemetry-gauge { color: #dce8f4; }
+        .telemetry-track { height: 4px; margin-top: .25rem; background: #263746; border-radius: 4px; overflow: hidden; }
+        .telemetry-fill { height: 100%; background: #1565c0; }
+        .telemetry-alert { color: #ff9a9a; border-color: #873f45; }
+        @media (max-width: 460px) { .telemetry-gauges { grid-template-columns: 1fr; } }
         .social-links a.primary {
             background: #1976d2;
             border-color: #1976d2;
@@ -346,6 +374,8 @@
 
     <!-- Hero Section -->
     <section class="hero">
+        <div class="hero-layout">
+        <div class="hero-copy">
         <h1>Thiago Pari</h1>
         <p class="focus">Perception &middot; 3D Mapping &middot; State Estimation</p>
         <p class="status">M.S. Robotics, Northeastern University &middot; Graduating May 2027 &middot; Open to full-time roles</p>
@@ -361,6 +391,12 @@
             <a href="https://github.com/thiagopari" target="_blank">GitHub</a>
             <a href="https://linkedin.com/in/thiago-pari" target="_blank">LinkedIn</a>
             <a href="mailto:parimaquera.t@northeastern.edu">Email</a>
+        </div>
+        </div>
+        <div class="hero-cloud-panel">
+            <div class="hero-cloud" id="hero-cloud"><img class="hero-cloud-fallback" src="projects/underwater-sfm/media/frames/clear.jpg" alt="Clear-air underwater structure-from-motion point cloud preview"></div>
+            <p class="cloud-caption"><a href="projects/underwater-sfm/index.html#explorer">Sparse COLMAP reconstruction from my underwater SfM study (clear-air baseline). Drag to orbit.</a></p>
+        </div>
         </div>
     </section>
 
@@ -566,6 +602,15 @@
                             IK and gait code developed on a MuJoCo model. Since Oct 2026: an RL-ready Isaac Lab model of the real leg mechanism, and a
                             sim-first VIO study where OpenVINS reaches 0.015 m ATE over a 10.46 m path (mono VO: 0.027 m) but diverges with a 20 ms camera&ndash;IMU offset.
                         </p>
+                        <div class="telemetry" aria-label="Quadruped telemetry summary">
+                            <div class="telemetry-chips"><span class="telemetry-chip">12 DOF</span><span class="telemetry-chip">PCA9685 · BNO055</span><span class="telemetry-chip">STATUS: RL MODEL + VIO</span></div>
+                            <div class="telemetry-gauges">
+                                <div class="telemetry-gauge">OpenVINS ATE 0.015 m<div class="telemetry-track"><div class="telemetry-fill" style="width:56%"></div></div></div>
+                                <div class="telemetry-gauge">Mono VO 0.027 m<div class="telemetry-track"><div class="telemetry-fill" style="width:100%"></div></div></div>
+                                <div class="telemetry-gauge">Path 10.46 m<div class="telemetry-track"><div class="telemetry-fill" style="width:100%"></div></div></div>
+                            </div>
+                            <div class="telemetry-chips" style="margin:.65rem 0 0"><span class="telemetry-chip telemetry-alert">20 ms cam–IMU offset → diverges</span></div>
+                        </div>
                         <div class="tech-tags">
                             <span class="tag">Python</span>
                             <span class="tag">MuJoCo</span>
@@ -681,5 +726,18 @@
             </div>
         </div>
     </footer>
+    <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+    <script type="module">
+        const panel = document.querySelector('.hero-cloud-panel');
+        if (navigator.connection?.saveData) panel.dataset.saveData = 'true';
+        const startCloud = async () => {
+            try {
+                const { mountCloud } = await import('./assets/sfm/cloud.js');
+                await mountCloud(document.getElementById('hero-cloud'), { level: 'clear', autoRotate: true, cameras: true });
+            } catch (_) { /* Static frame remains visible when WebGL or the module is unavailable. */ }
+        };
+        if ('requestIdleCallback' in window) requestIdleCallback(startCloud, { timeout: 1800 });
+        else setTimeout(startCloud, 150);
+    </script>
 </body>
 </html>

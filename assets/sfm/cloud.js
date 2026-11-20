@@ -4,7 +4,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 const tags = ['clear', 'IB', 'II', 'III', '1C', '3C', '5C'];
 const CROP = 1.8;   // drop stray far points; same cut for every level so they stay comparable (clear: ~1% cut)
 const SWAY = .6;    // auto-rotate sways ±35° around the photographers' view instead of spinning to the back
-const SIZE = .032;  // ~2.5 px points for the ~5k-point clouds; retune when denser clouds arrive
+const SIZE = .018;  // world units (~1.2 px at 3.2 m on a 420 px panel); tuned for the ~97k-point dense clouds
 
 let disc;
 const dot = () => disc ??= (() => { // round points instead of squares
@@ -42,7 +42,8 @@ export async function mountCloud(target, { level = 'clear', autoRotate = false, 
         const geometries = new Map();
         const materials = new Map();
         const objects = new Map();
-        let active = level;
+        let active = level, wanted = level;
+        const pending = new Map(); // one load per level, even when the slider fires twice mid-download
         let visible = true;
         let disposed = false;
         const resize = () => {
@@ -50,8 +51,11 @@ export async function mountCloud(target, { level = 'clear', autoRotate = false, 
             renderer.setSize(w, h, false);
             camera.aspect = w / h; camera.updateProjectionMatrix();
         };
-        const makeLevel = async (tag) => {
-            if (objects.has(tag)) return objects.get(tag);
+        const makeLevel = (tag) => {
+            if (!pending.has(tag)) pending.set(tag, loadLevel(tag).catch(e => { pending.delete(tag); throw e; }));
+            return pending.get(tag);
+        };
+        const loadLevel = async (tag) => {
             const metaRes = await fetch(new URL('meta.json', import.meta.url));
             const meta = await metaRes.json();
             const info = meta.levels.find(x => x.tag === tag);
@@ -127,7 +131,9 @@ export async function mountCloud(target, { level = 'clear', autoRotate = false, 
         const setLevel = async (next) => {
             if (!tags.includes(next) || disposed) return;
             try {
+                wanted = next;
                 await makeLevel(next);
+                if (wanted !== next || disposed) return; // a newer slider position won
                 const start = performance.now();
                 for (const [tag, mat] of materials) if (tag !== next) mat.opacity = 0;
                 for (const [tag, obj] of objects) if (tag !== next) for (const child of obj.children) if (child.material !== materials.get(tag)) child.material.opacity = 0;
@@ -135,6 +141,7 @@ export async function mountCloud(target, { level = 'clear', autoRotate = false, 
                 for (const child of obj.children) if (child.material !== mat) child.material.opacity = 0;
                 active = next;
                 const tick = (now) => {
+                    if (active !== next) return; // superseded mid-fade
                     const t = Math.min(1, (now - start) / 400); mat.opacity = t;
                     for (const child of obj.children) if (child.material !== mat) child.material.opacity = t;
                     if (t < 1) requestAnimationFrame(tick);

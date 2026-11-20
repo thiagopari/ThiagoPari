@@ -1,0 +1,68 @@
+{
+ "source": "underwater-sfm-degradation results/v2/summary.md (SIFT, 3 m standoff, 1600x1200, mean over 2-3 seeds)",
+ "levels": [
+  {
+   "tag": "clear",
+   "name": "Clear air",
+   "cameras": 30,
+   "accurate": 30,
+   "ate_mm": 0.3,
+   "points": 13044,
+   "gain": 1.0
+  },
+  {
+   "tag": "IB",
+   "name": "IB \u00b7 average open ocean",
+   "cameras": 30,
+   "accurate": 30,
+   "ate_mm": 1.1,
+   "points": 11871,
+   "gain": 2.5
+  },
+  {
+   "tag": "II",
+   "name": "II \u00b7 clear coastal / open ocean",
+   "cameras": 30,
+   "accurate": 30,
+   "ate_mm": 1.9,
+   "points": 11365,
+   "gain": 3.1
+  },
+  {
+   "tag": "III",
+   "name": "III \u00b7 turbid open ocean",
+   "cameras": 30,
+   "accurate": 30,
+   "ate_mm": 3.0,
+   "points": 10321,
+   "gain": 4.7
+  },
+  {
+   "tag": "1C",
+   "name": "1C \u00b7 clearest coastal",
+   "cameras": 30,
+   "accurate": 30,
+   "ate_mm": 3.2,
+   "points": 8691,
+   "gain": 7.0
+  },
+  {
+   "tag": "3C",
+   "name": "3C \u00b7 coastal",
+   "cameras": 30,
+   "accurate": 30,
+   "ate_mm": 6.5,
+   "points": 5493,
+   "gain": 13.5
+  },
+  {
+   "tag": "5C",
+   "name": "5C \u00b7 turbid coastal",
+   "cameras": 11,
+   "accurate": 11,
+   "ate_mm": 9.6,
+   "points": 515,
+   "gain": 43.8
+  }
+ ]
+}

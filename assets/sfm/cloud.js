@@ -2,6 +2,16 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 const tags = ['clear', 'IB', 'II', 'III', '1C', '3C', '5C'];
+const CROP = 1.8;   // drop stray far points; same cut for every level so they stay comparable (clear: ~1% cut)
+const SWAY = .6;    // auto-rotate sways ±35° around the photographers' view instead of spinning to the back
+const SIZE = .032;  // ~2.5 px points for the ~5k-point clouds; retune when denser clouds arrive
+
+let disc;
+const dot = () => disc ??= (() => { // round points instead of squares
+    const c = document.createElement('canvas'); c.width = c.height = 32;
+    const x = c.getContext('2d'); x.fillStyle = '#fff'; x.beginPath(); x.arc(16, 16, 15, 0, 7); x.fill();
+    return new THREE.CanvasTexture(c);
+})();
 
 export async function mountCloud(target, { level = 'clear', autoRotate = false, cameras = false } = {}) {
     try {
@@ -25,7 +35,8 @@ export async function mountCloud(target, { level = 'clear', autoRotate = false, 
         controls.maxDistance = 8;
         controls.autoRotate = autoRotate && !matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (matchMedia('(pointer: coarse)').matches) { controls.enabled = false; renderer.domElement.style.touchAction = 'pan-y'; } // touch screens: let the page scroll, cloud just auto-rotates
-        controls.autoRotateSpeed = .35;
+        controls.autoRotateSpeed = .5;
+        let base = null;
         const group = new THREE.Group();
         scene.add(group);
         const geometries = new Map();
@@ -52,15 +63,28 @@ export async function mountCloud(target, { level = 'clear', autoRotate = false, 
             if (buffer.byteLength !== n * 15) throw new Error('Invalid cloud data');
             const floats = new Float32Array(buffer, 0, n * 3);
             const colors = new Uint8Array(buffer, n * 12, n * 3);
-            const position = new Float32Array(n * 3), color = new Float32Array(n * 3);
+            const position = new Float32Array(n * 3), color = new Float32Array(n * 3), mean = new THREE.Vector3();
+            let k = 0;
             for (let i = 0; i < n; i++) {
-                position[i * 3] = floats[i * 3]; position[i * 3 + 1] = floats[i * 3 + 1]; position[i * 3 + 2] = floats[i * 3 + 2];
-                color[i * 3] = colors[i * 3] / 255; color[i * 3 + 1] = colors[i * 3 + 1] / 255; color[i * 3 + 2] = colors[i * 3 + 2] / 255;
+                const x = floats[i * 3], y = floats[i * 3 + 1], z = floats[i * 3 + 2];
+                if (x * x + y * y + z * z > CROP * CROP) continue;
+                position[k * 3] = x; position[k * 3 + 1] = y; position[k * 3 + 2] = z; mean.x += x; mean.y += y; mean.z += z;
+                color[k * 3] = colors[i * 3] / 255; color[k * 3 + 1] = colors[i * 3 + 1] / 255; color[k * 3 + 2] = colors[i * 3 + 2] / 255;
+                k++;
+            }
+            if (base === null && k) { // first level sets the view: look at the cloud from behind its cameras, slightly above
+                mean.divideScalar(k);
+                const axis = new THREE.Vector3();
+                for (const c of info.cams || []) axis.add(new THREE.Vector3(c[3], c[4], c[5]));
+                const dir = axis.lengthSq() ? axis.normalize().negate() : new THREE.Vector3(0, 0, 1);
+                dir.y += .45;
+                camera.position.copy(mean).addScaledVector(dir.normalize(), 3.2);
+                controls.target.copy(mean); controls.update(); base = controls.getAzimuthalAngle();
             }
             const geometry = new THREE.BufferGeometry();
-            geometry.setAttribute('position', new THREE.BufferAttribute(position, 3));
-            geometry.setAttribute('color', new THREE.BufferAttribute(color, 3));
-            const material = new THREE.PointsMaterial({ size: .014, sizeAttenuation: true, vertexColors: true, transparent: true, opacity: 0 });
+            geometry.setAttribute('position', new THREE.BufferAttribute(position.subarray(0, k * 3), 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(color.subarray(0, k * 3), 3));
+            const material = new THREE.PointsMaterial({ size: SIZE, sizeAttenuation: true, vertexColors: true, transparent: true, opacity: 0, map: dot(), alphaTest: .5 });
             const points = new THREE.Points(geometry, material);
             const g = new THREE.Group(); g.add(points);
             if (cameras) {
@@ -69,9 +93,9 @@ export async function mountCloud(target, { level = 'clear', autoRotate = false, 
                     const p = new THREE.Vector3(c[0], c[1], c[2]);
                     const d = new THREE.Vector3(c[3], c[4], c[5]).normalize();
                     const side = new THREE.Vector3().crossVectors(d, new THREE.Vector3(0, 1, 0));
-                    if (side.lengthSq() < .01) side.set(1, 0, 0); side.normalize().multiplyScalar(.035);
-                    const up = new THREE.Vector3().crossVectors(side, d).normalize().multiplyScalar(.025);
-                    const tip = p.clone().addScaledVector(d, .08), a = p.clone().add(side).add(up), b = p.clone().sub(side).add(up), c2 = p.clone().sub(side).sub(up), e = p.clone().add(side).sub(up);
+                    if (side.lengthSq() < .01) side.set(1, 0, 0); side.normalize().multiplyScalar(.024);
+                    const up = new THREE.Vector3().crossVectors(side, d).normalize().multiplyScalar(.017);
+                    const tip = p.clone().addScaledVector(d, .055), a = p.clone().add(side).add(up), b = p.clone().sub(side).add(up), c2 = p.clone().sub(side).sub(up), e = p.clone().add(side).sub(up);
                     for (const q of [[p,a],[p,b],[p,c2],[p,e],[a,b],[b,c2],[c2,e],[e,a],[a,tip],[b,tip],[c2,tip],[e,tip]]) vertices.push(...q[0].toArray(), ...q[1].toArray());
                 }
                 const lineGeometry = new THREE.BufferGeometry(); lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
@@ -91,7 +115,13 @@ export async function mountCloud(target, { level = 'clear', autoRotate = false, 
         const render = () => {
             if (disposed) return;
             animation = requestAnimationFrame(render);
-            if (visible) { controls.update(); renderer.render(scene, camera); }
+            if (visible) {
+                if (controls.autoRotate && base !== null) {
+                    const d = controls.getAzimuthalAngle() - base, a = Math.atan2(Math.sin(d), Math.cos(d));
+                    if (a > SWAY) controls.autoRotateSpeed = Math.abs(controls.autoRotateSpeed); else if (a < -SWAY) controls.autoRotateSpeed = -Math.abs(controls.autoRotateSpeed);
+                }
+                controls.update(); renderer.render(scene, camera);
+            }
         };
         render();
         const setLevel = async (next) => {

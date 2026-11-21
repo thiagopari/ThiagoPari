@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="data:,">
     <title>Underwater SfM Degradation Study - Thiago Pari</title>
-    <meta name="description" content="Simulation study of when COLMAP structure-from-motion stops recovering camera poses underwater: measured Jerlov water optics, a camera noise model and 64 seeded runs.">
+    <meta name="description" content="Simulation study of when COLMAP structure-from-motion stops recovering camera poses underwater: measured Jerlov water optics, a camera noise model and 64 seeded runs, plus relocalization into a map built once in clear water.">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -144,7 +144,7 @@
 
     <div class="project-header">
         <h1>Underwater SfM Degradation Study</h1>
-        <p class="context">Personal research project &middot; Jul &ndash; Sep 2026 &middot; Solo</p>
+        <p class="context">Personal research project &middot; Jul &ndash; Nov 2026 &middot; Solo</p>
         <div class="project-meta">
             <span class="meta-tag">Python</span>
             <span class="meta-tag">COLMAP 4</span>
@@ -236,6 +236,23 @@
             <figcaption>Accurate poses in the largest model against optical depth, every uncorrected SIFT run at baseline sensor settings. Hollow markers count cameras in any sub-model; the grey band is the observed transition.</figcaption>
         </figure>
 
+        <h2>Map Once, Relocalize Each Visit</h2>
+        <p>
+            Build the map once in clear water (Jerlov IB, 3&nbsp;m), then register each degraded image set into it with COLMAP&rsquo;s
+            <code>image_registrator</code>, matching every frame against all prior images except its own clear twin.
+        </p>
+        <ul>
+            <li><strong>The split goes away.</strong> At &tau; &asymp; 2.7, where from-scratch SfM splits, every registered camera lands in one map: 30/30 at 1C, 5&nbsp;m (from scratch: 17 in the largest model) and 25/30 at 3C, 3.5&nbsp;m (16).</li>
+            <li><strong>The losses don&rsquo;t.</strong> At &tau; &ge; 3.2 it keeps about as many cameras as from scratch (9&ndash;17 against 10&ndash;14). Those frames have too few matchable features, and a prior map can&rsquo;t add any.</li>
+            <li><strong>Accurate when it registers.</strong> Every relocalized camera is within 10&nbsp;cm and 2&deg; of the reference (median 0.6&ndash;4.5&nbsp;mm).</li>
+        </ul>
+        <p><em>A best case: one seed, and the degraded frames are taken from the prior map&rsquo;s own viewpoints. A real revisit sees the scene from new angles.</em></p>
+
+        <figure>
+            <img src="media/relocalize.png" alt="Accurate poses out of 30 against optical depth for 14 conditions: relocalized and from-scratch agree at 30 below the transition; at 1C 5 m and 3C 3.5 m relocalization keeps 30 and 25 where from scratch keeps 17 and 16; past optical depth 3.2 both keep 9 to 17">
+            <figcaption>Accurate poses for 14 water and standoff conditions: from scratch (squares) and relocalized into the clear-water map (dots), with arrows where they differ. Seed 0.</figcaption>
+        </figure>
+
         <h2>Water-Type Sweep</h2>
         <p>SIFT, 3 m median standoff, 3 seeds (clear air: 2 replicates; mean, with min&ndash;max where runs differ).</p>
         <div class="table-wrap">
@@ -266,7 +283,7 @@
             <li><strong>Ambient light only.</strong> Vehicle lights change both the signal and the backscatter geometry.</li>
             <li><strong>Simplified scattering.</strong> Single-scattering veiling light with no multiple scattering is probably too weak, which is why the sensitivity runs matter.</li>
             <li><strong>The sensor model sets the numbers.</strong> A bigger sensor or longer exposure moves the transition to larger &tau;.</li>
-            <li><strong>No real underwater validation yet</strong>, and 2&ndash;3 seeds per condition (1 for the ALIKED and sensitivity runs).</li>
+            <li><strong>No real underwater validation yet</strong>, and 2&ndash;3 seeds per condition (1 for the ALIKED, sensitivity and relocalization runs).</li>
         </ul>
 
         <h2>How It Was Built</h2>
@@ -281,6 +298,7 @@
         <ul>
             <li>Validate against real underwater footage with ground-truth trajectories (FLSea, AQUALOC).</li>
             <li>Multiple-scattering path radiance and vehicle-mounted lighting.</li>
+            <li>Relocalization from viewpoints the prior map never saw, as on a real revisit.</li>
         </ul>
     </div>
     <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>

@@ -17,7 +17,7 @@ I work on perception and mapping for places where cameras and GPS stop being rel
 ## Projects
 
 - [Craigie Bridge Inspector](https://thiagopari.github.io/ThiagoPari/projects/craigie-bridge/): ArduPilot SITL drone inspection in Isaac Sim. 2nd in Robotics, Hackachusetts, Oct 2026.
-- [Underwater SfM Degradation Study](https://thiagopari.github.io/ThiagoPari/projects/underwater-sfm/): physics-based underwater renderer feeding COLMAP, scored against a clear-air reference over 64 seeded runs. Solo, Jul – Sep 2026.
+- [Underwater SfM Degradation Study](https://thiagopari.github.io/ThiagoPari/projects/underwater-sfm/): physics-based underwater renderer feeding COLMAP, scored against a clear-air reference over 64 seeded runs; relocalizing into a map built once in clear water keeps the map in one piece where from-scratch SfM fragments (30/30 and 25/30 cameras against 17 and 16). Solo, Jul – Nov 2026.
 - [LiDAR Odometry Under Degradation](https://thiagopari.github.io/ThiagoPari/projects/lidar-odometry/): KISS-ICP, GICP and map-based VGICP on real KITTI scans under fewer beams, dropout, range noise, shorter range and lower scan rates. Solo, in progress.
 - [Learner's Permit](https://thiagopari.github.io/ThiagoPari/projects/learners-permit/): licences for robot skills, enforced with Cedar. Nebius × NVIDIA Global AI Hackathon, Oct 2026.
 - [Bayesian Skill Gate for VLA Robot Policies](https://thiagopari.github.io/ThiagoPari/projects/skill-gate/): an AI agent may trigger a robot skill only after trials show P(success ≥ 0.8) ≥ 0.95 under a Beta posterior; GR00T N1.7 in LIBERO on a Dell GB10. Team of 4.

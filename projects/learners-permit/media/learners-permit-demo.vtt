@@ -1,0 +1,169 @@
+WEBVTT
+
+00:01.500 --> 00:05.055
+Olga asks the robot agent to put the red dishes in the bin.
+
+00:05.055 --> 00:06.269
+It refuses.
+
+00:06.269 --> 00:08.193
+Not because the AI is unsure,
+
+00:08.193 --> 00:11.245
+but because that skill never earned a licence.
+
+00:11.245 --> 00:14.787
+On our Nebius GPU, NVIDIA's GR00T managed
+
+00:14.787 --> 00:17.724
+only 14 of 40 tries in simulation.
+
+00:18.520 --> 00:20.158
+This is Learner's Permit:
+
+00:20.158 --> 00:24.023
+an AI may command a robot skill only after trials prove it,
+
+00:24.023 --> 00:28.085
+only where it was tested, and only until the evidence changes.
+
+00:28.085 --> 00:30.818
+Nemotron plans on Nebius Token Factory,
+
+00:30.818 --> 00:34.251
+but its only path to the robot is one checkpoint.
+
+00:34.251 --> 00:36.697
+There, a Cedar policy, the licence,
+
+00:36.697 --> 00:39.563
+and live web checks decide every request.
+
+00:40.360 --> 00:42.773
+Licences are earned in simulation.
+
+00:42.773 --> 00:47.509
+Bananas into the bin: 37 successes in 40 GR00T episodes.
+
+00:47.509 --> 00:51.352
+The gate is plain statistics: we're 97.6 percent sure
+
+00:51.352 --> 00:54.614
+the true success rate is at least 80 percent,
+
+00:54.614 --> 00:56.427
+above the 95 percent bar.
+
+00:56.427 --> 01:00.189
+So the AI may now command it, at the speed that was tested.
+
+01:00.189 --> 01:04.645
+The same sweep also runs as a Nebius Serverless AI Job:
+
+01:04.645 --> 01:08.615
+71 of 80, licensed, for about a cent per episode.
+
+01:09.430 --> 01:12.757
+The web can only narrow a licence, never widen it.
+
+01:12.757 --> 01:15.978
+This skill is licensed for parts up to one kilogram.
+
+01:15.978 --> 01:18.756
+Asked to move a cordless drill kit,
+
+01:18.756 --> 01:22.168
+Tavily finds its spec sheet: 1.7 kilograms.
+
+01:22.168 --> 01:24.199
+Denied, with the source cited.
+
+01:24.199 --> 01:28.310
+Then a grease gun: Tavily finds an official recall notice.
+
+01:28.310 --> 01:31.531
+Denied again, and Nemotron explains what to do next.
+
+01:32.330 --> 01:33.698
+Then we changed the scene.
+
+01:33.698 --> 01:35.098
+GR00T still succeeded,
+
+01:35.098 --> 01:38.217
+but the licence was evidence about the old scene.
+
+01:38.217 --> 01:41.146
+After each run, Nemotron's vision model compares
+
+01:41.146 --> 01:44.563
+the camera frame with the one the licence was earned on.
+
+01:44.563 --> 01:46.892
+It saw the floor change from tile to wood,
+
+01:46.892 --> 01:49.055
+so the licence was revoked on the spot,
+
+01:49.055 --> 01:51.162
+before the robot had a chance to fail.
+
+01:51.162 --> 01:54.570
+Olga's next request was denied, with an explanation,
+
+01:54.570 --> 01:57.388
+and the agent goes back to asking a person.
+
+01:58.180 --> 02:01.315
+One application of Learner's Permit is crop health.
+
+02:01.315 --> 02:05.044
+In 2024, disease cut US corn yields six percent
+
+02:05.044 --> 02:10.281
+and soybeans over five: nearly seven billion dollars, by our math.
+
+02:10.281 --> 02:12.577
+The licence works for any model.
+
+02:12.577 --> 02:16.332
+Few-shot leaf diagnosis with Nemotron's vision model
+
+02:16.332 --> 02:18.426
+earned a licence for peppers,
+
+02:18.426 --> 02:21.675
+but not for tomatoes: 85 of 100 isn't enough.
+
+02:21.675 --> 02:25.453
+A ResNet we fine-tuned on a Nebius GPU in under a minute
+
+02:25.453 --> 02:29.500
+earned both, and each licence is pinned to that exact model.
+
+02:30.300 --> 02:33.227
+This is the system our team designed for the field:
+
+02:33.227 --> 02:35.637
+drones and ground robots feed crop models,
+
+02:35.637 --> 02:37.990
+and every action goes through the permit.
+
+02:37.990 --> 02:40.021
+What's lit already runs on Nebius.
+
+02:40.021 --> 02:43.807
+The drones, thermal cameras and navigation come next.
+
+02:44.610 --> 02:47.144
+Other robot agents ask when they're unsure.
+
+02:47.144 --> 02:48.922
+Ours asks when it's unproven.
+
+02:48.922 --> 02:51.427
+Learner's Permit: cultivating trust,
+
+02:51.427 --> 02:53.237
+one robot skill at a time.

@@ -1,0 +1,115 @@
+WEBVTT
+
+00:00:00.600 --> 00:00:06.100
+61,000 cars cross this bridge every day.
+
+00:00:06.100 --> 00:00:08.400
+Nobody sees what holds it up.
+
+00:00:08.400 --> 00:00:10.800
+It's down here.
+
+00:00:10.800 --> 00:00:15.800
+To check it, a diver goes down into waters so murky they often work by touch.
+
+00:00:15.800 --> 00:00:19.600
+Massachusetts has 778 bridges that need this.
+
+00:00:19.600 --> 00:00:22.600
+MassDOT has 7 divers.
+
+00:00:22.600 --> 00:00:27.800
+And scour is worst in a flood, exactly when nobody can go in.
+
+00:00:27.800 --> 00:00:32.100
+Federal rules keep the diver, sonar can only supplement.
+
+00:00:32.100 --> 00:00:39.700
+So we asked, what if a robot went first and divers only went where the map says?
+
+00:00:39.700 --> 00:00:43.800
+In one day, from scratch, we built it in NVIDIA Isaac Sim.
+
+00:00:43.800 --> 00:00:51.000
+A digital twin of this crossing, flown by ArduPilot, the same flight code that runs on real hardware.
+
+00:00:51.000 --> 00:00:52.400
+Above the water, a drone.
+
+00:00:52.400 --> 00:00:58.000
+Its lidar fires 128 laser beams and turns the bridge into millions of 3D points.
+
+00:00:58.000 --> 00:01:03.000
+A gimbal camera and a thermal camera simulated here hunt for cracks and damp stone, floodlights
+
+00:01:03.000 --> 00:01:08.200
+for the underside, RTK GPS for position.
+
+00:01:08.200 --> 00:01:12.400
+Below, a BlueROV2. There is no GPS underwater.
+
+00:01:12.400 --> 00:01:14.000
+So it navigates by sound.
+
+00:01:14.000 --> 00:01:18.400
+A Doppler velocity log pings the riverbed and tracks its own speed, 40 centimeters of
+
+00:01:18.400 --> 00:01:20.600
+drift after 60 meters.
+
+00:01:20.600 --> 00:01:23.700
+A multibeam sonar sees where the camera sees only silt.
+
+00:01:23.700 --> 00:01:27.200
+Eight thrusters hold it in the current.
+
+00:01:27.200 --> 00:01:30.000
+The mission: the drone takes the wall.
+
+00:01:30.000 --> 00:01:33.600
+Under the deck, 12 satellites become seven.
+
+00:01:33.600 --> 00:01:37.600
+At the waterline it spots damage and hands the spot to the robot below.
+
+00:01:37.600 --> 00:01:40.200
+The ROV dives straight to the mark.
+
+00:01:40.200 --> 00:01:44.500
+Its sonar finds what nobody could see, a missing granite block, a scour pit, timber
+
+00:01:44.500 --> 00:01:47.300
+piles exposed.
+
+00:01:47.300 --> 00:01:58.400
+Four flagged, four inspected, one model above the water and below.
+
+00:01:58.400 --> 00:02:02.600
+Then the brain, built with Kiro: it finds the defects, cites every one in the report
+
+00:02:02.600 --> 00:02:05.000
+and waits for an engineer to sign off.
+
+00:02:05.000 --> 00:02:07.100
+Every finding lands in one dashboard.
+
+00:02:07.100 --> 00:02:13.400
+The 3D map, the camera footage, the GPS track and a report that Kiro writes itself.
+
+00:02:13.400 --> 00:02:18.800
+Robot first is 20 to 30 percent cheaper per bridge by our estimate on a $16,000 kit.
+
+00:02:18.800 --> 00:02:22.500
+By 2028, every state must recode its scour data.
+
+00:02:22.500 --> 00:02:26.100
+And the pilot money already exists.
+
+00:02:26.100 --> 00:02:27.600
+Today it's a simulation.
+
+00:02:27.600 --> 00:02:32.000
+Next, a 10-bridge pilot checked against divers.
+
+00:02:32.000 --> 00:02:34.300
+Robot first, divers only where the map says.

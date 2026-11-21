@@ -147,6 +147,7 @@
             height: 100%;
             object-fit: cover;
         }
+        #hackathons .project-image img { object-position: left center; }
         .project-content {
             padding: 1.5rem;
         }
@@ -354,6 +355,8 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="assets/css/boulder.css">
+    <script src="assets/js/boulder.js" defer></script>
 </head>
 <body>
     <!-- Header -->
@@ -364,6 +367,7 @@
                 <ul>
                     <li><a href="#experience">Experience</a></li>
                     <li><a href="#projects">Projects</a></li>
+                    <li><a href="#hackathons">Hackathons</a></li>
                     <li><a href="#skills">Skills</a></li>
                     <li><a href="#contact">Contact</a></li>
                     <li><a href="Pari Resume.pdf" target="_blank">Resume</a></li>
@@ -563,31 +567,6 @@
                 </div>
             </a>
 
-            <!-- Project: Hyperion x Fo (continuation of Hyperion) -->
-            <a href="projects/hyperion-fo/index.html" style="text-decoration: none; color: inherit;">
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="images/hyperion-fo.jpg" alt="Isaac Sim warehouse with a real phone call card: Fo calls the next technician on the list, who answers 'Half hour.'">
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">Hyperion &times; Fo: Technician Dispatch for Robot Faults <span class="pill">2nd place</span> <span class="pill">&#9654; Demo video</span></h3>
-                        <p class="card-context">Wajo AI &times; Anthropic Hackathon &middot; Oct 2026 &middot; Team of 3 &middot; Continues Hyperion</p>
-                        <p class="project-description">
-                            When one of 20 simulated Nova Carter robots faults, Claude uses the Fo MCP to phone real technicians, book the
-                            repair on the calendar and email the report. Rules in code gate every Fo call (approved list, 2-call cap, arrival time
-                            1&ndash;120 min), so a &ldquo;67 days&rdquo; answer went to a human instead of being booked.
-                        </p>
-                        <div class="tech-tags">
-                            <span class="tag">Claude Code</span>
-                            <span class="tag">MCP</span>
-                            <span class="tag">Isaac Sim</span>
-                            <span class="tag">AI Agents</span>
-                            <span class="tag">Guardrails</span>
-                        </div>
-                    </div>
-                </div>
-            </a>
-
             <!-- Project: 12-DOF Quadruped -->
             <a href="projects/quadruped/index.html" style="text-decoration: none; color: inherit;">
                 <div class="project-card">
@@ -624,34 +603,6 @@
 
         </div>
 
-        <h3 class="project-title">Hackathon Builds</h3>
-        <ul class="compact-list">
-            <li>
-                <a href="https://github.com/mochi-bunny/navfix/tree/hackachusetts-craigie">Craigie Bridge Inspector</a> <span class="when">&middot; Hackachusetts, Oct 2026 &middot; 2nd in Robotics &middot; Team of 3</span><br>
-                A drone flown by real ArduPilot SITL inspects Boston's Craigie Drawbridge and Charles River Dam canal in Isaac Sim,
-                threading under the deck where GNSS degrades; ROS 2 / RViz2 and QGroundControl, with simulated thermal labelled as simulated.
-                My part: the Kiro-specced triage step that merges nearby detections into one row per bridge (33 tests pass).
-            </li>
-            <li>
-                <a href="https://github.com/thiagopari/mission-preflight">Mission Preflight</a> <span class="when">&middot; Vultr Agent Rush (lablab.ai), Nov 2026 &middot; Solo</span><br>
-                Tests every ROV mission in a throwaway sandbox before it goes in the water: each step runs in its own Kata microVM,
-                with Vultr Serverless Inference and Cloud Compute; built with Kiro.
-            </li>
-            <li>
-                <a href="https://github.com/thiagopari/pierside">Pierside</a> <span class="when">&middot; PayPal AI Hackathon, Nov 2026 &middot; Team entry</span><br>
-                An AI agent scopes an underwater ROV inspection, prices it from a fixed rate card and books it with a PayPal (sandbox) deposit.
-            </li>
-            <li>
-                <a href="https://github.com/thiagopari/mandate-wallet">Mandate Wallet</a> <span class="when">&middot; PayPal AI Hackathon, Nov 2026 &middot; Team entry</span><br>
-                Signed spending mandates for AI agents that pay with PayPal: Claude shops, and a rule gate decides each payment.
-            </li>
-            <li>
-                <a href="https://github.com/thiagopari/learners-permit">Learner's Permit</a> <span class="when">&middot; Nebius &times; NVIDIA Global AI Hackathon, Oct 2026 &middot; Team entry</span><br>
-                Robots earn the right to be commanded by AI: GR00T skills licensed by Nebius evals, Cedar RBAC and a Nemotron planner.
-                Continues the Bayesian Skill Gate above.
-            </li>
-        </ul>
-
         <h3 class="project-title">Other Projects</h3>
         <ul class="compact-list">
             <li>
@@ -671,6 +622,111 @@
                 logistic classifiers with SMOTE. Python, statsmodels, scikit-learn (<a href="DS%20Project.py">code</a>).
             </li>
         </ul>
+    </section>
+
+    <!-- Hackathons Section -->
+    <section class="projects" id="hackathons">
+        <h2 class="section-title">Hackathons</h2>
+        <div class="projects-grid">
+            <!-- Project: Hyperion x Fo (continuation of Hyperion) -->
+            <a href="projects/hyperion-fo/index.html" style="text-decoration: none; color: inherit;">
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="images/hyperion-fo.jpg" alt="Isaac Sim warehouse with a real phone call card: Fo calls the next technician on the list, who answers 'Half hour.'">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Hyperion &times; Fo: Technician Dispatch for Robot Faults <span class="pill">2nd place</span> <span class="pill">&#9654; Demo video</span></h3>
+                        <p class="card-context">Wajo AI &times; Anthropic Hackathon &middot; Oct 2026 &middot; Team of 3 &middot; Continues Hyperion</p>
+                        <p class="project-description">
+                            When one of 20 simulated Nova Carter robots faults, Claude uses the Fo MCP to phone real technicians, book the
+                            repair on the calendar and email the report. Rules in code gate every Fo call (approved list, 2-call cap, arrival time
+                            1&ndash;120 min), so a &ldquo;67 days&rdquo; answer went to a human instead of being booked.
+                        </p>
+                        <div class="tech-tags">
+                            <span class="tag">Claude Code</span>
+                            <span class="tag">MCP</span>
+                            <span class="tag">Isaac Sim</span>
+                            <span class="tag">AI Agents</span>
+                            <span class="tag">Guardrails</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="projects/craigie-bridge/index.html" style="text-decoration: none; color: inherit;">
+                <div class="project-card">
+                    <div class="project-image"><img src="images/craigie-bridge.jpg" alt="3D lidar map of the canal with 4 of 4 waterline defects flagged and inspected"></div>
+                    <div class="project-content">
+                        <h3 class="project-title">Craigie Bridge Inspector: Drone Above the Waterline, Robot Below <span class="pill">2nd in Robotics</span> <span class="pill">&#9654; Demo video</span></h3>
+                        <p class="card-context">Hackachusetts &middot; Oct 2026 &middot; Team of 3</p>
+                        <p class="project-description">A drone flown by real ArduPilot SITL inspects Boston&rsquo;s Craigie Drawbridge and Charles River Dam canal in Isaac Sim, threading under the deck where GNSS degrades; ROS 2 / RViz2 and QGroundControl, with simulated thermal labelled as simulated. My part: the Kiro-specced triage step that merges nearby detections into one row per bridge (33 tests pass).</p>
+                        <div class="tech-tags"><span class="tag">Isaac Sim</span><span class="tag">ArduPilot SITL</span><span class="tag">ROS 2</span><span class="tag">RViz2</span><span class="tag">Kiro</span></div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Learner's Permit -->
+            <a href="projects/learners-permit/index.html" style="text-decoration: none; color: inherit;">
+                <div class="project-card">
+                    <div class="project-image"><img src="images/learners-permit.jpg" alt="GR00T policy in Isaac Sim drops bananas in a bin on a new wood floor; the overlay says the licence was earned on the old scene"></div>
+                    <div class="project-content">
+                        <h3 class="project-title">Learner&rsquo;s Permit: Licences for Robot Skills <span class="pill">&#9654; Demo video</span></h3>
+                        <p class="card-context">Nebius &times; NVIDIA Global AI Hackathon &middot; Oct 2026 &middot; Team of 3 &middot; Continues Skill Gate</p>
+                        <p class="project-description">A Nemotron planner may command a GR00T skill only after trials prove it: 37 of 40 simulated episodes licensed the skill (P(success &ge; 80%) = 0.976), and the licence was revoked when the floor changed. Every request passes a Cedar policy check, and the 40-episode sweep cost about $0.34 on Nebius.</p>
+                        <div class="tech-tags"><span class="tag">Isaac Sim</span><span class="tag">GR00T</span><span class="tag">Nemotron</span><span class="tag">Cedar</span><span class="tag">Nebius</span></div>
+                    </div>
+                </div>
+            </a>
+            <!-- Mission Preflight -->
+            <a href="projects/mission-preflight/index.html" style="text-decoration: none; color: inherit;">
+                <div class="project-card">
+                    <div class="project-image"><img src="images/mission-preflight.jpg" alt="Simulated ROV over a red waypoint grid: one bad waypoint can lose the vehicle"></div>
+                    <div class="project-content">
+                        <h3 class="project-title">Mission Preflight: Sandboxed Checks for ROV Missions <span class="pill">&#9654; Demo video</span></h3>
+                        <p class="card-context">Vultr Agent Rush (lablab.ai) &middot; Nov 2026 &middot; Solo</p>
+                        <p class="project-description">Tests every ROV mission in a throwaway sandbox before it goes in the water. A model writes the checks, each step runs in its own Kata microVM on Vultr, and the host decides: a pier survey is approved, a 65 m dive on a vehicle rated for 50 m stays blocked after a patch, and a contractor script carrying a prompt injection is contained.</p>
+                        <div class="tech-tags"><span class="tag">Python</span><span class="tag">Kata Containers</span><span class="tag">Vultr</span><span class="tag">Docker</span><span class="tag">Kiro</span></div>
+                    </div>
+                </div>
+            </a>
+            <!-- Pierside -->
+            <a href="projects/pierside/index.html" style="text-decoration: none; color: inherit;">
+                <div class="project-card">
+                    <div class="project-image"><img src="images/pierside.jpg" alt="Pierside title card over a harbor at dusk"></div>
+                    <div class="project-content">
+                        <h3 class="project-title">Pierside: Book an Underwater Inspection in One Conversation <span class="pill">&#9654; Demo video</span></h3>
+                        <p class="card-context">PayPal AI Hackathon &middot; Nov 2026 &middot; Team of 3</p>
+                        <p class="project-description">Claude scopes a dock, piling, seawall or hull inspection, asking only what changes the price; a fixed server-side rate card quotes it, PayPal (sandbox) takes a 30% deposit, and the dive slot is booked only after the server verifies the payment.</p>
+                        <div class="tech-tags"><span class="tag">FastAPI</span><span class="tag">Claude</span><span class="tag">PayPal</span><span class="tag">Elasticsearch</span><span class="tag">Render</span></div>
+                    </div>
+                </div>
+            </a>
+            <!-- Mandate Wallet -->
+            <a href="projects/mandate-wallet/index.html" style="text-decoration: none; color: inherit;">
+                <div class="project-card">
+                    <div class="project-image"><img src="images/mandate-wallet.jpg" alt="A $93 purchase over the per-item cap waits for the owner's approval in the gate feed"></div>
+                    <div class="project-content">
+                        <h3 class="project-title">Mandate Wallet: Signed Spending Limits for AI Agents <span class="pill">&#9654; Demo video</span></h3>
+                        <p class="card-context">PayPal AI Hackathon &middot; Nov 2026</p>
+                        <p class="project-description">Claude shops from the owner&rsquo;s PayPal wallet, but only inside a mandate the owner signed. Plain code, not the model, runs 13 checks before each vault charge; over-cap buys wait for the owner, and all 20 red-team attacks were stopped (14 by the gate, 6 refused by Claude).</p>
+                        <div class="tech-tags"><span class="tag">Python</span><span class="tag">Claude</span><span class="tag">PayPal</span><span class="tag">Ed25519</span><span class="tag">Guardrails</span></div>
+                    </div>
+                </div>
+            </a>
+            <!-- Pulse -->
+            <a href="projects/pulse/index.html" style="text-decoration: none; color: inherit;">
+                <div class="project-card">
+                    <div class="project-image"><img src="images/pulse.jpg" alt="Unedited Lens Studio preview: the Press step, a press counter at 80 and the label FASTER"></div>
+                    <div class="project-content">
+                        <h3 class="project-title">Pulse: CPR Practice with an AI Dispatcher <span class="pill">&#9654; Demo video</span></h3>
+                        <p class="card-context">Snap &ldquo;Learn AR with Specs&rdquo; &middot; Nov 2026 &middot; Snap Spectacles</p>
+                        <p class="project-description">A Spectacles lens for hands-only CPR practice: a ring pulses at 110 presses per minute, the live rate reads FASTER, GOOD or SLOWER, and 30 good presses finish a round. An Ask button gets a short dispatcher reply from an LLM, or a scripted line if it takes over 3 s. Practice only, not certification.</p>
+                        <div class="tech-tags"><span class="tag">Lens Studio</span><span class="tag">TypeScript</span><span class="tag">AR</span><span class="tag">Snap Spectacles</span><span class="tag">LLM</span></div>
+                    </div>
+                </div>
+            </a>
+            <!-- Craigie Bridge Inspector -->
+        </div>
     </section>
 
     <!-- Skills Section -->

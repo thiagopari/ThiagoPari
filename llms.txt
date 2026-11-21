@@ -16,22 +16,18 @@ I work on perception and mapping for places where cameras and GPS stop being rel
 
 ## Projects
 
+- [Craigie Bridge Inspector](https://thiagopari.github.io/ThiagoPari/projects/craigie-bridge/): ArduPilot SITL drone inspection in Isaac Sim. 2nd in Robotics, Hackachusetts, Oct 2026.
 - [Underwater SfM Degradation Study](https://thiagopari.github.io/ThiagoPari/projects/underwater-sfm/): physics-based underwater renderer feeding COLMAP, scored against a clear-air reference over 64 seeded runs. Solo, Jul – Sep 2026.
 - [LiDAR Odometry Under Degradation](https://thiagopari.github.io/ThiagoPari/projects/lidar-odometry/): KISS-ICP, GICP and map-based VGICP on real KITTI scans under fewer beams, dropout, range noise, shorter range and lower scan rates. Solo, in progress.
+- [Learner's Permit](https://thiagopari.github.io/ThiagoPari/projects/learners-permit/): licences for robot skills, enforced with Cedar. Nebius × NVIDIA Global AI Hackathon, Oct 2026.
+- [Bayesian Skill Gate for VLA Robot Policies](https://thiagopari.github.io/ThiagoPari/projects/skill-gate/): an AI agent may trigger a robot skill only after trials show P(success ≥ 0.8) ≥ 0.95 under a Beta posterior; GR00T N1.7 in LIBERO on a Dell GB10. Team of 4.
+- [Mission Preflight](https://thiagopari.github.io/ThiagoPari/projects/mission-preflight/): sandboxed checks for ROV missions in Kata microVMs. Vultr Agent Rush, Nov 2026. Solo.
+- [Hyperion × Fo](https://thiagopari.github.io/ThiagoPari/projects/hyperion-fo/): technician dispatch for robot faults. 2nd place, Wajo AI × Anthropic Hackathon, Oct 2026.
 - [Multi-Sensor Fusion Localization](https://thiagopari.github.io/ThiagoPari/projects/ekf-localization/): 50 Hz ROS 2 EKF and UKF fusing wheel odometry, IMU and simulated GPS in Gazebo; ported to C++ (rclcpp + Eigen) with gtest and CI. Solo.
 - Robustness Analysis of Convex Bundle Adjustment: EECE 5550 course project, team of 2. Stress-tested XM, a convex SDP bundle-adjustment pipeline, under severe image blur and ill-conditioned problems.
-- [Bayesian Skill Gate for VLA Robot Policies](https://thiagopari.github.io/ThiagoPari/projects/skill-gate/): an AI agent may trigger a robot skill only after trials show P(success ≥ 0.8) ≥ 0.95 under a Beta posterior; GR00T N1.7 in LIBERO on a Dell GB10. Team of 4.
 - [12-DOF Quadruped Robot](https://thiagopari.github.io/ThiagoPari/projects/quadruped/): printed, wired and calibrated 12-servo quadruped based on Will Cogley's RoboFox design; MuJoCo IK and gait, an Isaac Lab model of the leg mechanism, and a sim-first VIO study with OpenVINS.
-
-## Hackathons
-
-- [Hyperion × Fo](https://thiagopari.github.io/ThiagoPari/projects/hyperion-fo/): technician dispatch for robot faults. 2nd place, Wajo AI × Anthropic Hackathon, Oct 2026.
-- [Craigie Bridge Inspector](https://thiagopari.github.io/ThiagoPari/projects/craigie-bridge/): ArduPilot SITL drone inspection in Isaac Sim. 2nd in Robotics, Hackachusetts, Oct 2026.
-- [Learner's Permit](https://thiagopari.github.io/ThiagoPari/projects/learners-permit/): licences for robot skills, enforced with Cedar. Nebius × NVIDIA Global AI Hackathon, Oct 2026.
-- [Mission Preflight](https://thiagopari.github.io/ThiagoPari/projects/mission-preflight/): sandboxed checks for ROV missions in Kata microVMs. Vultr Agent Rush, Nov 2026. Solo.
 - [Pierside](https://thiagopari.github.io/ThiagoPari/projects/pierside/): book an underwater inspection in one conversation. PayPal AI Hackathon, Nov 2026.
 - [Mandate Wallet](https://thiagopari.github.io/ThiagoPari/projects/mandate-wallet/): signed spending limits for AI agents. PayPal AI Hackathon, Nov 2026.
-- [Pulse](https://thiagopari.github.io/ThiagoPari/projects/pulse/): CPR practice on Snap Spectacles with an AI dispatcher. Nov 2026.
 
 ## Skills
 

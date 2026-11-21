@@ -213,7 +213,7 @@
     function setCircuit(el,name,property){if(!name)return;el.dataset.circuit=name;el.style.setProperty(property,circuitMap[name]);}
     document.querySelectorAll('#experience .project-card').forEach(card=>setCircuit(card,'teal','--card-circuit'));
     const projectCircuits=[['underwater-sfm','teal'],['lidar-odometry','teal'],['ekf-localization','blue'],['When Does Convex Bundle Adjustment Fail.pdf','blue'],['skill-gate','coral'],['hyperion-fo','yellow'],['quadruped','yellow'],['craigie-bridge','teal'],['learners-permit','coral'],['mission-preflight','yellow'],['pierside','blue'],['mandate-wallet','blue'],['pulse','coral']];
-    document.querySelectorAll('#projects .projects-grid > a, #hackathons .projects-grid > a').forEach(link=>{const href=link.getAttribute('href')||'';const hit=projectCircuits.find(([key])=>href.includes(key));if(hit){const card=link.querySelector('.project-card');if(card)setCircuit(card,hit[1],'--card-circuit');}});
+    document.querySelectorAll('#projects .projects-grid > a').forEach(link=>{const href=link.getAttribute('href')||'';const hit=projectCircuits.find(([key])=>href.includes(key));if(hit){const card=link.querySelector('.project-card');if(card)setCircuit(card,hit[1],'--card-circuit');}});
     const skillMap=[['perception','teal'],['deep learning','coral'],['robotics','yellow'],['programming','blue']];
     document.querySelectorAll('.skills-grid > div').forEach(group=>{const title=(group.querySelector('h3')?.textContent||'').toLowerCase();const hit=skillMap.find(([key])=>title.includes(key));if(hit)setCircuit(group,hit[1],'--skill-circuit');});
     const tagMap=[
@@ -225,10 +225,10 @@
     document.querySelectorAll('.tag').forEach(tag=>{const label=(tag.textContent||'').trim().toLowerCase();const hit=tagMap.find(([re])=>re.test(label));if(hit)setCircuit(tag,hit[1],'--tag-circuit');});
     if(document.getElementById('experience')&&document.getElementById('skills')){
       const rail=document.createElement('nav');rail.className='route-rail';rail.setAttribute('aria-label','Page sections');
-      const routes=[['Top',null],['Experience','experience'],['Projects','projects'],['Hackathons','hackathons'],['Skills','skills'],['Contact','contact']];
+      const routes=[['Top',null],['Experience','experience'],['Projects','projects'],['Skills','skills'],['Contact','contact']];
       routes.forEach(([label,id],index)=>{const a=document.createElement('a');a.href=id?'#'+id:'#';a.title=label;a.setAttribute('aria-label',label);a.dataset.route=id||'top';if(index===0)a.setAttribute('aria-current','location');rail.appendChild(a);a.addEventListener('click',event=>{event.preventDefault();const target=id?document.getElementById(id):null;const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;if(target)target.scrollIntoView({behavior:reduce?'instant':'smooth'});else window.scrollTo({top:0,behavior:reduce?'instant':'smooth'});});});document.body.appendChild(rail);
       document.querySelectorAll(wallSelectors).forEach(decorateWall);
-      const targets=['experience','projects','hackathons','skills','contact'].map(id=>document.getElementById(id)).filter(Boolean);
+      const targets=['experience','projects','skills','contact'].map(id=>document.getElementById(id)).filter(Boolean);
       if('IntersectionObserver'in window){const observer=new IntersectionObserver(entries=>{const visible=entries.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];if(visible){rail.querySelectorAll('a').forEach(a=>a.removeAttribute('aria-current'));rail.querySelector('[data-route="'+visible.target.id+'"]').setAttribute('aria-current','location');}else if(window.scrollY<innerHeight/2){rail.querySelectorAll('a').forEach(a=>a.removeAttribute('aria-current'));rail.querySelector('[data-route="top"]').setAttribute('aria-current','location');}},{rootMargin:'-15% 0px -55% 0px',threshold:[0,.1,.25,.5]});targets.forEach(target=>observer.observe(target));}
     }
   } catch (_) { /* Theme enhancements must never interrupt the page. */ }

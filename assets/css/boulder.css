@@ -404,3 +404,11 @@ footer::after { content:""; position:absolute; top:-9px; left:12%; width:56px; h
 .route-tip[data-circuit="teal"] { --tip:var(--circuit-teal); }
 .chalk-particle, .chalk-haze { animation-duration:.9s; }
 @media (max-width:600px) { .route-tip { max-width:140px; font-size:10px; } }
+
+/* Touch targets (Apple HIG accessibility.md: 44pt default, 28pt mobile minimum, 20pt desktop minimum).
+   Hit areas grow; the negative margins keep the layout where it was. */
+header nav a { display:inline-block; padding:12px 0; margin:-12px 0; }
+.social-links a { padding-top:.6rem; padding-bottom:.6rem; }
+.water-slider, .vio-slider { height:44px; margin-top:-14px; margin-bottom:-14px; }
+.route-rail a { position:relative; }
+.route-rail a::after { content:""; position:absolute; inset:-9px -8px; }

@@ -283,7 +283,8 @@
             <li><strong>Ambient light only.</strong> Vehicle lights change both the signal and the backscatter geometry.</li>
             <li><strong>Simplified scattering.</strong> Single-scattering veiling light with no multiple scattering is probably too weak, which is why the sensitivity runs matter.</li>
             <li><strong>The sensor model sets the numbers.</strong> A bigger sensor or longer exposure moves the transition to larger &tau;.</li>
-            <li><strong>No real underwater validation yet</strong>, and 2&ndash;3 seeds per condition (1 for the ALIKED, sensitivity and relocalization runs).</li>
+            <li><strong>Only a partial real-data check.</strong> The pipeline runs end to end on real underwater imagery (Sea-thru, 583 photos; every image lands in one model per set), but with no ground-truth poses and no way yet to place those scenes on the &tau; axis, that doesn&rsquo;t test the thresholds.</li>
+            <li><strong>Few seeds:</strong> 2&ndash;3 per condition (1 for the ALIKED, sensitivity and relocalization runs).</li>
         </ul>
 
         <h2>How It Was Built</h2>

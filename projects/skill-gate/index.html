@@ -62,7 +62,7 @@
         .project-content li { color: #555; margin-bottom: 0.5rem; line-height: 1.8; }
         .clips { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
         figure { margin: 0; }
-        video { width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: #000; }
+        video { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: #000; }
         figcaption { color: #666; font-size: 0.9rem; text-align: center; margin-top: 0.75rem; }
         .stats-grid {
             display: grid;
@@ -218,14 +218,15 @@
         </div>
         <div class="clips">
             <figure>
-                <video src="media/candidate-policy-pass.mp4" autoplay muted loop playsinline controls preload="metadata" aria-label="Simulated robot arm opening the middle drawer of a cabinet"></video>
+                <video src="media/candidate-policy-pass.mp4" poster="media/candidate-policy-pass.jpg" width="1280" height="766" autoplay muted loop playsinline controls preload="metadata" aria-label="Simulated robot arm opening the middle drawer of a cabinet, seed 0"></video>
                 <figcaption>Candidate checkpoint opens the drawer (simulation).</figcaption>
             </figure>
             <figure>
-                <video src="media/current-policy-fail.mp4" autoplay muted loop playsinline controls preload="metadata" aria-label="Simulated robot arm failing to open the cabinet drawer"></video>
+                <video src="media/current-policy-fail.mp4" poster="media/current-policy-fail.jpg" width="1280" height="766" autoplay muted loop playsinline controls preload="metadata" aria-label="Simulated robot arm failing to open the cabinet drawer before the time limit, seed 0"></video>
                 <figcaption>Current checkpoint fails the same task (simulation).</figcaption>
             </figure>
         </div>
+        <p class="explorer-note">New rollouts of the same two checkpoints, rendered at 1280×720 for this page (the policy still sees its usual 256 px cameras). Task: open the middle drawer, LIBERO simulation. Seeds 0–4 were fixed in advance and each run once: candidate 5/5, current 0/5. Shown: seed 0. Slow motion and fast-forward are labelled on screen.</p>
         <p>
             <em>Caveat:</em> the passing checkpoint was trained on that task suite and the failing one wasn't, so C-3 shows the gate
             making the right call, not a surprising policy result.

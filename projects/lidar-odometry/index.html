@@ -216,10 +216,34 @@
             </table>
         </div>
 
-        <figure>
-            <img src="media/07_clean_traj.png" alt="Top-down trajectories of KITTI sequence 07 for ground truth and the four methods on clean input; all follow the loop closely, with point-to-point ICP drifting most">
-            <figcaption>Sequence 07, clean input: every method starts at identity, with no alignment.</figcaption>
-        </figure>
+        <section class="explorer" id="traj-explorer" aria-labelledby="traj-title">
+            <h2 id="traj-title">Try it: degrade the scans</h2>
+            <p class="explorer-intro">Pick a degradation and drag the slider. Each path is a real estimated trajectory (seed 0), drawn over ground truth.</p>
+            <div class="chips" role="group" aria-label="KITTI sequence">
+                <button class="chip" type="button" data-seq="07" aria-pressed="true">Seq 07 (loop)</button>
+                <button class="chip" type="button" data-seq="04" aria-pressed="false">Seq 04 (straight road)</button>
+            </div>
+            <p><label for="traj-deg"><strong>Degradation</strong></label><br>
+            <select id="traj-deg">
+                <option value="beams">Fewer beams</option>
+                <option value="dropout">Random point dropout</option>
+                <option value="noise">Range noise</option>
+                <option value="maxrange" selected>Shorter max range</option>
+                <option value="rate">Lower scan rate</option>
+                <option value="rate_gtseed">Lower scan rate, first step seeded from ground truth</option>
+            </select></p>
+            <label for="traj-level"><strong>Level:</strong> <span class="readout" id="traj-level-text"></span></label>
+            <input class="water-slider" id="traj-level" type="range" min="0" max="4" step="1" value="0">
+            <canvas class="viz" id="traj-plot" width="1200" height="760" role="img" aria-label="Top-down estimated trajectories of the four methods over the ground-truth path"></canvas>
+            <noscript><img src="media/07_clean_traj.png" alt="Top-down trajectories of KITTI sequence 07 for ground truth and the four methods on clean input"></noscript>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Method</th><th>KITTI drift</th><th>ATE</th></tr></thead>
+                    <tbody id="traj-table" aria-live="polite"></tbody>
+                </table>
+            </div>
+            <p class="explorer-note">Dashed: ground truth. Unaligned, so every method starts at identity. Diverged means KITTI drift above 10%. KISS-ICP runs its default config here; the range-matched runs are under Key Results.</p>
+        </section>
 
         <figure>
             <a href="media/04_sweep.png" target="_blank"><img src="media/04_sweep.png" alt="Grid of line charts for KITTI sequence 04 showing trajectory error and 10 m relative error against the six degradations for the four methods"></a>
@@ -255,5 +279,61 @@
             <li>Real degraded data (rain, fog, dust) instead of synthetic degradations.</li>
         </ul>
     </div>
+    <script>
+    (() => {
+        const box = document.getElementById('traj-explorer'), cv = document.getElementById('traj-plot'), ctx = cv.getContext('2d');
+        const deg = document.getElementById('traj-deg'), lvl = document.getElementById('traj-level');
+        const lvlText = document.getElementById('traj-level-text'), table = document.getElementById('traj-table');
+        const METHODS = [['kiss', 'KISS-ICP', '#2a78d6'], ['gicp', 'GICP, scan-to-scan', '#eb6834'], ['icp', 'Point-to-point ICP', '#1baf7a'], ['vgicp', 'VGICP, scan-to-model', '#eda100']];
+        const rate = [['2', '5 Hz'], ['4', '2.5 Hz'], ['8', '1.25 Hz']];
+        const LEVELS = {  // [key, label]; index 0 is the shared clean run
+            beams: [['0', '64 rings (clean)'], ['32', '32 rings'], ['16', '16 rings'], ['8', '8 rings']],
+            dropout: [['0', 'none (clean)'], ['0.25', '25% dropped'], ['0.5', '50% dropped'], ['0.75', '75% dropped'], ['0.9', '90% dropped']],
+            noise: [['0', 'none (clean)'], ['0.01', 'σ = 1 cm'], ['0.03', 'σ = 3 cm'], ['0.05', 'σ = 5 cm'], ['0.1', 'σ = 10 cm']],
+            maxrange: [['0', 'full range (clean)'], ['80', '80 m'], ['40', '40 m'], ['20', '20 m'], ['10', '10 m']],
+            rate: [['0', '10 Hz (clean)'], ...rate], rate_gtseed: [['0', '10 Hz (clean)'], ...rate],
+        };
+        const cache = {};
+        let seq = '07';
+        const load = s => cache[s] || (cache[s] = fetch(`media/traj_${s}.json`).then(r => r.json()));
+        async function draw() {
+            const levels = LEVELS[deg.value];
+            lvl.max = levels.length - 1; if (+lvl.value > +lvl.max) lvl.value = lvl.max;
+            const [key, label] = levels[+lvl.value];
+            lvlText.textContent = label; lvl.setAttribute('aria-valuetext', label);
+            const d = await load(seq);
+            const runOf = m => d.runs[key === '0' ? `${m}|clean|0` : `${m}|${deg.value}|${key}`];
+            const gt = d.gt, W = cv.width, H = cv.height, pad = 60;
+            let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+            for (let i = 0; i < gt.length; i += 2) { x0 = Math.min(x0, gt[i]); x1 = Math.max(x1, gt[i]); y0 = Math.min(y0, gt[i + 1]); y1 = Math.max(y1, gt[i + 1]); }
+            const k = Math.min((W - 2 * pad) / (x1 - x0), (H - 2 * pad) / (y1 - y0));
+            const ox = (W - k * (x1 + x0)) / 2, oy = (H + k * (y1 + y0)) / 2;
+            const path = (xy, color, width, dash) => {
+                ctx.beginPath(); ctx.setLineDash(dash); ctx.strokeStyle = color; ctx.lineWidth = width;
+                for (let i = 0; i < xy.length; i += 2) ctx[i ? 'lineTo' : 'moveTo'](ox + k * xy[i], oy - k * xy[i + 1]);
+                ctx.stroke();
+            };
+            ctx.fillStyle = '#fffefa'; ctx.fillRect(0, 0, W, H);
+            path(gt, '#1c1d20', 5, [16, 10]);
+            const rows = METHODS.map(([m, name, color]) => {
+                const r = runOf(m);
+                if (r) path(r.xy, color, 4, []);
+                const cells = r ? `<td>${r.drift.toFixed(2)}%${r.div ? ' <span class="pill pill-stop">diverged</span>' : ''}</td><td>${r.ate.toFixed(2)} m</td>` : '<td colspan="2">not in the sweep</td>';
+                return `<tr><td><span aria-hidden="true" style="display:inline-block;width:1.4em;height:.3em;vertical-align:middle;background:${color}"></span> ${name}</td>${cells}</tr>`;
+            });
+            const bar = 100 * 10 * k;  // 100 m; coordinates are decimetres
+            ctx.setLineDash([]); ctx.strokeStyle = ctx.fillStyle = '#5b5f66'; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.moveTo(pad, H - 24); ctx.lineTo(pad + bar, H - 24); ctx.stroke();
+            ctx.font = '26px Inter, sans-serif'; ctx.fillText('100 m', pad + bar + 12, H - 15);
+            table.innerHTML = rows.join('');
+        }
+        box.addEventListener('click', e => {
+            const b = e.target.closest('[data-seq]'); if (!b) return;
+            seq = b.dataset.seq; box.querySelectorAll('[data-seq]').forEach(c => c.setAttribute('aria-pressed', String(c === b))); draw();
+        });
+        deg.addEventListener('change', draw); lvl.addEventListener('input', draw);
+        draw();
+    })();
+    </script>
 </body>
 </html>

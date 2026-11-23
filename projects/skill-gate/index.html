@@ -173,6 +173,29 @@
         </div>
         <p>The project moved from a cap of 40 to 100 because of this table.</p>
 
+        <section class="explorer" id="gate-explorer" aria-labelledby="gate-title">
+            <h2 id="gate-title">Try it: run trials through the gate</h2>
+            <p class="explorer-intro">Add trial results and watch the posterior move. This is the same Beta math the gate runs.</p>
+            <div class="chips" role="group" aria-label="Add a trial">
+                <button class="chip" type="button" data-add="s">+ Success</button>
+                <button class="chip" type="button" data-add="f">+ Failure</button>
+                <button class="chip" type="button" data-set="0,0">Reset</button>
+            </div>
+            <div class="chips" role="group" aria-label="Runs from this page">
+                <button class="chip" type="button" data-set="12,0">12 straight</button>
+                <button class="chip" type="button" data-set="13,0">13 straight</button>
+                <button class="chip" type="button" data-set="15,0">C-3 candidate, 15/15</button>
+                <button class="chip" type="button" data-set="0,5">C-3 current, 0/5</button>
+            </div>
+            <div class="chips" role="group" aria-label="Licence tier">
+                <button class="chip" type="button" data-tier="0.8" aria-pressed="true">Supervised: rate &ge; 0.8</button>
+                <button class="chip" type="button" data-tier="0.99" aria-pressed="false">Unattended: rate &ge; 0.99</button>
+            </div>
+            <svg class="viz" id="gate-plot" viewBox="0 0 600 230" role="img" aria-label="Posterior distribution of the policy's success rate, with the area above the threshold shaded"></svg>
+            <p class="readout" id="gate-readout" aria-live="polite"></p>
+            <p class="explorer-note">Uniform prior, so the posterior is Beta(1 + successes, 1 + failures), drawn scaled to its peak. The shaded area is P(rate &ge; threshold); the gate opens when it reaches 0.95.</p>
+        </section>
+
         <h2>Result on the GB10 (Oct 3)</h2>
         <p>
             The models and simulators ran locally on one Dell Pro Max GB10: a Qwen3.6 supervisor model on vLLM, an agent sandbox, and two GR00T N1.7
@@ -223,5 +246,49 @@
             and CI, all on a mock runner with offline stand-ins for Nemotron and the datasheet check. GR00T trials in Isaac Sim come next; no Isaac Sim numbers yet.
         </p>
     </div>
+    <script>
+    (() => {
+        const box = document.getElementById('gate-explorer'), svg = document.getElementById('gate-plot'), out = document.getElementById('gate-readout');
+        const NS = 'http://www.w3.org/2000/svg', W = 600, H = 230, L = 20, R = 580, T = 14, B = 196, MAX = 300;
+        let s = 0, f = 0, thr = 0.8;
+        // P(rate >= x), rate ~ Beta(1+s, 1+f)  ==  P(Binomial(s+f+1, x) <= s)
+        const tail = (s, f, x) => {
+            const n = s + f + 1; let p = Math.pow(x, n), up = 0;
+            for (let k = n; k > s; k--) { up += p; p *= k / (n - k + 1) * (1 - x) / x; }
+            return Math.max(0, 1 - up);
+        };
+        const fmt = p => p > 0.9995 ? '> 0.999' : p < 0.0005 ? '< 0.001' : p.toFixed(3);
+        const el = (tag, attrs, text) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text) e.textContent = text; svg.appendChild(e); return e; };
+        const X = p => L + p * (R - L);
+        function draw() {
+            svg.textContent = '';
+            const ld = p => (s ? s * Math.log(p) : 0) + (f ? f * Math.log(1 - p) : 0);
+            const xs = Array.from({ length: 301 }, (_, i) => Math.min(Math.max(i / 300, 1e-9), 1 - 1e-9));
+            const top = Math.max(...xs.map(ld)), ys = xs.map(p => B - Math.exp(ld(p) - top) * (B - T));
+            const line = xs.map((p, i) => `${X(p).toFixed(1)},${ys[i].toFixed(1)}`);
+            const shade = xs.map((p, i) => p >= thr ? `${X(p).toFixed(1)},${ys[i].toFixed(1)}` : null).filter(Boolean);
+            el('path', { d: `M${X(thr)},${B} L${shade.join(' L')} L${R},${B} Z`, fill: '#14a098', 'fill-opacity': .3 });
+            el('polyline', { points: line.join(' '), fill: 'none', stroke: '#1c1d20', 'stroke-width': 2.5 });
+            el('line', { x1: L, x2: R, y1: B, y2: B, stroke: '#5b5f66' });
+            for (let t = 0; t <= 10; t += 2) el('text', { x: X(t / 10), y: B + 20, 'text-anchor': 'middle', 'font-size': 13, fill: '#5b5f66' }, (t / 10).toFixed(1));
+            el('line', { x1: X(thr), x2: X(thr), y1: T, y2: B, stroke: '#0f6f69', 'stroke-width': 2, 'stroke-dasharray': '5 4' });
+            el('text', { x: X(thr) - 6, y: T + 12, 'text-anchor': 'end', 'font-size': 13, fill: '#0f6f69', 'font-weight': 700 }, `threshold ${thr}`);
+            el('text', { x: R, y: H - 2, 'text-anchor': 'end', 'font-size': 12, fill: '#5b5f66' }, 'success rate');
+            const p = tail(s, f, thr), open = p >= 0.95;
+            let need = 0; while (!open && need < 3000 && tail(s + need, f, thr) < 0.95) need++;
+            out.innerHTML = `${s} success${s === 1 ? '' : 'es'}, ${f} failure${f === 1 ? '' : 's'} &rarr; P(rate &ge; ${thr}) = ${fmt(p)} `
+                + (open ? '<span class="pill pill-go">Gate open</span>' : `<span class="pill pill-stop">Gate closed</span> needs ${need >= 3000 ? 'over 3,000' : need} more straight success${need === 1 ? '' : 'es'}`);
+        }
+        box.addEventListener('click', e => {
+            const b = e.target.closest('button'); if (!b) return;
+            if (b.dataset.add === 's') s = Math.min(MAX, s + 1);
+            if (b.dataset.add === 'f') f = Math.min(MAX, f + 1);
+            if (b.dataset.set) [s, f] = b.dataset.set.split(',').map(Number);
+            if (b.dataset.tier) { thr = Number(b.dataset.tier); box.querySelectorAll('[data-tier]').forEach(t => t.setAttribute('aria-pressed', String(t === b))); }
+            draw();
+        });
+        draw();
+    })();
+    </script>
 </body>
 </html>

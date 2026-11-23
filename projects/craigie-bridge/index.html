@@ -152,6 +152,24 @@
         <h2>My Part</h2>
         <p>The bridge triage, specced in Kiro before any code: it ranks all 5,252 Massachusetts bridge records one row per bridge (5,226 bridges), and 33 tests pass.</p>
 
+        <section class="explorer" id="triage" aria-labelledby="triage-title">
+            <h2 id="triage-title">Try it: re-weight the bridge triage</h2>
+            <p class="explorer-intro">The triage gives every Massachusetts bridge a 0&ndash;100 score: a weighted sum of five sub-scores from the 2022 National Bridge Inventory. Change the weights and the statewide ranking re-sorts in your browser.</p>
+            <div class="triage-weights" id="triage-weights"></div>
+            <div class="chips">
+                <button class="chip" type="button" id="triage-reset">Reset to the triage&rsquo;s weights</button>
+                <button class="chip" type="button" id="triage-uw" aria-pressed="false">Only bridges that need an underwater inspection</button>
+            </div>
+            <p class="readout" id="triage-craigie" aria-live="polite"></p>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>#</th><th>Score</th><th>Carries / over</th><th>What drives it</th></tr></thead>
+                    <tbody id="triage-table"></tbody>
+                </table>
+            </div>
+            <p class="explorer-note">Data: FHWA National Bridge Inventory 2022, Massachusetts: 5,252 records grouped into 5,226 bridges, each scored by its highest-scoring record. &ldquo;Overdue&rdquo; is measured as of the snapshot (March 2022).</p>
+        </section>
+
         <h2>Results</h2>
         <div class="stats-grid">
             <div class="stat-card"><div class="stat-value">4 / 4</div><div class="stat-label">Waterline defects flagged by the drone and inspected by the ROV</div></div>
@@ -161,5 +179,46 @@
 
         <p><a href="https://github.com/mochi-bunny/navfix/tree/hackachusetts-craigie" target="_blank" rel="noopener">Code on GitHub</a></p>
     </div>
+    <script>
+    (() => {
+        const PARTS = [['Condition', 'worst deck, superstructure or substructure rating', '#e0457b'], ['Scour', 'scour-critical rating, NBI item 113', '#14a098'],
+            ['Overdue', 'underwater inspection past its interval', '#f07a2a'], ['Traffic', 'average daily traffic, log scale', '#7a5cd6'], ['Age', 'years since built', '#f4c430']];
+        const SPOTS = [['B160134EMDOTNBI', 'Craigie drawbridge'], ['B160134ETDOTNBI', 'Charles River Dam Rd bridge']];
+        const wBox = document.getElementById('triage-weights'), table = document.getElementById('triage-table');
+        const spot = document.getElementById('triage-craigie'), uwBtn = document.getElementById('triage-uw');
+        let D, groups, W, uwOnly = false;
+        const fmt = n => n.toLocaleString('en-US');
+        wBox.innerHTML = PARTS.map(([name, help, color], i) => `<p><label for="tw${i}"><span aria-hidden="true" style="display:inline-block;width:.8em;height:.8em;border-radius:2px;background:${color}"></span> <strong>${name}</strong> <span class="explorer-note">(${help})</span>: <span class="readout" id="tw${i}v"></span></label><br><input class="water-slider" id="tw${i}" type="range" min="0" max="50" step="1"></p>`).join('');
+        const sliders = PARTS.map((_, i) => document.getElementById('tw' + i));
+        function draw() {
+            W = sliders.map(s => +s.value);
+            sliders.forEach((s, i) => { document.getElementById(`tw${i}v`).textContent = s.value; });
+            const total = W.reduce((a, b) => a + b, 0) || 1;
+            const score = i => 100 * D.s[i].reduce((a, v, j) => a + v * W[j], 0) / total / 1e4;
+            const best = groups.filter(g => !uwOnly || g.uw).map(g => {
+                let b = -1, bs = -1;
+                for (const i of g.recs) { const sc = score(i); if (sc > bs || (sc === bs && D.sn[i] < D.sn[b])) { b = i; bs = sc; } }
+                return { i: b, sc: bs };
+            }).sort((a, b) => b.sc - a.sc || (D.sn[a.i] < D.sn[b.i] ? -1 : 1));
+            table.innerHTML = best.slice(0, 10).map(({ i, sc }, r) => {
+                const bar = D.s[i].map((v, j) => `<span title="${PARTS[j][0]}" style="display:inline-block;height:.7em;width:${(v * W[j] / total / 1e4 * 100).toFixed(2)}%;background:${PARTS[j][2]}"></span>`).join('');
+                return `<tr><td>${r + 1}</td><td>${sc.toFixed(1)}</td><td>${D.carries[i]}<br><span class="explorer-note">over ${D.over[i].replace(/^WATER\s+/, '')}</span></td><td style="min-width:4.5rem"><span style="display:flex;width:100%;background:#e9e6df">${bar}</span></td></tr>`;
+            }).join('');
+            spot.innerHTML = SPOTS.map(([sn, name]) => {
+                const r = best.findIndex(b => D.sn[b.i] === sn || groups[D.g[b.i]].recs.some(i => D.sn[i] === sn));
+                return `${name}: ${r < 0 ? 'not in this list' : `#${fmt(r + 1)} of ${fmt(best.length)}`}`;
+            }).join(' &middot; ');
+        }
+        document.getElementById('triage-reset').addEventListener('click', () => { sliders.forEach((s, i) => { s.value = D.weights[i]; }); draw(); });
+        uwBtn.addEventListener('click', () => { uwOnly = !uwOnly; uwBtn.setAttribute('aria-pressed', String(uwOnly)); draw(); });
+        sliders.forEach(s => s.addEventListener('input', draw));
+        fetch('media/triage.json').then(r => r.json()).then(d => {
+            D = d; groups = [];
+            d.g.forEach((g, i) => { (groups[g] = groups[g] || { recs: [], uw: 0 }).recs.push(i); groups[g].uw |= d.uw[i]; });
+            sliders.forEach((s, i) => { s.value = d.weights[i]; });
+            draw();
+        });
+    })();
+    </script>
 </body>
 </html>

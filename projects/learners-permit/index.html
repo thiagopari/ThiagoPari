@@ -149,6 +149,23 @@
             <li><strong>Watch:</strong> After every run, Nemotron-3.5-Super-VL compares the camera frame with the one the licence was earned on. When the floor changed from tile to wood, the licence was revoked even though the run succeeded.</li>
         </ol>
 
+        <section class="explorer" id="replay" aria-labelledby="replay-title">
+            <h2 id="replay-title">Replay: the licence that got revoked</h2>
+            <p class="explorer-intro">Step through the logged end-to-end run of Oct 28, 2026 (Isaac Sim on Nebius). Every value below comes from that run's audit log.</p>
+            <div class="chips" role="group" aria-label="Replay step">
+                <button class="chip" type="button" data-step="0" aria-pressed="true">1. Earn</button>
+                <button class="chip" type="button" data-step="1" aria-pressed="false">2. Same scene</button>
+                <button class="chip" type="button" data-step="2" aria-pressed="false">3. New floor</button>
+                <button class="chip" type="button" data-step="3" aria-pressed="false">4. Ask again</button>
+            </div>
+            <div class="explorer-views">
+                <figure><img src="media/replay-reference.jpg" width="864" height="480" alt="Reference frame: bananas and a grey bin on a black table, tiled floor"><figcaption>Licence reference frame (13:05:32)</figcaption></figure>
+                <figure><img id="replay-frame" src="media/replay-reference.jpg" width="864" height="480" alt=""><figcaption id="replay-caption"></figcaption></figure>
+            </div>
+            <p class="readout" id="replay-status" aria-live="polite"></p>
+            <ul class="replay-log" id="replay-log"></ul>
+        </section>
+
         <h2>Results</h2>
         <div class="stats-grid">
             <div class="stat-card"><div class="stat-value">37/40</div><div class="stat-label">Simulated episodes that earned the licence: P(success &ge; 80%) = 0.976</div></div>
@@ -158,5 +175,43 @@
 
         <p><a href="https://github.com/thiagopari/learners-permit" target="_blank" rel="noopener">Code on GitHub</a></p>
     </div>
+    <script>
+    (() => {
+        const box = document.getElementById('replay'), img = document.getElementById('replay-frame');
+        const cap = document.getElementById('replay-caption'), status = document.getElementById('replay-status'), log = document.getElementById('replay-log');
+        const pill = (cls, text) => `<span class="pill ${cls}">${text}</span>`;
+        const steps = [
+            { t: '13:05:32', img: 'replay-reference.jpg', alt: 'The same reference frame', cap: 'No AI run yet', licence: 'licensed', lines: [
+                'The supervisor commissions <code>bananas_in_bin</code> on GR00T N1.7-DROID.',
+                'Batch 1: 19/20 successes, P(success &ge; 80%) = 0.94. Not enough, so the trials continue.',
+                'Batch 2: 37/40, P = 0.976. Licence issued: supervised tier, scope speed 40%.',
+                'This camera frame is stored as the licence&rsquo;s reference.'] },
+            { t: '13:06:42', img: 'replay-same.jpg', alt: 'Live frame after the run: same tiled floor', cap: 'Live frame after the run (13:06:42)', licence: 'licensed', decision: 'allow', lines: [
+                'The Nemotron planner asks for <code>bananas_in_bin</code> for an operator at speed 40%.',
+                'Cedar policy: <strong>allow</strong>. Context: skill licensed, speed 40%, no human in the zone.',
+                'GR00T runs the skill: success.',
+                'Scene check (Nemotron-3.5-Super-VL): <strong>same</strong> as the reference.'] },
+            { t: '13:07:56', img: 'replay-wood.jpg', alt: 'Live frame after the run: the floor is now wooden', cap: 'Live frame after the run (13:07:56)', licence: 'revoked', decision: 'allow', lines: [
+                'The supervisor changes the scene&rsquo;s background (seed 1).',
+                'The planner asks again. Cedar: <strong>allow</strong>, because the licence is still valid. GR00T succeeds.',
+                'Scene check: <strong>changed</strong>, &ldquo;floor changed from tiled to wooden flooring on the left side&rdquo; and &ldquo;background flooring changed in the top right corner&rdquo;.',
+                'The licence is <strong>revoked</strong> by the scene check, even though the run succeeded.'] },
+            { t: '13:07:59', img: 'replay-wood.jpg', alt: 'The wooden-floor scene; the robot does not move', cap: 'Scene unchanged since the revocation', licence: 'revoked', decision: 'deny', lines: [
+                'The planner asks for the same skill a third time.',
+                'Cedar: <strong>deny</strong>, &ldquo;skill not licensed for this request&rdquo;. The robot does not move.',
+                'Only a supervisor can now approve a single run, or re-commission the skill in the new scene.'] },
+        ];
+        function show(i) {
+            const s = steps[i];
+            img.src = 'media/' + s.img; img.alt = s.alt; cap.textContent = s.cap;
+            status.innerHTML = `${s.t} &middot; Licence ${s.licence === 'licensed' ? pill('pill-go', 'Licensed') : pill('pill-stop', 'Revoked')}`
+                + (s.decision ? ` &middot; Request ${s.decision === 'allow' ? pill('pill-go', 'Allowed') : pill('pill-stop', 'Denied')}` : '');
+            log.innerHTML = s.lines.map(l => `<li>${l}</li>`).join('');
+            box.querySelectorAll('[data-step]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.step === String(i))));
+        }
+        box.addEventListener('click', e => { const b = e.target.closest('[data-step]'); if (b) show(Number(b.dataset.step)); });
+        show(0);
+    })();
+    </script>
 </body>
 </html>

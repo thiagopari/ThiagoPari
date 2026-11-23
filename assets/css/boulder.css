@@ -412,3 +412,26 @@ header nav a { display:inline-block; padding:12px 0; margin:-12px 0; }
 .water-slider, .vio-slider { height:44px; margin-top:-14px; margin-bottom:-14px; }
 .route-rail a { position:relative; }
 .route-rail a::after { content:""; position:absolute; inset:-9px -8px; }
+
+/* Project-page explorers (skill gate, permit replay, lidar trajectories, bridge triage) */
+.explorer { margin: 2.5rem 0 3rem; }
+.explorer h2 { margin-top: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: .75rem 0; }
+.chip { min-height: 44px; padding: .4rem .9rem; font: inherit; font-size: .9rem; color: var(--ink); background: var(--paper); border: 1.5px solid #c9c5bd; border-radius: 12px 15px 10px 14px; cursor: pointer; }
+.chip:hover { border-color: var(--teal); }
+.chip[aria-pressed="true"] { color: #fffefa; background: var(--ink); border-color: var(--ink); }
+.chip:focus-visible, .explorer select:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+.explorer select { max-width: 100%; min-height: 44px; padding: .3rem .6rem; font: inherit; color: var(--ink); background: var(--paper); border: 1.5px solid #c9c5bd; border-radius: 10px; }
+.viz { display: block; width: 100%; height: auto; background: #fffefa; border: 1px solid #d8d4cc; border-radius: 8px; }
+.readout { font-family: 'Space Mono', monospace; color: var(--ink); }
+.pill { display: inline-block; padding: .1rem .55rem; border-radius: 999px; font-weight: 700; font-size: .85rem; }
+.pill-go { color: #fffefa; background: var(--teal-ink); }
+.pill-stop { color: #fffefa; background: var(--magenta-ink); }
+.pill-wait { color: var(--ink); background: #e9e6df; }
+.explorer-views { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start; }
+.explorer-views figure { margin: 0; }
+.explorer-views figure img { display: block; width: 100%; }
+#traj-explorer .water-slider, #triage .water-slider { display: block; width: 100%; max-width: 420px; }
+.replay-log { margin: .75rem 0 0; padding-left: 1.2rem; }
+.replay-log li { margin: .3rem 0; }
+@media (max-width: 768px) { .explorer-views { grid-template-columns: minmax(0, 1fr); } }
